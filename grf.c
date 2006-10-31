@@ -266,7 +266,7 @@ static bool prv_grf_load(struct grf_handler *handler) {
 	struct stat grfstat;
 	uint32_t posinfo[2];
 	int32_t wasted_space=0;
-	int result;
+	int dlen, result;
 	void *table, *table_comp, *pos, *pos_max;
 
 	// load header...
@@ -276,60 +276,111 @@ static bool prv_grf_load(struct grf_handler *handler) {
 	if (result != sizeof(struct grf_header)) return false;
 
 	if (strncmp(head.header_magic, GRF_HEADER_MAGIC, sizeof(head.header_magic)) != 0) return false; // bad magic !
-	for(int i=1;i<=sizeof(head.header_key);i++) if (head.header_key[i-1] != i) return false;
-	if (head.version != 0x200) return false;
+	for(int i=1;i<=sizeof(head.header_key);i++) if ((head.header_key[i-1] != i) && (head.header_key[i-1] != 0)) return false;
+	switch(head.version) {
+		case 0x102: case 0x103: case 0x200: break;
+		default: return false; /* unknown version */
+	}
 
 	handler->table_offset = head.offset;
 	handler->filecount = head.filecount - head.seed - 7;
 
 	if (handler->filecount == 0) return true; // do not even bother reading file table, it's empty
 
-	if (fstat(handler->fd, (struct stat *)&grfstat) != 0) return false;
-	if ((handler->table_offset + GRF_HEADER_SIZE) > grfstat.st_size) return false;
+	switch(head.version) {
+		case 0x102: case 0x103: // old GRF files
+			if (fstat(handler->fd, (struct stat *)&grfstat) != 0) return false;
+			if ((handler->table_offset + GRF_HEADER_SIZE) > grfstat.st_size) return false;
 
-	lseek(handler->fd, handler->table_offset + GRF_HEADER_SIZE, SEEK_SET);
-	if (read(handler->fd, (void *)&posinfo, sizeof(posinfo)) != sizeof(posinfo)) return false;
-	// posinfo[0] = comp size
-	// posinfo[1] = decomp size
+			lseek(handler->fd, handler->table_offset + GRF_HEADER_SIZE, SEEK_SET);
+			dlen = grfstat.st_size - (handler->table_offset + GRF_HEADER_SIZE);
+			table = malloc(dlen);
+			if (read(handler->fd, (void *)table, dlen) != dlen) { free(table); return false; }
+			result = handler->filecount;
+			wasted_space = handler->table_offset;
+			pos = table;
+			pos_max=table+dlen;
+			while(pos < pos_max) {
+				result--;
+				size_t av_len = pos_max - pos;
+				int fn_len = (*(uint32_t*)pos)-2; pos+=4+2;
+				struct grf_table_entry_data tmpentry;
+				struct grf_node *entry;
+				if (fn_len>av_len) { free(table); return false; }
+				entry = malloc(sizeof(struct grf_node));
+				entry->filename = calloc(1, fn_len + 1);
+				memcpy(entry->filename, pos, fn_len); // fn_len + 1 is already 0x00
+				decode_filename((unsigned char *)entry->filename, fn_len);
+				pos += fn_len;
+				memcpy((void *)&tmpentry, pos, sizeof(struct grf_table_entry_data));
+				pos += sizeof(struct grf_table_entry_data);
 
-	if ((handler->table_offset + GRF_HEADER_SIZE + 8 + posinfo[0]) > grfstat.st_size) return false;
-	table_comp = malloc(posinfo[0]);
-	table = malloc(posinfo[1]);
-	if (read(handler->fd, table_comp, posinfo[0]) != posinfo[0]) { free(table); free(table_comp); return false; }
-	if (zlib_buffer_inflate(table, posinfo[1], table_comp, posinfo[0]) != posinfo[1]) { free(table); free(table_comp); return false; }
+				entry->type = tmpentry.type;
+				entry->size = tmpentry.size;
+				entry->len = tmpentry.len-tmpentry.size-715;
+				entry->len_aligned = tmpentry.len_aligned-37579;
+				entry->pos = tmpentry.pos;
+				entry->parent = handler;
+				wasted_space -= entry->len_aligned;
 
-	free(table_comp);
+				entry->next = handler->first_node;
+				entry->prev = NULL;
+				if (handler->first_node != NULL) handler->first_node->prev = entry;
+				handler->first_node = entry;
+				hash_add_element(handler->fast_table, entry->filename, entry);
+			}
+			break;
+		case 0x200: // new GRF files
+			if (fstat(handler->fd, (struct stat *)&grfstat) != 0) return false;
+			if ((handler->table_offset + GRF_HEADER_SIZE) > grfstat.st_size) return false;
 
-	pos = table;
-	pos_max = table + posinfo[1];
-	result = handler->filecount;
-	wasted_space = handler->table_offset;
-	while(pos < pos_max) {
-		size_t av_len = pos_max - pos;
-		int fn_len = prv_grf_strnlen((char *)pos, av_len);
-		struct grf_table_entry_data tmpentry;
-		struct grf_node *entry;
-		result--;
-		if (fn_len + sizeof(struct grf_table_entry_data) > av_len) { free(table); return false; }
-		entry = malloc(sizeof(struct grf_node));
-		entry->filename = calloc(1, fn_len + 1);
-		memcpy(entry->filename, pos, fn_len); // fn_len + 1 is already 0x00
-		pos += fn_len + 1;
-		memcpy((void *)&tmpentry, pos, sizeof(struct grf_table_entry_data));
-		pos += sizeof(struct grf_table_entry_data);
-		entry->type = tmpentry.type;
-		entry->size = tmpentry.size;
-		entry->len = tmpentry.len;
-		entry->len_aligned = tmpentry.len_aligned;
-		entry->pos = tmpentry.pos;
-		entry->parent = handler;
-		wasted_space -= tmpentry.len_aligned;
+			lseek(handler->fd, handler->table_offset + GRF_HEADER_SIZE, SEEK_SET);
+			if (read(handler->fd, (void *)&posinfo, sizeof(posinfo)) != sizeof(posinfo)) return false;
+			// posinfo[0] = comp size
+			// posinfo[1] = decomp size
 
-		entry->next = handler->first_node;
-		entry->prev = NULL;
-		if (handler->first_node != NULL) handler->first_node->prev = entry;
-		handler->first_node = entry;
-		hash_add_element(handler->fast_table, entry->filename, entry);
+			if ((handler->table_offset + GRF_HEADER_SIZE + 8 + posinfo[0]) > grfstat.st_size) return false;
+			table_comp = malloc(posinfo[0]);
+			table = malloc(posinfo[1]);
+			if (read(handler->fd, table_comp, posinfo[0]) != posinfo[0]) { free(table); free(table_comp); return false; }
+			if (zlib_buffer_inflate(table, posinfo[1], table_comp, posinfo[0]) != posinfo[1]) { free(table); free(table_comp); return false; }
+
+			free(table_comp);
+
+			pos = table;
+			pos_max = table + posinfo[1];
+			result = handler->filecount;
+			wasted_space = handler->table_offset;
+			while(pos < pos_max) {
+				size_t av_len = pos_max - pos;
+				int fn_len = prv_grf_strnlen((char *)pos, av_len);
+				struct grf_table_entry_data tmpentry;
+				struct grf_node *entry;
+				result--;
+				if (fn_len + sizeof(struct grf_table_entry_data) > av_len) { free(table); return false; }
+				entry = malloc(sizeof(struct grf_node));
+				entry->filename = calloc(1, fn_len + 1);
+				memcpy(entry->filename, pos, fn_len); // fn_len + 1 is already 0x00
+				pos += fn_len + 1;
+				memcpy((void *)&tmpentry, pos, sizeof(struct grf_table_entry_data));
+				pos += sizeof(struct grf_table_entry_data);
+				entry->type = tmpentry.type;
+				entry->size = tmpentry.size;
+				entry->len = tmpentry.len;
+				entry->len_aligned = tmpentry.len_aligned;
+				entry->pos = tmpentry.pos;
+				entry->parent = handler;
+				wasted_space -= tmpentry.len_aligned;
+
+				entry->next = handler->first_node;
+				entry->prev = NULL;
+				if (handler->first_node != NULL) handler->first_node->prev = entry;
+				handler->first_node = entry;
+				hash_add_element(handler->fast_table, entry->filename, entry);
+			}
+			break;
+		default:
+			return false;
 	}
 	if (result != 0) return false;
 	if (wasted_space < 0) {
@@ -404,13 +455,13 @@ GRFEXPORT uint32_t grf_file_get_contents(void *tmphandler, void *target) {
 	return count;
 }
 
-GRFEXPORT bool grf_file_add(void *tmphandler, const char *filename, const void *ptr, int size) {
+GRFEXPORT void *grf_file_add(void *tmphandler, const char *filename, const void *ptr, int size) {
 //	void *comp;
 	struct grf_handler *handler;
 	handler = (struct grf_handler *)tmphandler;
 	
 	handler->need_save = true;
-	return false;
+	return NULL;
 }
 
 static bool prv_grf_write_header(struct grf_handler *handler) {
@@ -429,6 +480,12 @@ static bool prv_grf_write_header(struct grf_handler *handler) {
 	result = write(handler->fd, (void *)&file_header, sizeof(struct grf_header));
 	if (result != sizeof(struct grf_header)) return false;
 	return true;
+}
+
+GRFEXPORT void **grf_get_file_list(void *tmphandler) {
+	struct grf_handler *handler;
+	handler = (struct grf_handler *)tmphandler;
+	return hash_foreach_val(handler->fast_table);
 }
 
 static bool prv_grf_write_table(struct grf_handler *handler) {

@@ -3,10 +3,10 @@
 # There are 3 known versions of those files, which are 0x120 0x130 and 0x200
 # Difference in 0x200 files: the file index is now unencrypted, but also compressed
 # 
-# sdata.grf from KRO does not have the 01 02 03... but 00 00 00 at offset 16...
 # filecount = filecount - seed - 7
 # Some programs (grf factory?) tend to use value 15724 as seed...
 0 string    Master\ of\ Magic\0 Gravity GRF file
+> 16 string \0\0\0\0\0\0\0\0\0\0\0\0\0\0 without encryption
 > 16 string !\0\0\0\0\0\0\0\0\0\0\0\0\0\0
 >> 16 string !\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0a\x0b\x0c\x0d\x0e (corrupted)
 > 42 leshort >0 (version 0x%x)

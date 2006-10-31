@@ -28,11 +28,12 @@ void timer_end(const char *reason) {
 
 void test_grf_version() {
 	uint32_t version=grf_version();
-	uint8_t major, minor;
-	major = version >> 8;
-	minor = version & 0xff;
-	printf(" - test_version(): %x (%d.%d)\n", version, major, minor);
-	if ( (major != VERSION_MAJOR) || (minor != VERSION_MINOR)) {
+	uint8_t major, minor, revision;
+	major = (version >> 16) & 0xff;
+	minor = (version >> 8) & 0xff;
+	revision = version & 0xff;
+	printf(" - test_version(): %x (%d.%d.%d)\n", version, major, minor, revision);
+	if ( (major != VERSION_MAJOR) || (minor != VERSION_MINOR) || (revision != VERSION_REVISION)) {
 		puts("Error: This test program was not compiled for this lib!");
 		exit(1);
 	}
@@ -62,8 +63,10 @@ void test_new_handler() {
 void test_load_file() {
 	void *handler, *fhandler;
 	void *filec;
-	char *fn = "/storage/win_d/Program Files/Gravity/fRO_II/data.grf";
-//	char *fn = "test.grf";
+	void **list;
+//	char *fn = "/storage/win_d/Program Files/Gravity/fRO_II/data.grf";
+//	char *fn = "/storage/win_d/Program Files/Gravity/20060224_krodata.gpf";
+	char *fn = "102.grf";
 	char *fn2 = "DATA/texTURE\\유저인터페이스/LOADING45.JPG";
 
 	printf(" - test_load_file(): Opening `%s` in read only mode...\n", fn);
@@ -83,20 +86,35 @@ void test_load_file() {
 	fhandler = grf_get_file(handler, fn2);
 	timer_end(" - test_load_file(): File search took %fms.\n");
 	printf(" - test_load_file(): File is at %p\n", fhandler);
-	if (fhandler == NULL) return;
-	printf(" - test_load_file(): Real filename is `%s`\n", grf_file_get_filename(fhandler));
-	printf(" - test_load_file(): File size is %d bytes.\n", grf_file_get_size(fhandler));
-	filec = malloc(grf_file_get_size(fhandler));
-	printf(" - test_load_file(): Extracted %d bytes for this file.\n", grf_file_get_contents(fhandler, filec));
-	FILE *f=fopen("loading45.jpg", "w");
-	if (f == NULL) {
-		printf(" - test_writing failed\n");
-	} else {
-		printf(" - test_writing ok\n");
-		fwrite(filec, grf_file_get_size(fhandler), 1, f);
-		fclose(f);
+	if (fhandler != NULL) {
+		printf(" - test_load_file(): Real filename is `%s`\n", grf_file_get_filename(fhandler));
+		printf(" - test_load_file(): File size is %d bytes.\n", grf_file_get_size(fhandler));
+		filec = malloc(grf_file_get_size(fhandler));
+		printf(" - test_load_file(): Extracted %d bytes for this file.\n", grf_file_get_contents(fhandler, filec));
+#if 0
+		FILE *f=fopen("loading45.jpg", "w");
+		if (f == NULL) {
+			printf(" - test_writing failed\n");
+		} else {
+			printf(" - test_writing ok\n");
+			fwrite(filec, grf_file_get_size(fhandler), 1, f);
+			fclose(f);
+		}
+#endif
+		free(filec);
 	}
-	free(filec);
+	// Attempt to list file content
+	printf(" - test_load_file(): Getting files list\n");
+	timer_start();
+	list = grf_get_file_list(handler);
+	timer_end(" - test_load_file(): Got files list in %fms.\n");
+	if (list == NULL) {
+		printf(" - test_load_file(): No files found\n");
+	} else {
+		for(int i=0;list[i]!=NULL;i++) {
+			printf(" - test_load_file(): %s\n", grf_file_get_filename(list[i]));
+		}
+	}
 	grf_free(handler);
 }
 

@@ -24,10 +24,12 @@ GRFEXPORT void grf_free(void *); /* grf.c */
 GRFEXPORT uint32_t grf_filecount(void *); /* grf.c */
 GRFEXPORT uint32_t grf_wasted_space(void *); /* grf.c */
 GRFEXPORT void *grf_get_file(void *, const char *); /* grf.c */
+GRFEXPORT void *grf_file_add(void *, const char *, const void *, int); /* grf.c */
 GRFEXPORT const char *grf_file_get_filename(void *); /* grf.c */
 GRFEXPORT uint32_t grf_file_get_size(void *); /* grf.c */
 GRFEXPORT uint32_t grf_file_get_contents(void *, void *); /* grf.c */
 GRFEXPORT void grf_create_tree(void *); /* grf.c */
+GRFEXPORT void **grf_get_file_list(void *); /* grf.c */
 
 #ifdef GRFEXPORT_TMP_DEF
 #undef GRFEXPORT_TMP_DEF

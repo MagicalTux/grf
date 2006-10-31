@@ -25,6 +25,7 @@
 
 #define VERSION_MAJOR 0
 #define VERSION_MINOR 1
+#define VERSION_REVISION 6
 
 #ifdef __WIN32
 #define VERSION_TYPE "Win32"
@@ -44,7 +45,7 @@
 #define VERSION_EXTRA2
 #endif
 
-#define VERSION_STRING "Gravity Ragnarok Files lib v%d.%d (" VERSION_TYPE VERSION_EXTRA VERSION_EXTRA2 ") by MagicalTux <MagicalTux@gmail.com>\nBundled zlib version %s"
+#define VERSION_STRING "Gravity Ragnarok Files lib v%d.%d.%d (" VERSION_TYPE VERSION_EXTRA VERSION_EXTRA2 ") by MagicalTux <MagicalTux@gmail.com>\nBundled zlib version %s"
 
 struct grf_node {
 	struct grf_node *prev, *next;

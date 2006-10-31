@@ -51,6 +51,7 @@ int hash_add_element(hash_table *, char *, void *);
 int hash_del_element(hash_table *, char *);
 void hash_free_table(hash_table *);
 list_element **hash_foreach(hash_table *);
+void **hash_foreach_val(hash_table *);
 
 #endif
 

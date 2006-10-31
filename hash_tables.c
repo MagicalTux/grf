@@ -1,22 +1,6 @@
 /* hash_tables.c : Hash tables manager
  * $Id: hash_tables.c 2 2005-07-24 23:28:07Z magicaltux $
  *
- *  Kumo Internet Relay Chat Daemon
- *  Copyright (C) 2004 Robert Karpeles
- *
- *   This program is free software; you can redistribute it and/or modify
- *   it under the terms of the GNU General Public License as published by
- *   the Free Software Foundation; either version 1, or (at your option)
- *   any later version.
- *
- *   This program is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *   GNU General Public License for more details.
- *
- *   You should have received a copy of the GNU General Public License
- *   along with this program; if not, write to the Free Software
- *   Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
 /* System includes */
@@ -215,7 +199,7 @@ list_element **hash_foreach(hash_table *table) {
 		while(cur != NULL) {
 			num_entries++;
 			if (num_entries > num_alloc) {
-				num_alloc+=16;
+				num_alloc+=512;
 				if (result == NULL) {
 					result = calloc(num_alloc, sizeof(void *));
 				} else {
@@ -223,6 +207,38 @@ list_element **hash_foreach(hash_table *table) {
 				}
 			}
 			result[num_entries-1]=cur;
+			cur=cur->next;
+		}
+	}
+	if (result != NULL) {
+		result = realloc(result, sizeof(void *) * (num_entries+1));
+		result[num_entries]=NULL;
+	}
+	return result;
+}
+
+void **hash_foreach_val(hash_table *table) {
+	/* will return an array of pointers with every pointer in the list */
+	void **result;
+	list_element *cur;
+	int num_entries=0,num_alloc=0, i;
+	result = NULL;
+
+	if (table == NULL) return NULL;
+
+	for(i=0;i<table->size; i++) {
+		cur=table->table[i];
+		while(cur != NULL) {
+			num_entries++;
+			if (num_entries > num_alloc) {
+				num_alloc+=512;
+				if (result == NULL) {
+					result = calloc(num_alloc, sizeof(void *));
+				} else {
+					result = realloc(result, sizeof(void *) * num_alloc);
+				}
+			}
+			result[num_entries-1]=cur->pointer;
 			cur=cur->next;
 		}
 	}

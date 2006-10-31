@@ -24,11 +24,14 @@ ifeq ($(UNAME),Linux)
 # *** Linux config
 # *****
 CC=gcc32
+STRIP=strip
 # /opt/xmingw/ for gentoo, i586-mingw32msvc-gcc for debian
 ifeq ($(shell which i586-mingw32msvc-gcc 2>/dev/null),)
 CC_WIN=/opt/xmingw/bin/i386-mingw32msvc-gcc
+STRIP_WIN=/opt/xmingw/bin/i386-mingw32msvc-strip
 else
 CC_WIN=i586-mingw32msvc-gcc
+STRIP_WIN=i586-mingw32msvc-strip
 endif
 BUILD=Linux
 WINFLAGS=-D__WIN32
@@ -41,6 +44,8 @@ ifeq ($(UNAME),CYGWIN)
 # *****
 CC=gcc
 CC_WIN=gcc
+STRIP=strip
+STRIP_WIN=strip
 BUILD=Cygwin
 WINFLAGS=-mno-cygwin -mwindows -D__WIN32
 LINFLAGS=
@@ -78,10 +83,22 @@ make_dirs:
 $(TARGET_WIN): $(patsubst %.o,win32/%.o,$(ZOBJS) $(OBJECTS))
 	@echo -e "  LD\t$@              "
 	@$(CC_WIN) $(CFLAGS) $(WINFLAGS) $(LDFLAGS) -o $@ $^
+ifeq ($(DEBUG),no)
+	@echo -e " STRIP\t$@"
+	@$(STRIP_WIN) $@
+endif
 
 $(TARGET): $(patsubst %.o,linux/%.o,$(ZOBJS) $(OBJECTS))
 	@echo -e "  LD\t$@              "
 	@$(CC) $(CFLAGS) $(LINFLAGS) $(LDFLAGS) -o $@ $^
+ifeq ($(DEBUG),no)
+	@echo -e " STRIP\t$@"
+	@$(STRIP) $@
+endif
+
+grf_dist.zip: $(TARGET) $(TARGET_WIN) includes/libgrf.h
+	$(RM) $@
+	zip -9 $@ $^
 
 grf_test_win.exe: win32/test.o $(TARGET_WIN)
 	@echo -e "  LD\t$@              "
