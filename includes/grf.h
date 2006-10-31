@@ -25,7 +25,7 @@
 
 #define VERSION_MAJOR 0
 #define VERSION_MINOR 1
-#define VERSION_REVISION 9
+#define VERSION_REVISION 10
 
 #ifdef __WIN32
 #define VERSION_TYPE "Win32"
@@ -50,8 +50,9 @@
 struct grf_node {
 	struct grf_node *prev, *next;
 	struct grf_handler *parent;
-	char *filename, type;
+	char *filename, flags;
 	uint32_t size, len, len_aligned, pos;
+	int cycle;
 };
 
 struct grf_treenode {
@@ -63,7 +64,7 @@ struct grf_treenode {
 struct grf_handler {
 	uint32_t filecount, table_offset, wasted_space;
 	int fd;
-	bool need_save;
+	bool need_save, write_mode;
 	struct grf_node *first_node;
 	hash_table *fast_table;
 	struct grf_treenode *root;
@@ -74,6 +75,12 @@ struct grf_handler {
 #define GRF_FILE_OUTPUT_VERISON 0x200
 #define GRF_HASH_TABLE_SIZE 128
 #define GRF_TREE_HASH_SIZE 16
+
+#define GRF_FLAG_FILE 1
+#define GRF_FLAG_MIXCRYPT 2
+#define GRF_FLAG_DES 4
+/* extra custom-flag to delete a file while updating */
+#define GRF_FLAG_DELETE 8
 
 // should we use pragma pack ?
 struct grf_header {
@@ -90,7 +97,7 @@ struct grf_table_entry_data {
 	uint32_t len __attribute__ ((__packed__)); // packed len
 	uint32_t len_aligned __attribute__ ((__packed__)); // same, but with the alignment (?)
 	uint32_t size __attribute__ ((__packed__)); // real file size (unpacked)
-	uint8_t type __attribute__ ((__packed__)); // type seems to be 1, 3 or 5
+	uint8_t flags __attribute__ ((__packed__)); // file flags
 	uint32_t pos __attribute__ ((__packed__)); // position in the grf
 };
 

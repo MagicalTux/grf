@@ -110,6 +110,10 @@ grf_test_win.exe: win32/test.o $(TARGET_WIN)
 	@echo -e "  LD\t$@              "
 	@$(CC_WIN) $(CFLAGS) $(WINFLAGS) $(LDFLAGS_TEST) -o $@ $< -L. -lgrf
 
+extract_all: linux/extract_all.o $(TARGET)
+	@echo -e "  LD\t$@              "
+	@$(CC) $(CFLAGS) $(LINFLAGS) $(LDFLAGS_TEST) -o $@ $< -L. -lgrf
+
 grf_test_linux: linux/test.o $(TARGET)
 	@echo -e "  LD\t$@              "
 	@$(CC) $(CFLAGS) $(LINFLAGS) $(LDFLAGS_TEST) -o $@ $< -L. -lgrf

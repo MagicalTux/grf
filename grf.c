@@ -9,7 +9,17 @@
 
 /* BEGIN: INCLUDE FROM GRFIO.C */
 
-/* GRF: GRF 0x120 and 0x130 decoding tables */
+#ifdef __WIN32
+#include <windows.h>
+#else
+/* Since GRF is a windows-type file, we're using windows types "BYTE", "WORD" and "DWORD".
+ * However, when we compile on __WIN32 machine, those types are already defined in windef.h
+ * included from windows.h, so we don't need to redefine them ! */
+typedef unsigned char  BYTE;
+typedef unsigned short WORD;
+typedef unsigned long  DWORD;
+#endif
+
 static unsigned char BitMaskTable[8] = {
 	0x80, 0x40, 0x20, 0x10, 0x08, 0x04, 0x02, 0x01
 };
@@ -55,30 +65,35 @@ static unsigned char NibbleData[4][64]={
 	}
 };
 
-static void NibbleSwap(unsigned char *Src, int len) {
+static void NibbleSwap(BYTE *Src, int len) {
 	for( ; 0 < len; len--, Src++) {
 		*Src = (*Src >> 4) | (*Src << 4);
 	}
+
+	return;
 }
 
-static void BitConvert(unsigned char *Src, char *BitSwapTable) {
+static void BitConvert(BYTE *Src, char *BitSwapTable) {
 	int lop, prm;
-	char tmp[8];
-	*(int*)tmp = *(int*)(tmp+4)=0;
+	BYTE tmp[8];
 
-	for(lop=0;lop!=64;lop++) {
+	*(DWORD*)tmp = *(DWORD*)(tmp + 4) = 0; // use memset is slower.
+
+	for(lop = 0; lop != 64; lop++) {
 		prm = BitSwapTable[lop]-1;
 		if (Src[(prm >> 3) & 7] & BitMaskTable[prm & 7]) {
 			tmp[(lop >> 3) & 7] |= BitMaskTable[lop & 7];
 		}
 	}
-	*(int*)Src     = *(int*)tmp;
-	*(int*)(Src+4) = *(int*)(tmp+4);
+	*(DWORD*)Src       = *(DWORD*)tmp;
+	*(DWORD*)(Src + 4) = *(DWORD*)(tmp + 4); // use memcpy is not speeder
+
+	return;
 }
 
-static void BitConvert4(unsigned char *Src) {
+static void BitConvert4(BYTE *Src) {
 	int lop,prm;
-	unsigned char tmp[8];
+	BYTE tmp[8];
 
 	tmp[0] = ((Src[7]<<5) | (Src[4]>>3)) & 0x3f;	// ..0 vutsr
 	tmp[1] = ((Src[4]<<1) | (Src[5]>>7)) & 0x3f;	// ..srqpo n
@@ -90,22 +105,23 @@ static void BitConvert4(unsigned char *Src) {
 	tmp[7] = ((Src[7]<<1) | (Src[4]>>7)) & 0x3f;	// ..43210 v
 
 	for(lop=0;lop!=4;lop++) {
-		tmp[lop] = (NibbleData[lop][tmp[lop*2]] & 0xf0)
+		tmp[lop] = (NibbleData[lop][tmp[lop*2  ]] & 0xf0)
 		         | (NibbleData[lop][tmp[lop*2+1]] & 0x0f);
 	}
 
-	*(int*)(tmp+4)=0;
+	*(DWORD*)(tmp+4)=0;
 	for(lop=0;lop!=32;lop++) {
 		prm = BitSwapTable3[lop]-1;
 		if (tmp[prm >> 3] & BitMaskTable[prm & 7]) {
 			tmp[(lop >> 3) + 4] |= BitMaskTable[lop & 7];
 		}
 	}
-	*(int*)Src ^= *(int*)(tmp+4);
+	*(DWORD*)Src ^= *(DWORD*)(tmp + 4); // speeder method
+
+	return;
 }
 
-#if 0
-static void decode_des_etc(unsigned char *buf, int len, int type, int cycle) {
+static void decode_des_etc(BYTE *buf, int len, int type, int cycle) {
 	int lop, cnt = 0;
 
 	if (cycle<3) cycle=3;
@@ -121,9 +137,9 @@ static void decode_des_etc(unsigned char *buf, int len, int type, int cycle) {
 		} else {
 			if (cnt == 7 && type == 0) {
 				int a;
-				char tmp[8];
-				*(int*)tmp     = *(int*)buf;
-				*(int*)(tmp+4) = *(int*)(buf+4);
+				BYTE tmp[8];
+				*(DWORD*)tmp     = *(DWORD*)buf;
+				*(DWORD*)(tmp+4) = *(DWORD*)(buf+4);
 				cnt=0;
 				buf[0]=tmp[3];
 				buf[1]=tmp[4];
@@ -152,8 +168,9 @@ static void decode_des_etc(unsigned char *buf, int len, int type, int cycle) {
 			cnt++;
 		}
 	}
+
+	return;
 }
-#endif
 
 static unsigned char * decode_filename(unsigned char *buf, int len) {
 	int lop;
@@ -194,6 +211,7 @@ GRFEXPORT void *grf_new(const char *filename, bool writemode) {
 	handler->fast_table = hash_create_table(GRF_HASH_TABLE_SIZE, prv_grf_free_node);
 	handler->fd = fd;
 	handler->need_save = writemode; // file should be new (flag will be unset by prv_grf_load)
+	handler->write_mode = writemode;
 	return handler;
 }
 
@@ -291,6 +309,7 @@ static bool prv_grf_load(struct grf_handler *handler) {
 
 	switch(head.version) {
 		case 0x102: case 0x103: // old GRF files
+//			if (handler->write_mode) return false; // disallow usage of "write mode" for those files. Repack is needed to write to those files.
 			if (fstat(handler->fd, (struct stat *)&grfstat) != 0) return false;
 			if ((handler->table_offset + GRF_HEADER_SIZE) > grfstat.st_size) return false;
 
@@ -308,22 +327,60 @@ static bool prv_grf_load(struct grf_handler *handler) {
 				int fn_len = (*(uint32_t*)pos)-2; pos+=4+2;
 				struct grf_table_entry_data tmpentry;
 				struct grf_node *entry;
+				char ext[3];
 				if (fn_len>av_len) { free(table); return false; }
 				entry = malloc(sizeof(struct grf_node));
 				entry->filename = calloc(1, fn_len + 1);
 				memcpy(entry->filename, pos, fn_len); // fn_len + 1 is already 0x00
 				decode_filename((unsigned char *)entry->filename, fn_len);
 				pos += fn_len;
+				fn_len = strlen(entry->filename);
 				memcpy((void *)&tmpentry, pos, sizeof(struct grf_table_entry_data));
 				pos += sizeof(struct grf_table_entry_data);
+				if ((tmpentry.flags & GRF_FLAG_FILE) == 0) {
+					// do not register "directory" entries
+					free(entry->filename);
+					free(entry);
+					continue;
+				}
 
-				entry->type = tmpentry.type;
+				entry->flags = tmpentry.flags;
 				entry->size = tmpentry.size;
 				entry->len = tmpentry.len-tmpentry.size-715;
 				entry->len_aligned = tmpentry.len_aligned-37579;
 				entry->pos = tmpentry.pos;
 				entry->parent = handler;
+				entry->cycle = 0;
 				wasted_space -= entry->len_aligned;
+				// check file extension
+				if (*((entry->filename)+(fn_len-4)) == '.') {
+					char *nocrypt_list="gndgatactstr";
+					bool nocrypt = false;
+					memcpy(&ext, ((entry->filename)+(fn_len-3)), 3);
+					for(int i=0;i<3;i++) if ((ext[i]>='A') && (ext[i]<='Z')) ext[i]+=32;
+					// only files which are *NOT* one of : .gnd .gat .act .str
+					// are encrypted using method GRF_FLAG_MIXCRYPT. Other files are using
+					// GRF_FLAG_DES (cycle = 0).
+					// we have to compare the obtained extension (in ext) against those four possibilities
+					for(int j=0;j<4;j++) {
+						char *p=nocrypt_list+(j*3);
+						bool eq=true;
+						for(int i=0;i<3;i++) if (ext[i]!=*(p+i)) eq=false;
+						if (eq) {
+							nocrypt=true; /* found one! */
+							break;
+						}
+					}
+					if (!nocrypt) {
+						entry->flags |= GRF_FLAG_MIXCRYPT; /* required so if we save as 0x200 the file stays readable */
+						entry->cycle = 1;
+						for(int i=10; (entry->len)>=i; i=i*10) entry->cycle++;
+					} else {
+						entry->flags |= GRF_FLAG_DES;
+					}
+				} else {
+					entry->flags |= GRF_FLAG_DES;
+				}
 
 				entry->next = handler->first_node;
 				entry->prev = NULL;
@@ -353,7 +410,7 @@ static bool prv_grf_load(struct grf_handler *handler) {
 			pos = table;
 			pos_max = table + posinfo[1];
 			result = handler->filecount;
-			wasted_space = handler->table_offset;
+			wasted_space = handler->table_offset + 8;
 			while(pos < pos_max) {
 				size_t av_len = pos_max - pos;
 				int fn_len = prv_grf_strnlen((char *)pos, av_len);
@@ -367,12 +424,26 @@ static bool prv_grf_load(struct grf_handler *handler) {
 				pos += fn_len + 1;
 				memcpy((void *)&tmpentry, pos, sizeof(struct grf_table_entry_data));
 				pos += sizeof(struct grf_table_entry_data);
-				entry->type = tmpentry.type;
+				if ((tmpentry.flags & GRF_FLAG_FILE) == 0) {
+					// do not register "directory" entries
+					free(entry->filename);
+					free(entry);
+					continue;
+				}
+				entry->flags = tmpentry.flags;
 				entry->size = tmpentry.size;
 				entry->len = tmpentry.len;
 				entry->len_aligned = tmpentry.len_aligned;
 				entry->pos = tmpentry.pos;
 				entry->parent = handler;
+				entry->cycle = -1;
+				if (entry->flags & GRF_FLAG_MIXCRYPT) {
+					entry->cycle = 1;
+					for(int i=10; entry->len>=i; i=i*10) entry->cycle++;
+				}
+				if (entry->flags & GRF_FLAG_DES) {
+					entry->cycle = 0;
+				}
 				wasted_space -= tmpentry.len_aligned;
 
 				entry->next = handler->first_node;
@@ -452,15 +523,15 @@ GRFEXPORT uint32_t grf_file_get_contents(void *tmphandler, void *target) {
 	uint32_t count;
 	fhandler = (struct grf_node *)tmphandler;
 	handler = fhandler->parent;
+	if ((fhandler->flags & GRF_FLAG_FILE) == 0) return 0; // not a file
 	comp = malloc(fhandler->len_aligned);
 	lseek(handler->fd, fhandler->pos + GRF_HEADER_SIZE, SEEK_SET);
 	count = read(handler->fd, (char *)comp, fhandler->len_aligned);
 	if (count != fhandler->len_aligned) { free(comp); return 0; }
+	// decrypt (if required)
+	//static void decode_des_etc(unsigned char *buf, int len, int type, int cycle) {
+	if (fhandler->cycle >= 0) decode_des_etc((unsigned char *)comp, fhandler->len_aligned, (fhandler->cycle)==0, fhandler->cycle);
 	// decompress to target...
-	switch(fhandler->type) {
-		case 1: break;
-		default: return 0;
-	}
 	count = zlib_buffer_inflate(target, fhandler->size, comp, fhandler->len);
 	free(comp);
 	return count;
@@ -525,13 +596,13 @@ static bool prv_grf_write_table(struct grf_handler *handler) {
 			int j=strlen(((struct grf_node *)(files_list[i])->pointer)->filename);
 			memcpy(pos, ((struct grf_node *)(files_list[i])->pointer)->filename, j);
 			pos+=j;
-			*(char *)(pos+1) = 0;
+			*(char *)(pos) = 0;
 			pos++;
 			te.len = ((struct grf_node *)(files_list[i])->pointer)->len;
 			te.len_aligned = ((struct grf_node *)(files_list[i])->pointer)->len_aligned;
 			te.size = ((struct grf_node *)(files_list[i])->pointer)->size;
 			te.pos = ((struct grf_node *)(files_list[i])->pointer)->pos;
-			te.type = ((struct grf_node *)(files_list[i])->pointer)->type;
+			te.flags = ((struct grf_node *)(files_list[i])->pointer)->flags;
 			memcpy(pos, (void *)&te, sizeof(struct grf_table_entry_data));
 			pos+=sizeof(struct grf_table_entry_data);
 		}

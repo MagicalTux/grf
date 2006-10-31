@@ -69,6 +69,12 @@ void test_load_file() {
 	char *fn = "103-6.grf";
 	char *fn2 = "DATA/texTURE\\유저인터페이스/LOADING45.JPG";
 
+// test
+#if 0
+handler=grf_load("103.grf", true);
+grf_save(handler);
+grf_free(handler);
+#endif
 	printf(" - test_load_file(): Opening `%s` in read only mode...\n", fn);
 	timer_start();
 	handler = grf_load(fn, false);
