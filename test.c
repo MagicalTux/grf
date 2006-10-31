@@ -1,10 +1,10 @@
 #define GRF_NO_EXPORT
-#include <grf.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdint.h>
 #include <stdbool.h>
 #include <sys/time.h>
+#include <grf.h>
 
 #ifndef __WIN32
 struct timeval tv;
@@ -66,7 +66,7 @@ void test_load_file() {
 	void **list;
 //	char *fn = "/storage/win_d/Program Files/Gravity/fRO_II/data.grf";
 //	char *fn = "/storage/win_d/Program Files/Gravity/20060224_krodata.gpf";
-	char *fn = "problemfix.gpf";
+	char *fn = "103-6.grf";
 	char *fn2 = "DATA/texTURE\\유저인터페이스/LOADING45.JPG";
 
 	printf(" - test_load_file(): Opening `%s` in read only mode...\n", fn);
@@ -115,6 +115,7 @@ void test_load_file() {
 			for(int i=0;list[i]!=NULL;i++) {
 				printf(" - test_load_file(): %s\n", grf_file_get_filename(list[i]));
 			}
+			free(list);
 		}
 	}
 	grf_free(handler);

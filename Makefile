@@ -99,12 +99,12 @@ endif
 version.sh: includes/grf.h
 	cat $< | grep "define VERSION" | grep -E "MAJOR|MINOR|REVISION" | sed -e 's/^#define //;s/ /=/' >$@
 
-grf_dist-%.zip: $(TARGET) $(TARGET_WIN) includes/libgrf.h
+libgrf-%.zip: $(TARGET) $(TARGET_WIN) includes/libgrf.h
 	$(RM) $@
 	zip -9 $@ $^
 
-dist: version.sh
-	. version.sh; make -C . grf_dist-$$VERSION_MAJOR.$$VERSION_MINOR.$$VERSION_REVISION.zip
+dist: make_dirs version.sh
+	. version.sh; make -C . libgrf-$$VERSION_MAJOR.$$VERSION_MINOR.$$VERSION_REVISION.zip
 
 grf_test_win.exe: win32/test.o $(TARGET_WIN)
 	@echo -e "  LD\t$@              "
@@ -130,5 +130,5 @@ endif
 endif
 
 clean:
-	$(RM) -r linux $(TARGET) win32 $(TARGET_WIN) grf_test_win.exe grf_test_linux grf_dist-*.zip version.sh
+	$(RM) -r linux $(TARGET) win32 $(TARGET_WIN) grf_test_win.exe grf_test_linux libgrf-*.zip version.sh
 

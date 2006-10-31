@@ -9,6 +9,7 @@
 
 /* Local includes */
 #include <hash_tables.h>
+#include <grf.h>
 
 /* Our hash function
  * It is based on the published UNIX ELF hash algorythm used to find object files
@@ -177,7 +178,7 @@ void hash_free_table(hash_table *table) {
 			if (table->free_func != NULL) (table->free_func)(cur->pointer);
 			prev=cur;
 			cur=cur->next;
-			free(prev->string);
+//			free(prev->string);
 			free(prev);
 		}
 	}

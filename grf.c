@@ -1,4 +1,3 @@
-#include <grf.h>
 #include <stdlib.h>
 #include <zlib.h>
 #include <unistd.h>
@@ -6,6 +5,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <grf.h>
 
 /* BEGIN: INCLUDE FROM GRFIO.C */
 
@@ -104,6 +104,7 @@ static void BitConvert4(unsigned char *Src) {
 	*(int*)Src ^= *(int*)(tmp+4);
 }
 
+#if 0
 static void decode_des_etc(unsigned char *buf, int len, int type, int cycle) {
 	int lop, cnt = 0;
 
@@ -152,6 +153,7 @@ static void decode_des_etc(unsigned char *buf, int len, int type, int cycle) {
 		}
 	}
 }
+#endif
 
 static unsigned char * decode_filename(unsigned char *buf, int len) {
 	int lop;
@@ -180,9 +182,9 @@ GRFEXPORT void *grf_new(const char *filename, bool writemode) {
 	int fd;
 
 #ifdef O_LARGEFILE
-	fd = open(filename, (writemode!=false?O_RDWR:O_RDONLY) | O_CREAT | O_LARGEFILE, 0744);
+	fd = open(filename, (writemode!=false?O_RDWR | O_CREAT:O_RDONLY) | O_LARGEFILE, 0744);
 #else
-	fd = open(filename, (writemode!=false?O_RDWR:O_RDONLY) | O_CREAT, 0744);
+	fd = open(filename, (writemode!=false?O_RDWR | O_CREAT:O_RDONLY), 0744);
 #endif
 	if (fd < 0) return NULL;
 
@@ -329,6 +331,7 @@ static bool prv_grf_load(struct grf_handler *handler) {
 				handler->first_node = entry;
 				hash_add_element(handler->fast_table, entry->filename, entry);
 			}
+			free(table);
 			break;
 		case 0x200: // new GRF files
 			if (fstat(handler->fd, (struct stat *)&grfstat) != 0) return false;
@@ -378,6 +381,7 @@ static bool prv_grf_load(struct grf_handler *handler) {
 				handler->first_node = entry;
 				hash_add_element(handler->fast_table, entry->filename, entry);
 			}
+			free(table);
 			break;
 		default:
 			return false;
@@ -402,6 +406,13 @@ GRFEXPORT void *grf_load(const char *filename, bool writemode) {
 		return NULL;
 	}
 	return handler;
+}
+
+GRFEXPORT bool grf_file_delete(void *tmphandler) {
+	struct grf_node *handler;
+	handler = (struct grf_node *)tmphandler;
+	if (hash_del_element(handler->parent->fast_table, handler->filename)==0) return true;
+	return false;
 }
 
 GRFEXPORT uint32_t grf_filecount(void *tmphandler) {
@@ -524,8 +535,8 @@ static bool prv_grf_write_table(struct grf_handler *handler) {
 			memcpy(pos, (void *)&te, sizeof(struct grf_table_entry_data));
 			pos+=sizeof(struct grf_table_entry_data);
 		}
+		free(files_list);
 	}
-	free(files_list);
 
 	pos = malloc(table_size + 100);
 	*(uint32_t *)(pos+4) = table_size; /* initial size */
@@ -548,9 +559,20 @@ static bool prv_grf_write_table(struct grf_handler *handler) {
 	return true;
 }
 
+static void prv_grf_free_treenode(struct grf_treenode *p) {
+	if (p->is_dir) {
+//		void **treenode_list;
+//		treenode_list = hash_foreach_val(p->subdir);
+//		for(int i=0;treenode_list[i]!=NULL;i++) prv_grf_free_treenode(treenode_list[i]);
+//		free(treenode_list);
+		hash_free_table(p->subdir);
+	}
+	free(p);
+}
+
 GRFEXPORT void grf_free(void *tmphandler) {
 	struct grf_handler *handler;
-	struct grf_node *fn, *fn2;
+//	struct grf_node *fn, *fn2;
 	handler = (struct grf_handler *)tmphandler;
 	if (handler == NULL) return;
 
@@ -559,13 +581,16 @@ GRFEXPORT void grf_free(void *tmphandler) {
 		prv_grf_write_table(handler);
 	}
 	close(handler->fd);
+	/*
 	fn = handler->first_node;
 	while(fn != NULL) {
 		free(fn->filename);
 		fn2=fn->next;
 		free(fn);
 		fn=fn2;
-	}
+	}*/
+	hash_free_table(handler->fast_table);
+	if (handler->root != NULL) prv_grf_free_treenode(handler->root);
 	free(handler);
 }
 
