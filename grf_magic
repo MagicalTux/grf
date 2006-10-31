@@ -12,9 +12,6 @@
 > 42 leshort >0 (version 0x%x)
 > 34 lelong 0
 >> 38 lelong-7 x containing %u files
-> 34 lelong 15724
->> 38 lelong-15731 x containing %u files
 > 34 lelong >0
->> 34 lelong !15724
->>> 38 lelong-7 x containing (%u -
->>> 34 lelong x %u) files
+>> 38 lelong-7 x containing (%u -
+>> 34 lelong x %u) files
