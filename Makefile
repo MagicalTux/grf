@@ -69,7 +69,7 @@ linux/%.o: zlib/%.c
 	@echo -en "  CC\t$<           \015"
 	@$(CC) $(CFLAGS) $(LINFLAGS) $(INCLUDES) -c -o $@ $<
 
-.PHONY: make_dirs test
+.PHONY: make_dirs test dist
 
 ifeq ($(BUILD),unknown)
 all: ;@echo "Unknown system $(UNAME) !"
@@ -96,9 +96,15 @@ ifeq ($(DEBUG),no)
 	@$(STRIP) $@
 endif
 
-grf_dist.zip: $(TARGET) $(TARGET_WIN) includes/libgrf.h
+version.sh: includes/grf.h
+	cat $< | grep "define VERSION" | grep -E "MAJOR|MINOR|REVISION" | sed -e 's/^#define //;s/ /=/' >$@
+
+grf_dist-%.zip: $(TARGET) $(TARGET_WIN) includes/libgrf.h
 	$(RM) $@
 	zip -9 $@ $^
+
+dist: version.sh
+	. version.sh; make -C . grf_dist-$$VERSION_MAJOR.$$VERSION_MINOR.$$VERSION_REVISION.zip
 
 grf_test_win.exe: win32/test.o $(TARGET_WIN)
 	@echo -e "  LD\t$@              "
@@ -124,5 +130,5 @@ endif
 endif
 
 clean:
-	rm -fr linux $(TARGET) win32 $(TARGET_WIN) grf_test_win.exe grf_test_linux
+	$(RM) -r linux $(TARGET) win32 $(TARGET_WIN) grf_test_win.exe grf_test_linux grf_dist-*.zip version.sh
 

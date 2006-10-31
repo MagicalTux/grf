@@ -383,9 +383,9 @@ static bool prv_grf_load(struct grf_handler *handler) {
 			return false;
 	}
 	if (result != 0) return false;
-	if (wasted_space < 0) {
-		wasted_space = -1; // got more files data than can fit before the files table ?
-	}
+//	if (wasted_space < 0) {
+//		wasted_space = -1; // got more files data than can fit before the files table ?
+//	}
 	handler->wasted_space = wasted_space;
 
 	return true;

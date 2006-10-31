@@ -66,7 +66,7 @@ void test_load_file() {
 	void **list;
 //	char *fn = "/storage/win_d/Program Files/Gravity/fRO_II/data.grf";
 //	char *fn = "/storage/win_d/Program Files/Gravity/20060224_krodata.gpf";
-	char *fn = "102.grf";
+	char *fn = "problemfix.gpf";
 	char *fn2 = "DATA/texTURE\\유저인터페이스/LOADING45.JPG";
 
 	printf(" - test_load_file(): Opening `%s` in read only mode...\n", fn);
@@ -103,16 +103,18 @@ void test_load_file() {
 #endif
 		free(filec);
 	}
-	// Attempt to list file content
-	printf(" - test_load_file(): Getting files list\n");
-	timer_start();
-	list = grf_get_file_list(handler);
-	timer_end(" - test_load_file(): Got files list in %fms.\n");
-	if (list == NULL) {
-		printf(" - test_load_file(): No files found\n");
-	} else {
-		for(int i=0;list[i]!=NULL;i++) {
-			printf(" - test_load_file(): %s\n", grf_file_get_filename(list[i]));
+	if (grf_filecount(handler)<=16) {
+		// Attempt to list file content
+		printf(" - test_load_file(): Getting files list\n");
+		timer_start();
+		list = grf_get_file_list(handler);
+		timer_end(" - test_load_file(): Got files list in %fms.\n");
+		if (list == NULL) {
+			printf(" - test_load_file(): No files found\n");
+		} else {
+			for(int i=0;list[i]!=NULL;i++) {
+				printf(" - test_load_file(): %s\n", grf_file_get_filename(list[i]));
+			}
 		}
 	}
 	grf_free(handler);
