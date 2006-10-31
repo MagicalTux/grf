@@ -54,7 +54,7 @@ win32/%.o: %.c
 
 linux/%.o: %.c
 	@echo -en "  CC\t$<           \015"
-	@$(CC) $(CFLAGS) $(LINFLAGS) $(INCLUDES) -c -o $@ $<
+	@$(CC) $(CFLAGS) -Wno-attributes $(LINFLAGS) $(INCLUDES) -c -o $@ $<
 
 win32/%.o: zlib/%.c
 	@echo -en "  CC\t$<           \015"
