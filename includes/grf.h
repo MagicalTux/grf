@@ -8,6 +8,10 @@
 
 #define _LARGEFILE_SOURCE
 
+#ifdef __C99
+#error test
+#endif
+
 #include <stdint.h>
 #include <stdbool.h>
 #include <fcntl.h>
@@ -25,7 +29,7 @@
 
 #define VERSION_MAJOR 0
 #define VERSION_MINOR 1
-#define VERSION_REVISION 10
+#define VERSION_REVISION 11
 
 #ifdef __WIN32
 #define VERSION_TYPE "Win32"

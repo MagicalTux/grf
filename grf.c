@@ -426,7 +426,6 @@ static bool prv_grf_load(struct grf_handler *handler) {
 				pos += sizeof(struct grf_table_entry_data);
 				if ((tmpentry.flags & GRF_FLAG_FILE) == 0) {
 					// do not register "directory" entries
-					printf("DIR entry: %s\n", entry->filename);
 					free(entry->filename);
 					free(entry);
 					continue;
@@ -629,17 +628,6 @@ static bool prv_grf_write_table(struct grf_handler *handler) {
 	return true;
 }
 
-static void prv_grf_free_treenode(struct grf_treenode *p) {
-	if (p->is_dir) {
-//		void **treenode_list;
-//		treenode_list = hash_foreach_val(p->subdir);
-//		for(int i=0;treenode_list[i]!=NULL;i++) prv_grf_free_treenode(treenode_list[i]);
-//		free(treenode_list);
-		hash_free_table(p->subdir);
-	}
-	free(p);
-}
-
 GRFEXPORT void grf_free(void *tmphandler) {
 	struct grf_handler *handler;
 //	struct grf_node *fn, *fn2;
@@ -660,7 +648,7 @@ GRFEXPORT void grf_free(void *tmphandler) {
 		fn=fn2;
 	}*/
 	hash_free_table(handler->fast_table);
-	if (handler->root != NULL) prv_grf_free_treenode(handler->root);
+	if (handler->root != NULL) prv_grf_tree_table_free_node(handler->root);
 	free(handler);
 }
 

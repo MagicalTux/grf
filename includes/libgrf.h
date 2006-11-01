@@ -4,9 +4,27 @@
 #ifndef __LIBGRF_H_INCLUDED
 #define __LIBGRF_H_INCLUDED
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+
+#if __STDC_VERSION__ >= 199901L
+/* we have a C99 compiler, and we're compiling for C99 */
+#include <stdint.h>
 #ifndef __bool_true_false_are_defined
 #include <stdbool.h>
+#endif /* __bool_true_false_are_defined */
+#else /* __STDC_VERSION__ >= 199901L */
+/* We're most likely using ANSI C (C89), which does not provide bool, etc..
+ * Let's use typedef for a few things... */
+typedef unsigned int uint32_t;
+#ifndef __bool_true_false_are_defined
+typedef int bool;
+#define true 1
+#define false 0
 #endif
+#endif /* __STDC_VERSION__ >= 199901L */
 
 #ifndef GRFEXPORT
 #define GRFEXPORT
@@ -35,6 +53,10 @@ GRFEXPORT void **grf_get_file_list(void *); /* grf.c */
 #ifdef GRFEXPORT_TMP_DEF
 #undef GRFEXPORT_TMP_DEF
 #undef GRFEXPORT
+#endif
+
+#ifdef __cplusplus
+}
 #endif
 
 #endif /* __LIBGRF_H_INCLUDED */
