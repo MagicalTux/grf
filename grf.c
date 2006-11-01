@@ -568,6 +568,21 @@ GRFEXPORT void **grf_get_file_list(void *tmphandler) {
 	return hash_foreach_val(handler->fast_table);
 }
 
+GRFEXPORT void *grf_get_file_next(void *tmphandler) {
+	struct grf_node *handler = tmphandler;
+	return handler->next;
+}
+
+GRFEXPORT void *grf_get_file_prev(void *tmphandler) {
+	struct grf_node *handler = tmphandler;
+	return handler->prev;
+}
+
+GRFEXPORT void *grf_get_file_first(void *tmphandler) {
+	struct grf_handler *handler = tmphandler;
+	return handler->first_node;
+}
+
 static bool prv_grf_write_table(struct grf_handler *handler) {
 	// Step 1 : generate a proper table
 	// We need to determine the final size of the table. It's :

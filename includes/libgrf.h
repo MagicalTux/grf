@@ -49,6 +49,9 @@ GRFEXPORT uint32_t grf_file_get_size(void *); /* grf.c */
 GRFEXPORT uint32_t grf_file_get_contents(void *, void *); /* grf.c */
 GRFEXPORT void grf_create_tree(void *); /* grf.c */
 GRFEXPORT void **grf_get_file_list(void *); /* grf.c */
+GRFEXPORT void *grf_get_file_next(void *tmphandler); /* grf.c */
+GRFEXPORT void *grf_get_file_prev(void *tmphandler); /* grf.c */
+GRFEXPORT void *grf_get_file_first(void *tmphandler); /* grf.c */
 
 #ifdef GRFEXPORT_TMP_DEF
 #undef GRFEXPORT_TMP_DEF
