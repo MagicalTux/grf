@@ -32,7 +32,7 @@ void test_grf_version() {
 	major = (version >> 16) & 0xff;
 	minor = (version >> 8) & 0xff;
 	revision = version & 0xff;
-	printf(" - test_version(): %x (%d.%d.%d)\n", version, major, minor, revision);
+	printf(" - test_version(): 0x%06x (%d.%d.%d)\n", version, major, minor, revision);
 	if ( (major != VERSION_MAJOR) || (minor != VERSION_MINOR) || (revision != VERSION_REVISION)) {
 		puts("Error: This test program was not compiled for this lib!");
 		exit(1);
@@ -64,9 +64,9 @@ void test_load_file() {
 	void *handler, *fhandler;
 	void *filec;
 	void **list;
-//	char *fn = "/storage/win_d/Program Files/Gravity/fRO_II/data.grf";
+	char *fn = "/storage/win_d/Program Files/Gravity/fRO_II/data.grf";
 //	char *fn = "/storage/win_d/Program Files/Gravity/20060224_krodata.gpf";
-	char *fn = "103-6.grf";
+//	char *fn = "problemfix.gpf";
 	char *fn2 = "DATA/texTURE\\유저인터페이스/LOADING45.JPG";
 
 // test

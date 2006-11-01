@@ -104,7 +104,7 @@ libgrf-%.zip: $(TARGET) $(TARGET_WIN) includes/libgrf.h
 	zip -9 $@ $^
 
 dist: make_dirs version.sh
-	. version.sh; make -C . libgrf-$$VERSION_MAJOR.$$VERSION_MINOR.$$VERSION_REVISION.zip
+	. version.sh; make -C . libgrf-$$VERSION_MAJOR.$$VERSION_MINOR.$$VERSION_REVISION.zip DEBUG=no
 
 grf_test_win.exe: win32/test.o $(TARGET_WIN)
 	@echo -e "  LD\t$@              "

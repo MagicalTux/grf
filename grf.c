@@ -372,7 +372,7 @@ static bool prv_grf_load(struct grf_handler *handler) {
 						}
 					}
 					if (!nocrypt) {
-						entry->flags |= GRF_FLAG_MIXCRYPT; /* required so if we save as 0x200 the file stays readable */
+						entry->flags |= GRF_FLAG_MIXCRYPT;
 						entry->cycle = 1;
 						for(int i=10; (entry->len)>=i; i=i*10) entry->cycle++;
 					} else {
@@ -426,6 +426,7 @@ static bool prv_grf_load(struct grf_handler *handler) {
 				pos += sizeof(struct grf_table_entry_data);
 				if ((tmpentry.flags & GRF_FLAG_FILE) == 0) {
 					// do not register "directory" entries
+					printf("DIR entry: %s\n", entry->filename);
 					free(entry->filename);
 					free(entry);
 					continue;
@@ -458,9 +459,6 @@ static bool prv_grf_load(struct grf_handler *handler) {
 			return false;
 	}
 	if (result != 0) return false;
-//	if (wasted_space < 0) {
-//		wasted_space = -1; // got more files data than can fit before the files table ?
-//	}
 	handler->wasted_space = wasted_space;
 
 	return true;
@@ -482,6 +480,7 @@ GRFEXPORT void *grf_load(const char *filename, bool writemode) {
 GRFEXPORT bool grf_file_delete(void *tmphandler) {
 	struct grf_node *handler;
 	handler = (struct grf_node *)tmphandler;
+	handler->parent->need_save = true;
 	if (hash_del_element(handler->parent->fast_table, handler->filename)==0) return true;
 	return false;
 }

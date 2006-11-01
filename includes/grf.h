@@ -45,7 +45,7 @@
 #define VERSION_EXTRA2
 #endif
 
-#define VERSION_STRING "Gravity Ragnarok Files lib v%d.%d.%d (" VERSION_TYPE VERSION_EXTRA VERSION_EXTRA2 ") by MagicalTux <MagicalTux@gmail.com>\nBundled zlib version %s"
+#define VERSION_STRING "Gravity Ragnarok Files lib v%d.%d.%d (" VERSION_TYPE VERSION_EXTRA VERSION_EXTRA2 ") by MagicalTux <MagicalTux@ooKoo.org>\nBundled zlib version %s"
 
 struct grf_node {
 	struct grf_node *prev, *next;
@@ -81,6 +81,12 @@ struct grf_handler {
 #define GRF_FLAG_DES 4
 /* extra custom-flag to delete a file while updating */
 #define GRF_FLAG_DELETE 8
+
+/* values specific to all directories */
+#define GRF_DIRECTORY_LEN 1094
+#define GRF_DIRECTORY_LEN_ALIGNED 1812
+#define GRF_DIRECTORY_SIZE 1372
+#define GRF_DIRECTORY_OFFSET 1418
 
 // should we use pragma pack ?
 struct grf_header {
