@@ -288,6 +288,7 @@ static bool prv_grf_load(struct grf_handler *handler) {
 	int32_t wasted_space=0;
 	int dlen, result;
 	void *table, *table_comp, *pos, *pos_max;
+	struct grf_node *entry, *last;
 
 	// load header...
 	handler->need_save = false;
@@ -304,6 +305,10 @@ static bool prv_grf_load(struct grf_handler *handler) {
 
 	handler->table_offset = head.offset;
 	handler->filecount = head.filecount - head.seed - 7;
+	last = handler->first_node;
+	if (last != NULL) {
+		while(last->next != NULL) last = last->next; // seek to end of list
+	}
 
 	if (handler->filecount == 0) return true; // do not even bother reading file table, it's empty
 
@@ -326,7 +331,6 @@ static bool prv_grf_load(struct grf_handler *handler) {
 				size_t av_len = pos_max - pos;
 				int fn_len = (*(uint32_t*)pos)-2; pos+=4+2;
 				struct grf_table_entry_data tmpentry;
-				struct grf_node *entry;
 				char ext[3];
 				if (fn_len>av_len) { free(table); return false; }
 				entry = malloc(sizeof(struct grf_node));
@@ -382,10 +386,14 @@ static bool prv_grf_load(struct grf_handler *handler) {
 					entry->flags |= GRF_FLAG_DES;
 				}
 
-				entry->next = handler->first_node;
-				entry->prev = NULL;
-				if (handler->first_node != NULL) handler->first_node->prev = entry;
-				handler->first_node = entry;
+				if (last == NULL) {
+					last = entry;
+					handler->first_node = entry;
+				} else {
+					last->next = entry;
+					entry->prev = last;
+					last = entry;
+				}
 				hash_add_element(handler->fast_table, entry->filename, entry);
 			}
 			free(table);
@@ -415,7 +423,6 @@ static bool prv_grf_load(struct grf_handler *handler) {
 				size_t av_len = pos_max - pos;
 				int fn_len = prv_grf_strnlen((char *)pos, av_len);
 				struct grf_table_entry_data tmpentry;
-				struct grf_node *entry;
 				result--;
 				if (fn_len + sizeof(struct grf_table_entry_data) > av_len) { free(table); return false; }
 				entry = malloc(sizeof(struct grf_node));
@@ -446,10 +453,14 @@ static bool prv_grf_load(struct grf_handler *handler) {
 				}
 				wasted_space -= tmpentry.len_aligned;
 
-				entry->next = handler->first_node;
-				entry->prev = NULL;
-				if (handler->first_node != NULL) handler->first_node->prev = entry;
-				handler->first_node = entry;
+				if (last == NULL) {
+					last = entry;
+					handler->first_node = entry;
+				} else {
+					last->next = entry;
+					entry->prev = last;
+					last = entry;
+				}
 				hash_add_element(handler->fast_table, entry->filename, entry);
 			}
 			free(table);
@@ -460,6 +471,25 @@ static bool prv_grf_load(struct grf_handler *handler) {
 	if (result != 0) return false;
 	handler->wasted_space = wasted_space;
 
+	// sort entries (if needed)
+	// We use "bubble sort", as entries *should* already be sorted
+	// usually bubble sort isn't really optimized, however in our case it's just perfect
+	entry = handler->first_entry;
+	if (entry == NULL) return true; // no files?
+	while(1) {
+		last = entry;
+		entry = entry->next;
+		if (entry == NULL) break;
+		if (entry->pos < last->pos) {
+			entry->prev = last->prev;
+			last->prev = entry;
+			last->next = entry->next;
+			entry->next = last;
+			if (entry->prev != NULL) entry = entry->prev;
+			if (entry->prev != NULL) entry = entry->prev;
+		}
+	}
+	// sort OK! Oh yeah man!!
 	return true;
 }
 
@@ -477,11 +507,13 @@ GRFEXPORT void *grf_load(const char *filename, bool writemode) {
 }
 
 GRFEXPORT bool grf_file_delete(void *tmphandler) {
-	struct grf_node *handler;
-	handler = (struct grf_node *)tmphandler;
-	handler->parent->need_save = true;
-	if (hash_del_element(handler->parent->fast_table, handler->filename)==0) return true;
-	return false;
+	struct grf_node *handler = (struct grf_node *)tmphandler;
+	struct grf_handler *parent = handler->parent;
+	uint32_t len_aligned = handler->len_aligned;
+	parent->need_save = true;
+	if (hash_del_element(handler->parent->fast_table, handler->filename)!=0) return false;
+	parent->wasted_space += len_aligned; /* wasted_space accounting */
+	return true;
 }
 
 GRFEXPORT uint32_t grf_filecount(void *tmphandler) {
@@ -535,12 +567,52 @@ GRFEXPORT uint32_t grf_file_get_contents(void *tmphandler, void *target) {
 	return count;
 }
 
-GRFEXPORT void *grf_file_add(void *tmphandler, const char *filename, const void *ptr, int size) {
-//	void *comp;
+uint32_t prv_grf_find_free_space(struct grf_handler *handler, size_t size) {
+	// find a "leak" between two files, to put our own file
+}
+
+GRFEXPORT void *grf_file_add(void *tmphandler, const char *filename, const void *ptr, size_t size) {
+	// returns pointer to the newly created file structure
 	struct grf_handler *handler;
-	handler = (struct grf_handler *)tmphandler;
-	
-	handler->need_save = true;
+ 	handler = (struct grf_handler *)tmphandler;
+	void *ptr_comp;
+	struct grf_node *ptr_file;
+	size_t comp_size;
+	uint32_t pos;
+	// need some code here to actually add file to the GRF, and not just return NULL
+	// STEPS
+	// 1. Compress file, to have its size
+	ptr_comp = malloc(size+100);
+	if (ptr_comp == NULL) return NULL; /* out of memory? */
+	comp_size = zlib_buffer_deflate(ptr_comp, size + 100, ptr, size);
+	ptr_comp = realloc(ptr_comp, comp_size);
+	if (ptr_comp == NULL) return NULL; /* out of memory? */
+	// 2. Check if a file already exists with the same name.
+	ptr_file = hash_lookup(handler->fast_table, filename);
+	// 3. Find a place to add the file, and add it
+	pos = prv_grf_find_free_space(handler, comp_size, ptr_file);
+	// 4. Rebuild index, replace file if needed, etc...
+	if (ptr_file != NULL) {
+		// YAY! Everything made easy
+		free(ptr_file->filename);
+	} else {
+		// Regular add file~ (argh)
+		ptr_file = calloc(1, sizeof(ptr_file));
+		ptr_file->next = handler->first_node;
+		handler->first_node = ptr_file;
+		if (ptr_file->next->next != NULL) ptr_file->next->prev = ptr_file;
+		hash_add_element(handler->fast_table, filename, ptr_file);
+		// TODO: Check handler->root
+	}
+	ptr_file->filename = strdup(filename);
+	ptr_file->pos = pos;
+	ptr_file->size = size;
+	ptr_file->len = comp_size;
+	ptr_file->len_aligned = comp_size + (4-((comp_size-1) % 4)) - 1;
+	ptr_file->flags = GRF_FLAG_FILE;
+	// 5. Check if handler->root is not null. If that's the case and we added a new file (no replace), record it to the tree
+	// 6. If we didn't use end of archive, but some wasted space, substract used space to handler->wasted_space
+	//handler->need_save = true;
 	return NULL;
 }
 
@@ -568,6 +640,11 @@ GRFEXPORT void **grf_get_file_list(void *tmphandler) {
 	return hash_foreach_val(handler->fast_table);
 }
 
+GRFEXPORT void *grf_get_file_first(void *tmphandler) {
+	struct grf_handler *handler = tmphandler;
+	return handler->first_node;
+}
+
 GRFEXPORT void *grf_get_file_next(void *tmphandler) {
 	struct grf_node *handler = tmphandler;
 	return handler->next;
@@ -576,11 +653,6 @@ GRFEXPORT void *grf_get_file_next(void *tmphandler) {
 GRFEXPORT void *grf_get_file_prev(void *tmphandler) {
 	struct grf_node *handler = tmphandler;
 	return handler->prev;
-}
-
-GRFEXPORT void *grf_get_file_first(void *tmphandler) {
-	struct grf_handler *handler = tmphandler;
-	return handler->first_node;
 }
 
 static bool prv_grf_write_table(struct grf_handler *handler) {
@@ -638,8 +710,8 @@ static bool prv_grf_write_table(struct grf_handler *handler) {
 	lseek(handler->fd, handler->table_offset + GRF_HEADER_SIZE, SEEK_SET);
 	if (write(handler->fd, (char *)pos, table_size) != table_size) { free(pos); return false; }
 	free(pos);
+	ftruncate(handler->fd, handler->table_offset + GRF_HEADER_SIZE + table_size);
 	handler->need_save = false;
-
 	return true;
 }
 
@@ -667,11 +739,24 @@ GRFEXPORT void grf_free(void *tmphandler) {
 	free(handler);
 }
 
+static void prv_grf_update_values(struct grf_handler *handler) {
+	/* compute new position for the table */
+	struct grf_node *cur;
+	uint32_t pos = 0;
+	cur = handler->first_node;
+	while(cur != NULL) {
+		uint32_t p=cur->pos+cur->len_aligned;
+		pos = MAX(pos, p);
+	}
+	handler->table_offset = pos;
+}
+
 GRFEXPORT bool grf_save(void *tmphandler) {
 	struct grf_handler *handler;
 	handler = (struct grf_handler *)tmphandler;
 	if (handler == NULL) return false;
 
+	prv_grf_update_values(handler);
 	if (prv_grf_write_header(handler) != true) { return false; }
 	if (prv_grf_write_table(handler) != true) { return false; }
 

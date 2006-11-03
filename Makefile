@@ -99,9 +99,9 @@ endif
 version.sh: includes/grf.h
 	cat $< | grep "define VERSION" | grep -E "MAJOR|MINOR|REVISION" | sed -e 's/^#define //;s/ /=/' >$@
 
-libgrf-%.zip: $(TARGET) $(TARGET_WIN) includes/libgrf.h examples README
+libgrf-%.zip: $(TARGET) $(TARGET_WIN) includes/libgrf.h $(wildcard examples/*) README
 	$(RM) $@
-	zip -9r $@ $^
+	zip -9r $@ $^ -x .svn '*.o'
 
 dist: make_dirs version.sh
 	. version.sh; make -C . libgrf-$$VERSION_MAJOR.$$VERSION_MINOR.$$VERSION_REVISION.zip DEBUG=no

@@ -29,7 +29,7 @@
 
 #define VERSION_MAJOR 0
 #define VERSION_MINOR 1
-#define VERSION_REVISION 11
+#define VERSION_REVISION 13
 
 #ifdef __WIN32
 #define VERSION_TYPE "Win32"
@@ -113,6 +113,8 @@ struct grf_table_entry_data {
 
 int zlib_buffer_inflate(void *, int, void *, int); /* private: zlib.c */
 int zlib_buffer_deflate(void *, int, void *, int); /* private: zlib.c */
+
+#define MAX(a,b) ((a>b)?a:b)
 
 #include "libgrf.h"
 
