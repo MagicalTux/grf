@@ -624,6 +624,8 @@ GRFEXPORT void *grf_file_add(void *tmphandler, char *filename, void *ptr, size_t
 		hash_add_element(handler->fast_table, ptr_file->filename, ptr_file);
 		// FIXME: Check handler->root and update arbo if needed
 	}
+	// filename: replace '/' with '\\'
+	for(int i=0;*(ptr_file->filename+i)!=0;i++) if (*(ptr_file->filename+i)=='/') *(ptr_file->filename+i)='\\';
 	if (prev == NULL) {
 		ptr_file->pos = 0;
 		ptr_file->next = handler->first_node; // just in case, supposed to be null
@@ -645,6 +647,7 @@ GRFEXPORT void *grf_file_add(void *tmphandler, char *filename, void *ptr, size_t
 	lseek(handler->fd, ptr_file->pos + GRF_HEADER_SIZE, SEEK_SET);
 	if (write(handler->fd, ptr_comp, ptr_file->len_aligned)!=ptr_file->len_aligned) {
 		free(ptr_comp);
+		hash_del_element(handler->fast_table, ptr_file->filename);
 		return NULL;
 	}
 	free(ptr_comp);
@@ -655,6 +658,27 @@ GRFEXPORT void *grf_file_add(void *tmphandler, char *filename, void *ptr, size_t
 	handler->need_save = true;
 	return ptr_file;
 }
+
+GRFEXPORT void *grf_file_add_path(void *tmphandler, char *filename, char *real_filename) {
+	int fp;
+	struct stat s;
+	void *ptr, *res;
+
+	fp = open(real_filename, O_RDONLY);
+	if (fp < 0) return NULL;
+	fstat(fp, &s);
+	ptr = malloc(s.st_size);
+	if (read(fp, ptr, s.st_size) != s.st_size) {
+		close(fp);
+		free(ptr);
+		return NULL;
+	}
+	close(fp);
+	res = grf_file_add(tmphandler, filename, ptr, s.st_size);
+	free(ptr);
+	return res;
+}
+
 
 static bool prv_grf_write_header(struct grf_handler *handler) {
 	struct grf_header file_header;
