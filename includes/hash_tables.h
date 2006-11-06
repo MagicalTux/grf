@@ -35,9 +35,10 @@ typedef struct _list_element {
  */
 
 typedef struct _hash_table {
-	unsigned long size; /* store hash table size for future references */
+	unsigned long int size; /* store hash table size for future references */
 	struct _list_element **table;
 	void (*free_func)(void *);
+	unsigned int count;
 } hash_table;
 
 /* Our "exported" functions 

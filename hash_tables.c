@@ -44,24 +44,20 @@ char *strduptolower(const char *str) {
 
 hash_table *hash_create_table(unsigned long size, void *func) {
 	hash_table *new_table;
-	unsigned long i;
 
 	if (size<1) return NULL; /* illegal table size */
 	
 	/* Attempt to malloc some memory */
-	if ((new_table = malloc(sizeof(hash_table))) == NULL) {
+	if ((new_table = calloc(1, sizeof(hash_table))) == NULL) {
 		return NULL;
 	}
 	new_table->free_func = func;
 
 	/* get some memory for our dynamic array */
-	if ((new_table->table = malloc(sizeof(list_element)*size)) == NULL) {
+	if ((new_table->table = calloc(1, sizeof(list_element)*size)) == NULL) {
 		free(new_table);
 		return NULL;
 	}
-
-	/* initialize our table */
-	for(i=0;i<size;new_table->table[i++]=NULL);
 
 	new_table->size=size;
 
@@ -87,7 +83,8 @@ list_element *hash_lookup_raw(hash_table *table, const char *string) {
 }
 
 void *hash_lookup(hash_table *table, const char *string) {
-	list_element *element=hash_lookup_raw(table,string);
+	list_element *element;
+	element=hash_lookup_raw(table,string);
 
 	if (element == NULL) return NULL;
 
@@ -115,7 +112,7 @@ int hash_add_element(hash_table *table, char *string, void *pointer) {
 
 	str=strduptolower(string);
 	hashval=hash_calc(str, table->size);
-	current_element=hash_lookup_raw(table, str);
+	current_element=hash_lookup_raw(table, string);
 	if (current_element != NULL) {
 		free(str);
 		return 2; /* already present in hash table */
@@ -130,6 +127,7 @@ int hash_add_element(hash_table *table, char *string, void *pointer) {
 	new_element->next = table->table[hashval];
 	new_element->pointer = pointer;
 	table->table[hashval]=new_element;
+	table->count += 1;
 
 	return 0;
 }
@@ -152,11 +150,13 @@ int hash_del_element(hash_table *table, char *string) {
 		if (current_element==old_element) {
 			if (prev==NULL) {
 				table->table[hashval] = current_element->next;
+				table->count -= 1;
 				free(current_element->string);
 				free(current_element);
 				return 0;
 			}
 			prev->next=current_element->next;
+			table->count -= 1;
 			free(current_element->string);
 			free(current_element);
 			return 0;
