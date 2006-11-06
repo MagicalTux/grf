@@ -178,7 +178,7 @@ void hash_free_table(hash_table *table) {
 			if (table->free_func != NULL) (table->free_func)(cur->pointer);
 			prev=cur;
 			cur=cur->next;
-//			free(prev->string);
+			free(prev->string);
 			free(prev);
 		}
 	}

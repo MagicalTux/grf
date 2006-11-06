@@ -205,7 +205,7 @@ GRFEXPORT void *grf_new(const char *filename, bool writemode) {
 #endif
 	if (fd < 0) return NULL;
 
-	handler = (struct grf_handler *)malloc(sizeof(struct grf_handler));
+	handler = (struct grf_handler *)calloc(1, sizeof(struct grf_handler));
 	if (handler == NULL) { close(fd); return NULL; }
 	memset(handler, 0, sizeof(struct grf_handler));
 	handler->fast_table = hash_create_table(GRF_HASH_TABLE_SIZE, prv_grf_free_node);
@@ -233,7 +233,7 @@ GRFEXPORT void grf_create_tree(void *tmphandler) {
 	if (handler->root != NULL) return;
 	// the idea is simple : get to each file and scan them~
 	// First, create the root node...
-	handler->root = (struct grf_treenode *)malloc(sizeof(struct grf_treenode));
+	handler->root = (struct grf_treenode *)calloc(1, sizeof(struct grf_treenode));
 	memset(handler->root, 0, sizeof(struct grf_treenode));
 	handler->root->is_dir = true; // root is a directory, that's common knowledge
 	handler->root->subdir = hash_create_table(GRF_TREE_HASH_SIZE, prv_grf_tree_table_free_node);
@@ -264,7 +264,7 @@ GRFEXPORT void grf_create_tree(void *tmphandler) {
 				continue;
 			}
 			// not found -> create a new node
-			new = (struct grf_treenode *)malloc(sizeof(struct grf_treenode));
+			new = (struct grf_treenode *)calloc(1, sizeof(struct grf_treenode));
 			memset(new, 0, sizeof(struct grf_treenode));
 			new->is_dir = true;
 			new->subdir = hash_create_table(GRF_TREE_HASH_SIZE, prv_grf_tree_table_free_node);
@@ -272,7 +272,7 @@ GRFEXPORT void grf_create_tree(void *tmphandler) {
 			parent = new;
 		}
 		// record file
-		new = (struct grf_treenode *)malloc(sizeof(struct grf_treenode));
+		new = (struct grf_treenode *)calloc(1, sizeof(struct grf_treenode));
 		memset(new, 0, sizeof(struct grf_treenode));
 		new->is_dir = false;
 		new->ptr = cur_node;
@@ -333,7 +333,7 @@ static bool prv_grf_load(struct grf_handler *handler) {
 				struct grf_table_entry_data tmpentry;
 				char ext[3];
 				if (fn_len>av_len) { free(table); return false; }
-				entry = malloc(sizeof(struct grf_node));
+				entry = calloc(1, sizeof(struct grf_node));
 				entry->filename = calloc(1, fn_len + 1);
 				memcpy(entry->filename, pos, fn_len); // fn_len + 1 is already 0x00
 				decode_filename((unsigned char *)entry->filename, fn_len);
@@ -425,7 +425,7 @@ static bool prv_grf_load(struct grf_handler *handler) {
 				struct grf_table_entry_data tmpentry;
 				result--;
 				if (fn_len + sizeof(struct grf_table_entry_data) > av_len) { free(table); return false; }
-				entry = malloc(sizeof(struct grf_node));
+				entry = calloc(1, sizeof(struct grf_node));
 				entry->filename = calloc(1, fn_len + 1);
 				memcpy(entry->filename, pos, fn_len); // fn_len + 1 is already 0x00
 				pos += fn_len + 1;
@@ -474,7 +474,7 @@ static bool prv_grf_load(struct grf_handler *handler) {
 	// sort entries (if needed)
 	// We use "bubble sort", as entries *should* already be sorted
 	// usually bubble sort isn't really optimized, however in our case it's just perfect
-	entry = handler->first_entry;
+	entry = handler->first_node;
 	if (entry == NULL) return true; // no files?
 	while(1) {
 		last = entry;
@@ -567,30 +567,49 @@ GRFEXPORT uint32_t grf_file_get_contents(void *tmphandler, void *target) {
 	return count;
 }
 
-uint32_t prv_grf_find_free_space(struct grf_handler *handler, size_t size) {
+inline struct grf_node *prv_grf_find_free_space(struct grf_handler *handler, size_t size, struct grf_node *inode) {
 	// find a "leak" between two files, to put our own file
+	// our files are sorted, that's a good thing:)
+	// We just have to return the node where the space is available, the other func will
+	// insert his new node just after this one, so everything stays cool
+	// FIXME: Handle case where "inode" is the first node
+	struct grf_node *cur = handler->first_node;
+	if (cur == NULL) return NULL; /* special case : nothing in the grf */
+	while(cur->next != NULL) {
+		struct grf_node *next = cur->next;
+		uint32_t avail;
+		if (next == inode) { /* skip the file refered by "inode" */
+			next = next->next;
+			if (next == NULL) break; /* ignore file is EOF */
+		}
+		// check available space between files
+		avail = next->pos - (cur->pos + cur->len_aligned);
+		if (avail >= size) break; /* yatta! */
+		cur = next;
+	}
+	return cur;
 }
 
-GRFEXPORT void *grf_file_add(void *tmphandler, const char *filename, const void *ptr, size_t size) {
+GRFEXPORT void *grf_file_add(void *tmphandler, char *filename, void *ptr, size_t size) {
 	// returns pointer to the newly created file structure
 	struct grf_handler *handler;
  	handler = (struct grf_handler *)tmphandler;
 	void *ptr_comp;
-	struct grf_node *ptr_file;
-	size_t comp_size;
-	uint32_t pos;
+	struct grf_node *prev, *ptr_file;
+	uint32_t comp_size, comp_size_aligned;
 	// need some code here to actually add file to the GRF, and not just return NULL
 	// STEPS
 	// 1. Compress file, to have its size
 	ptr_comp = malloc(size+100);
 	if (ptr_comp == NULL) return NULL; /* out of memory? */
 	comp_size = zlib_buffer_deflate(ptr_comp, size + 100, ptr, size);
-	ptr_comp = realloc(ptr_comp, comp_size);
+	comp_size_aligned = comp_size + (4-((comp_size-1) % 4)) - 1;
+	ptr_comp = realloc(ptr_comp, comp_size_aligned);
 	if (ptr_comp == NULL) return NULL; /* out of memory? */
 	// 2. Check if a file already exists with the same name.
 	ptr_file = hash_lookup(handler->fast_table, filename);
 	// 3. Find a place to add the file, and add it
-	pos = prv_grf_find_free_space(handler, comp_size, ptr_file);
+	prev = prv_grf_find_free_space(handler, comp_size_aligned, ptr_file);
 	// 4. Rebuild index, replace file if needed, etc...
 	if (ptr_file != NULL) {
 		// YAY! Everything made easy
@@ -602,13 +621,25 @@ GRFEXPORT void *grf_file_add(void *tmphandler, const char *filename, const void 
 		handler->first_node = ptr_file;
 		if (ptr_file->next->next != NULL) ptr_file->next->prev = ptr_file;
 		hash_add_element(handler->fast_table, filename, ptr_file);
-		// TODO: Check handler->root
+		// FIXME: Check handler->root and update arbo if needed
+	}
+	if (prev == NULL) {
+		ptr_file->pos = 0;
+		ptr_file->next = handler->first_node; // just in case, supposed to be null
+		ptr_file->prev = NULL;
+		handler->first_node = ptr_file;
+	} else {
+		// insert entry in the chained list
+		ptr_file->pos = prev->pos + prev->len_aligned;
+		ptr_file->next = prev->next;
+		ptr_file->prev = prev;
+		if (ptr_file->next != NULL) ptr_file->next->prev = ptr_file;
+		prev->next = ptr_file;
 	}
 	ptr_file->filename = strdup(filename);
-	ptr_file->pos = pos;
 	ptr_file->size = size;
 	ptr_file->len = comp_size;
-	ptr_file->len_aligned = comp_size + (4-((comp_size-1) % 4)) - 1;
+	ptr_file->len_aligned = comp_size_aligned;
 	ptr_file->flags = GRF_FLAG_FILE;
 	// 5. Check if handler->root is not null. If that's the case and we added a new file (no replace), record it to the tree
 	// 6. If we didn't use end of archive, but some wasted space, substract used space to handler->wasted_space
@@ -745,7 +776,7 @@ static void prv_grf_update_values(struct grf_handler *handler) {
 	uint32_t pos = 0;
 	cur = handler->first_node;
 	while(cur != NULL) {
-		uint32_t p=cur->pos+cur->len_aligned;
+		uint32_t p=cur->pos+cur->len_aligned; // position of EOF
 		pos = MAX(pos, p);
 	}
 	handler->table_offset = pos;

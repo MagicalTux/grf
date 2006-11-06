@@ -118,6 +118,9 @@ ifeq ($(UNAME),Linux)
 test: make_dirs grf_test_linux
 	@LD_LIBRARY_PATH="." ./grf_test_linux
 
+leak: make_dirs grf_test_linux
+	@valgrind --show-reachable=yes --leak-check=full ./grf_test_linux
+
 gdb: make_dirs grf_test_linux
 	@LD_LIBRARY_PATH="." gdb ./grf_test_linux
 else
