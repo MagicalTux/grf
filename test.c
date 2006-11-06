@@ -46,9 +46,9 @@ void test_new_handler() {
 		printf("Your compiler didn't use the right size for the packed structure (%x!=%x) !", (uint32_t) sizeof(struct grf_header), GRF_HEADER_SIZE);
 		exit(2);
 	}
-	grf_set_compression_level(9);
 
 	handler = grf_new("test.grf", true);
+	grf_set_compression_level(handler, 9);
 	printf(" - test_new_handler(): New handler at %p.\n", handler);
 	if (grf_save(handler) == true) {
 		puts(" - test_new_handler(): Write file success !");
@@ -64,15 +64,16 @@ void test_load_file() {
 	void *handler, *fhandler;
 	void *filec;
 	void **list;
-//	char *fn = "/storage/win_d/Program Files/Gravity/fRO_II/data.grf";
+	char *fn = "/storage/win_d/Program Files/Gravity/fRO_II/data.grf";
 //	char *fn = "/storage/win_d/Program Files/Gravity/20060224_krodata.gpf";
-	char *fn = "problemfix.gpf";
+//	char *fn = "problemfix.gpf";
 //	char *fn = "103.grf";
 	char *fn2 = "DATA/texTURE\\유저인터페이스/LOADING45.JPG";
 
 // test
 #if 0
 handler=grf_load("103.grf", true);
+grf_set_compression_level(handler, 9);
 grf_save(handler);
 grf_free(handler);
 #endif

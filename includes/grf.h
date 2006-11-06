@@ -29,7 +29,7 @@
 
 #define VERSION_MAJOR 0
 #define VERSION_MINOR 1
-#define VERSION_REVISION 14
+#define VERSION_REVISION 15
 
 #ifdef __WIN32
 #define VERSION_TYPE "Win32"
@@ -68,6 +68,7 @@ struct grf_treenode {
 struct grf_handler {
 	uint32_t filecount, table_offset, wasted_space;
 	int fd;
+	int compression_level;
 	bool need_save, write_mode;
 	struct grf_node *first_node;
 	hash_table *fast_table;
@@ -112,7 +113,7 @@ struct grf_table_entry_data {
 };
 
 int zlib_buffer_inflate(void *, int, void *, int); /* private: zlib.c */
-int zlib_buffer_deflate(void *, int, void *, int); /* private: zlib.c */
+int zlib_buffer_deflate(void *, int, void *, int, int); /* private: zlib.c */
 
 #define MAX(a,b) ((a>b)?a:b)
 

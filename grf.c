@@ -212,6 +212,7 @@ GRFEXPORT void *grf_new(const char *filename, bool writemode) {
 	handler->fd = fd;
 	handler->need_save = writemode; // file should be new (flag will be unset by prv_grf_load)
 	handler->write_mode = writemode;
+	handler->compression_level = 5; /* default ZLIB compression level */
 	return handler;
 }
 
@@ -602,7 +603,7 @@ GRFEXPORT void *grf_file_add(void *tmphandler, char *filename, void *ptr, size_t
 	// 1. Compress file, to have its size
 	ptr_comp = malloc(size+100);
 	if (ptr_comp == NULL) return NULL; /* out of memory? */
-	comp_size = zlib_buffer_deflate(ptr_comp, size + 100, ptr, size);
+	comp_size = zlib_buffer_deflate(ptr_comp, size + 100, ptr, size, handler->compression_level);
 	comp_size_aligned = comp_size + (4-((comp_size-1) % 4)) - 1;
 	ptr_comp = realloc(ptr_comp, comp_size_aligned);
 	if (ptr_comp == NULL) return NULL; /* out of memory? */
@@ -694,6 +695,12 @@ GRFEXPORT void *grf_get_file_prev(void *tmphandler) {
 	return handler->prev;
 }
 
+GRFEXPORT void grf_set_compression_level(void *tmphandler, int level) {
+	struct grf_handler *handler = tmphandler;
+	handler->compression_level = level;
+}
+
+
 static bool prv_grf_write_table(struct grf_handler *handler) {
 	// Step 1 : generate a proper table
 	// We need to determine the final size of the table. It's :
@@ -737,7 +744,7 @@ static bool prv_grf_write_table(struct grf_handler *handler) {
 	*(uint32_t *)(pos+4) = table_size; /* initial size */
 
 	// Compress the table using zlib
-	table_size = zlib_buffer_deflate(pos+8, table_size + 100 -8, table, table_size);
+	table_size = zlib_buffer_deflate(pos+8, table_size + 100 -8, table, table_size, handler->compression_level);
 	free(table);
 	if (table_size == 0) {
 		free(pos);

@@ -1,12 +1,6 @@
 #include <grf.h>
 #include <zlib.h>
 
-static int default_compression_level = 5;
-
-GRFEXPORT void grf_set_compression_level(int level) {
-	default_compression_level = level;
-}
-
 int zlib_buffer_inflate(void *dest, int destlen, void *src, int srclen) {
 	z_stream stream;
 	int err;
@@ -34,7 +28,7 @@ int zlib_buffer_inflate(void *dest, int destlen, void *src, int srclen) {
 	return stream.total_out;
 }
 
-int zlib_buffer_deflate(void *dest, int destlen, void *src, int srclen) {
+int zlib_buffer_deflate(void *dest, int destlen, void *src, int srclen, int level) {
 	z_stream stream;
 	int err;
 	
@@ -47,7 +41,7 @@ int zlib_buffer_deflate(void *dest, int destlen, void *src, int srclen) {
 	stream.zalloc = (alloc_func)0;
 	stream.zfree = (free_func)0;
 	
-	err = deflateInit(&stream, default_compression_level);
+	err = deflateInit(&stream, level);
 	if (err != Z_OK) return 0;
 
 	err = deflate(&stream, Z_FINISH);
