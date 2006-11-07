@@ -1,5 +1,5 @@
 #!make
-OBJECTS=main.o zlib.o hash_tables.o grf.o
+OBJECTS=main.o zlib.o hash_tables.o grf.o euc_kr.o
 GB_OBJECTS=$(patsubst grfbuilder/%.cpp,%.o,$(wildcard grfbuilder/*.cpp)) moc_qt_win.o
 TARGET=libgrf.so
 TARGET_WIN=grf.dll
