@@ -27,25 +27,6 @@
   <property name="windowTitle" >
    <string>GrfBuilder v1.0 (libgrf v0.1.15) by MagicalTux</string>
   </property>
-  <widget class="QProgressBar" name="progbar" >
-   <property name="geometry" >
-    <rect>
-     <x>340</x>
-     <y>270</y>
-     <width>281</width>
-     <height>23</height>
-    </rect>
-   </property>
-   <property name="value" >
-    <number>88</number>
-   </property>
-   <property name="orientation" >
-    <enum>Qt::Horizontal</enum>
-   </property>
-   <property name="invertedAppearance" >
-    <bool>false</bool>
-   </property>
-  </widget>
   <widget class="QComboBox" name="combo_complevel" >
    <property name="geometry" >
     <rect>
@@ -224,7 +205,7 @@
     </rect>
    </property>
    <property name="currentIndex" >
-    <number>1</number>
+    <number>0</number>
    </property>
    <widget class="QWidget" name="grf_allfiles" >
     <attribute name="title" >
@@ -268,20 +249,6 @@
        <string>Filename</string>
       </property>
      </column>
-     <item>
-      <property name="text" >
-       <string>15156</string>
-      </property>
-      <property name="text" >
-       <string>165645</string>
-      </property>
-      <property name="text" >
-       <string>0</string>
-      </property>
-      <property name="text" >
-       <string>data\prontera.gat</string>
-      </property>
-     </item>
     </widget>
    </widget>
    <widget class="QWidget" name="grf_treeview" >
@@ -307,40 +274,27 @@
        <string>File size</string>
       </property>
      </column>
-     <item>
-      <property name="text" >
-       <string>data</string>
-      </property>
-      <property name="text" >
-       <string/>
-      </property>
-      <item>
-       <property name="text" >
-        <string>prontera.gat</string>
-       </property>
-       <property name="text" >
-        <string>156465</string>
-       </property>
-      </item>
-      <item>
-       <property name="text" >
-        <string>palette</string>
-       </property>
-       <property name="text" >
-        <string/>
-       </property>
-       <item>
-        <property name="text" >
-         <string>한국어</string>
-        </property>
-        <property name="text" >
-         <string/>
-        </property>
-       </item>
-      </item>
-     </item>
     </widget>
    </widget>
+  </widget>
+  <widget class="QProgressBar" name="progbar" >
+   <property name="geometry" >
+    <rect>
+     <x>340</x>
+     <y>270</y>
+     <width>281</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="value" >
+    <number>0</number>
+   </property>
+   <property name="orientation" >
+    <enum>Qt::Horizontal</enum>
+   </property>
+   <property name="invertedAppearance" >
+    <bool>false</bool>
+   </property>
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11" />
