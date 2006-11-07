@@ -6,8 +6,9 @@
 
 #ifdef __cplusplus
 extern "C" {
-#endif
+#endif /* __cplusplus */
 
+#ifndef __cplusplus
 #if __STDC_VERSION__ >= 199901L
 /* we have a C99 compiler, and we're compiling for C99 */
 #include <stdint.h>
@@ -24,6 +25,7 @@ typedef int bool;
 #define false 0
 #endif
 #endif /* __STDC_VERSION__ >= 199901L */
+#endif /* !__cplusplus */
 
 #ifndef GRFEXPORT
 #define GRFEXPORT

@@ -1,6 +1,6 @@
 #!make
 OBJECTS=main.o zlib.o hash_tables.o grf.o
-GB_OBJECTS=$(patsubst grfbuilder/%.cpp,%.o,$(wildcard grfbuilder/*.cpp))
+GB_OBJECTS=$(patsubst grfbuilder/%.cpp,%.o,$(wildcard grfbuilder/*.cpp)) moc_qt_win.o
 TARGET=libgrf.so
 TARGET_WIN=grf.dll
 GB_TARGET=grfbuilder.bin
@@ -14,11 +14,11 @@ ifndef DEBUG
 DEBUG=yes
 endif
 ifeq ($(DEBUG),no)
-CFLAGS=-pipe -O3 -Wall -Wno-attributes --std=gnu99
-CXXFLAGS=-pipe -O3 -Wall -Wno-attributes
+CFLAGS=-pipe -O3 -Wall --std=gnu99
+CXXFLAGS=-pipe -O3 -Wall
 else
-CFLAGS=-pipe -g -ggdb -O0 -Wall -Wno-attributes --std=gnu99 -D__DEBUG
-CXXFLAGS=-pipe -g -ggdb -O0 -Wall -Wno-attributes -D__DEBUG
+CFLAGS=-pipe -g -ggdb -O0 -Wall --std=gnu99 -D__DEBUG
+CXXFLAGS=-pipe -g -ggdb -O0 -Wall -D__DEBUG
 endif
 
 ZOBJS = adler32.o compress.o crc32.o gzio.o uncompr.o deflate.o trees.o \
@@ -29,7 +29,9 @@ ifeq ($(UNAME),Linux)
 # *****
 # *** Linux config
 # *****
-CC=gcc32
+# TODO: Go back to gcc32/g++32
+CC=gcc
+CXX=g++
 STRIP=strip
 # /opt/xmingw/ for old gentoo, i586-mingw32msvc-gcc for debian
 # and mingw32-gcc for crossdev gentoo
@@ -75,6 +77,14 @@ QT_LIN_LIBS=$(shell pkg-config --libs QtGui QtCore)
 QT_LIN_LIBS+=-lpthread
 QT_LIN_INCLUDE=-I/usr/share/qt4/mkspecs/linux-g++ $(shell pkg-config --cflags QtGui QtCore)
 QT_LIN_INCLUDE+=-D_REENTRANT  -DQT_NO_DEBUG -DQT_GUI_LIB -DQT_CORE_LIB
+GCC_VERSION=$(shell $(CC) -dumpversion | awk -F. '{ print $$1 }')
+ifeq ($(GCC_VERSION),4)
+CFLAGS+=-Wno-attributes
+endif
+GCC_WIN_VERSION=$(shell $(CC_WIN) -dumpversion | awk -F. '{ print $$1 }')
+ifeq ($(GCC_WIN_VERSION),4)
+WINFLAGS+=-Wno-attributes
+endif
 
 win32/%.o: %.c
 	@echo -en "  CC\t$<           \015"
@@ -94,13 +104,13 @@ linux/%.o: zlib/%.c
 
 win32/gb_%.o: grfbuilder/%.cpp
 	@echo -en " CXX\t$<           \015"
-	@$(CXX_WIN) $(CXXFLAGS) $(WINFLAGS) $(QT_WIN_INCLUDE) $(INCLUDES) -c -o $@ $<
+	@$(CXX_WIN) $(CXXFLAGS) -Igrfbuilder $(WINFLAGS) $(QT_WIN_INCLUDE) $(INCLUDES) -c -o $@ $<
 
 linux/gb_%.o: grfbuilder/%.cpp
 	@echo -en " CXX\t$<           \015"
-	$(CXX) $(CXXFLAGS) $(LINFLAGS) $(QT_LIN_INCLUDE) $(INCLUDES) -c -o $@ $<
+	@$(CXX) $(CXXFLAGS) -Igrfbuilder $(LINFLAGS) $(QT_LIN_INCLUDE) $(INCLUDES) -c -o $@ $<
 
-.PHONY: make_dirs test dist
+.PHONY: make_dirs test dist gb
 
 ifeq ($(BUILD),unknown)
 all: ;@echo "Unknown system $(UNAME) !"
@@ -129,7 +139,7 @@ endif
 
 $(GB_TARGET): $(patsubst %.o,linux/gb_%.o,$(GB_OBJECTS))
 	@echo -e "  LD\t$@              "
-	$(CXX) $(CXXFLAGS) $(LINFLAGS) $(QT_LIN_INCLUDE) -o $@ $^ $(QT_LIN_LIBS)
+	@$(CXX) $(CXXFLAGS) $(LINFLAGS) $(QT_LIN_INCLUDE) -o $@ $^ $(QT_LIN_LIBS) -L. -lgrf
 ifeq ($(DEBUG),no)
 	@echo -e " STRIP\t$@"
 	@$(STRIP) $@
@@ -137,7 +147,7 @@ endif
 
 $(GB_TARGET_WIN): $(patsubst %.o,win32/gb_%.o,$(GB_OBJECTS))
 	@echo -e "  LD\t$@              "
-	@$(CXX_WIN) $(CXXFLAGS) $(WINFLAGS) $(QT_WIN_INCLUDE) -o $@ $^ $(QT_WIN_LIBS)
+	@$(CXX_WIN) $(CXXFLAGS) $(WINFLAGS) $(QT_WIN_INCLUDE) -o $@ $^ $(QT_WIN_LIBS) -L. -lgrf
 ifeq ($(DEBUG),no)
 	@echo -e " STRIP\t$@"
 	@$(STRIP_WIN) $@
@@ -170,6 +180,10 @@ leak: make_dirs grf_test_linux
 
 gdb: make_dirs grf_test_linux
 	@LD_LIBRARY_PATH="." gdb ./grf_test_linux
+
+gb: make_dirs libgrf.so grfbuilder.bin
+	@LD_LIBRARY_PATH="." ./grfbuilder.bin
+
 else
 ifeq ($(UNAME),CYGWIN)
 test: make_dirs grf_test_win.exe
@@ -179,6 +193,16 @@ test: ;@echo "No test available for your platform ($(UNAME))."
 endif
 endif
 
+## SPECIFIC RULES
+grfbuilder/moc_qt_win.cpp: grfbuilder/qt_win.h
+	@moc $(QT_LIN_INCLUDE) $< -o $@
+grfbuilder/main.cpp: grfbuilder/qt_win.h
+grfbuilder/qt_win.cpp: grfbuilder/qt_win.h
+grfbuilder/qt_win.h: grfbuilder/ui_qt_win.h
+grfbuilder/ui_qt_win.h: grfbuilder/qt_win.ui
+	@uic $< | sed -f grfbuilder/qt_win.sed >$@
+
 clean:
 	$(RM) -r linux $(TARGET) win32 $(TARGET_WIN) $(GB_TARGET) $(GB_TARGET_WIN) grf_test_win.exe grf_test_linux libgrf-*.zip version.sh
+	$(RM) grfbuilder/ui_qt_win.h grfbuilder/moc_qt_win.cpp
 
