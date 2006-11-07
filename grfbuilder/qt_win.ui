@@ -24,9 +24,6 @@
     <height>297</height>
    </size>
   </property>
-  <property name="windowTitle" >
-   <string>GrfBuilder v1.0 (libgrf v0.1.15) by MagicalTux</string>
-  </property>
   <widget class="QComboBox" name="combo_complevel" >
    <property name="geometry" >
     <rect>
@@ -236,7 +233,7 @@
      </column>
      <column>
       <property name="text" >
-       <string>Compressed size</string>
+       <string>Comp. size</string>
       </property>
      </column>
      <column>

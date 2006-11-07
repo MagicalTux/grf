@@ -194,15 +194,9 @@ static void prv_grf_free_node(struct grf_node *node) {
 	free(node);
 }
 
-GRFEXPORT void *grf_new(const char *filename, bool writemode) {
+GRFEXPORT void *grf_new_by_fd(int fd, bool writemode) {
 	struct grf_handler *handler;
-	int fd;
 
-#ifdef O_LARGEFILE
-	fd = open(filename, (writemode!=false?O_RDWR | O_CREAT:O_RDONLY) | O_LARGEFILE, 0744);
-#else
-	fd = open(filename, (writemode!=false?O_RDWR | O_CREAT:O_RDONLY), 0744);
-#endif
 	if (fd < 0) return NULL;
 
 	handler = (struct grf_handler *)calloc(1, sizeof(struct grf_handler));
@@ -214,6 +208,22 @@ GRFEXPORT void *grf_new(const char *filename, bool writemode) {
 	handler->write_mode = writemode;
 	handler->compression_level = 5; /* default ZLIB compression level */
 	return handler;
+}
+
+GRFEXPORT void *grf_new(const char *filename, bool writemode) {
+	int fd;
+
+#ifdef O_LARGEFILE
+	fd = open(filename, (writemode!=false?O_RDWR | O_CREAT:O_RDONLY) | O_LARGEFILE, 0744);
+#else
+	fd = open(filename, (writemode!=false?O_RDWR | O_CREAT:O_RDONLY), 0744);
+#endif
+	return grf_new_by_fd(fd, writemode);
+}
+
+GRFEXPORT void grf_set_callback(void *tmphandler, bool (*callback)(void *, void *, int, int), void *etc) {
+	((struct grf_handler *)tmphandler)->callback = callback;
+	((struct grf_handler *)tmphandler)->callback_etc = etc;
 }
 
 static inline size_t prv_grf_strnlen(const char *str, const size_t maxlen) {
@@ -290,6 +300,7 @@ static bool prv_grf_load(struct grf_handler *handler) {
 	int dlen, result;
 	void *table, *table_comp, *pos, *pos_max;
 	struct grf_node *entry, *last;
+	int hcall = 100;
 
 	// load header...
 	handler->need_save = false;
@@ -396,6 +407,12 @@ static bool prv_grf_load(struct grf_handler *handler) {
 					last = entry;
 				}
 				hash_add_element(handler->fast_table, entry->filename, entry);
+				if (--hcall<=0) {
+					hcall = 100;
+					if (handler->callback != NULL) {
+						handler->callback(handler->callback_etc, handler, handler->filecount - result, handler->filecount);
+					}
+				}
 			}
 			free(table);
 			break;
@@ -463,6 +480,12 @@ static bool prv_grf_load(struct grf_handler *handler) {
 					last = entry;
 				}
 				hash_add_element(handler->fast_table, entry->filename, entry);
+				if (--hcall<=0) {
+					hcall = 100;
+					if (handler->callback != NULL) {
+						handler->callback(handler->callback_etc, handler, handler->filecount - result, handler->filecount);
+					}
+				}
 			}
 			free(table);
 			break;
@@ -470,6 +493,9 @@ static bool prv_grf_load(struct grf_handler *handler) {
 			return false;
 	}
 	if (result != 0) return false;
+	if (handler->callback != NULL) {
+		handler->callback(handler->callback_etc, handler, handler->filecount, handler->filecount);
+	}
 	handler->wasted_space = wasted_space;
 
 	// sort entries (if needed)
@@ -494,17 +520,22 @@ static bool prv_grf_load(struct grf_handler *handler) {
 	return true;
 }
 
-GRFEXPORT void *grf_load(const char *filename, bool writemode) {
-	void *handler;
-
-	handler = grf_new(filename, writemode);
+GRFEXPORT void *grf_load_from_new(void *handler) {
 	if (handler == NULL) return NULL;
-
+	
 	if (prv_grf_load((struct grf_handler *)handler) == false) {
 		grf_free(handler);
 		return NULL;
 	}
 	return handler;
+}
+
+GRFEXPORT void *grf_load(const char *filename, bool writemode) {
+	void *handler;
+
+	handler = grf_new(filename, writemode);
+
+	return grf_load_from_new(handler);
 }
 
 GRFEXPORT bool grf_file_delete(void *tmphandler) {

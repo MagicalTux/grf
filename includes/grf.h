@@ -73,6 +73,8 @@ struct grf_handler {
 	struct grf_node *first_node;
 	hash_table *fast_table;
 	struct grf_treenode *root;
+	bool (* callback)(void *, void *, int, int);
+	void *callback_etc;
 };
 
 #define GRF_HEADER_SIZE 0x2e /* sizeof(grf_header) */

@@ -45,7 +45,10 @@ GRFEXPORT uint32_t grf_version(void); /* main.c */
 GRFEXPORT char *grf_versionstring(void); /* main.c */
 GRFEXPORT char *grf_versionstring_r(char *, size_t); /* main.c */
 GRFEXPORT void *grf_new(const char *, bool); /* grf.c */
+GRFEXPORT void *grf_new_by_fd(int, bool); /* grf.c */
+GRFEXPORT void grf_set_callback(void *, bool (*)(void *etc, void *grf, int cur, int max), void *etc);
 GRFEXPORT void *grf_load(const char *, bool); /* grf.c */
+GRFEXPORT void *grf_load_from_new(void *); /* grf.c */
 GRFEXPORT bool grf_save(void *); /* grf.c */
 GRFEXPORT void grf_free(void *); /* grf.c */
 GRFEXPORT uint32_t grf_filecount(void *); /* grf.c */
