@@ -224,11 +224,16 @@
       <bool>true</bool>
      </property>
      <property name="columnCount" >
-      <number>4</number>
+      <number>5</number>
      </property>
      <property name="sortingEnabled" >
       <bool>true</bool>
      </property>
+     <column>
+      <property name="text" >
+       <string>Idx</string>
+      </property>
+     </column>
      <column>
       <property name="text" >
        <string>Compressed size</string>

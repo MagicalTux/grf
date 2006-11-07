@@ -196,8 +196,8 @@ endif
 ## SPECIFIC RULES
 grfbuilder/moc_qt_win.cpp: grfbuilder/qt_win.h
 	@moc $(QT_LIN_INCLUDE) $< -o $@
-grfbuilder/main.cpp: grfbuilder/qt_win.h
-grfbuilder/qt_win.cpp: grfbuilder/qt_win.h
+grfbuilder/main.cpp: grfbuilder/qt_win.h grfbuilder/ui_qt_win.h
+grfbuilder/qt_win.cpp: grfbuilder/qt_win.h grfbuilder/ui_qt_win.h
 grfbuilder/qt_win.h: grfbuilder/ui_qt_win.h
 grfbuilder/ui_qt_win.h: grfbuilder/qt_win.ui
 	@uic $< | sed -f grfbuilder/qt_win.sed >$@
