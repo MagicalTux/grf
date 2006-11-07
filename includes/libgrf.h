@@ -63,7 +63,6 @@ GRFEXPORT void *grf_get_file_next(void *); /* grf.c */
 GRFEXPORT void *grf_get_file_prev(void *); /* grf.c */
 GRFEXPORT void *grf_get_file_first(void *); /* grf.c */
 GRFEXPORT void grf_set_compression_level(void *, int); /* grf.c */
-
 GRFEXPORT char *euc_kr_to_utf8(char *); /* euc_kr.c */
 
 #ifdef GRFEXPORT_TMP_DEF
