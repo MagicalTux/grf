@@ -10,7 +10,7 @@ class MainWindow : public QWidget {
 
 public:
 	MainWindow(QWidget *parent = 0);
-	bool MainWindow::progress_callback(void *, int pos, int max);
+	bool progress_callback(void *, int pos, int max);
 
 private slots:
 	void on_btn_open_clicked();

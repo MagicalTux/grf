@@ -34,6 +34,7 @@ static bool grf_callback_caller(void *MW_, void *grf, int pos, int max) {
 void MainWindow::on_btn_open_clicked() {
 	QString str = QFileDialog::getOpenFileName(this, tr("Open File"),
 			NULL, tr("GRF Files (*.grf *.gpf)"));
+	void *f;
 
 	if (str.size() == 0) return;
 
@@ -47,7 +48,20 @@ void MainWindow::on_btn_open_clicked() {
 	this->grf = grf_new_by_fd(this->grf_file.handle(), true);
 	grf_set_callback(this->grf, grf_callback_caller, (void *)this);
 	this->grf = grf_load_from_new(this->grf);
-	printf("RES=%p\n", this->grf);
+	if (this->grf == NULL) {
+		QMessageBox::warning(this, tr("GrfBuilder"), tr("The selected file doesn't look like a valid GRF file."), QMessageBox::Cancel, QMessageBox::Cancel);
+		return;
+	}
+	f = grf_get_file_first(this->grf);
+	while(f != NULL) {
+		QTreeWidgetItem *__item = new QTreeWidgetItem(ui.view_allfiles);
+		__item->setText(0, QApplication::translate("main_window", "?", 0, QApplication::UnicodeUTF8)); // idx
+		__item->setText(1, QApplication::translate("main_window", "?", 0, QApplication::UnicodeUTF8)); // compsize
+		__item->setText(2, QApplication::translate("main_window", "?", 0, QApplication::UnicodeUTF8)); // realsize
+		__item->setText(3, QApplication::translate("main_window", "0", 0, QApplication::UnicodeUTF8)); // pos
+		__item->setText(4, QApplication::translate("main_window", euc_kr_to_utf8(grf_file_get_filename(f)), 0, QApplication::UnicodeUTF8)); // name
+		f = grf_get_file_next(f);
+	}
 }
 
 void MainWindow::on_btn_close_clicked() {
@@ -55,7 +69,14 @@ void MainWindow::on_btn_close_clicked() {
 		grf_free(this->grf);
 		this->grf_file.close();
 		this->grf = NULL;
-		printf("close()\n");
+		ui.progbar->setValue(0);
+		ui.view_allfiles->clear();
+//		QList<QTreeWidgetItem *> list = ui.view_allfiles->findItems("", Qt::MatchContains | Qt::MatchRecursive);
+//		printf("list.size()=%d\n", list.size());
+//		for(int i=list.size()-1;i>=0;i--) {
+//			QTreeWidgetItem *x = (QTreeWidgetItem *)list.at(i);
+//			delete x;
+//		}
 	}
 }
 

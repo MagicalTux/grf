@@ -11,9 +11,9 @@
 #include "unicode_table_uhc.h"
 #include <grf.h>
 
-static uint32_t euc_kr_utf8_strlen(uint8_t *euckr) {
+static uint32_t euc_kr_utf8_strlen(const uint8_t *euckr) {
 	uint32_t c=0;
-	uint8_t *t=euckr;
+	const uint8_t *t=euckr;
 	while(*t) {
 		uint8_t x=*t; t++;
 		c++;
@@ -74,13 +74,12 @@ static void utf8_append_from_wchar(uint8_t **r, int c) {
 	**r = (c & 0x3f) | 0x80; (*r)++;
 }
 
-GRFEXPORT char *euc_kr_to_utf8(char *orig) {
+GRFEXPORT char *euc_kr_to_utf8_r(const char *orig, uint8_t *res) {
 	int c;
-	uint32_t flen = euc_kr_utf8_strlen((uint8_t *)orig); /* final len */
+	uint32_t flen = euc_kr_utf8_strlen((const uint8_t *)orig); /* final len */
 	uint8_t *t = (uint8_t *)orig;
-	uint8_t *res, *r;
+	uint8_t *r = res;
 	if (flen == 0) return NULL;
-	r = res = malloc(flen);
 	while (*t) {
 		uint8_t x = *t;
 		uint8_t x2;
@@ -134,7 +133,12 @@ GRFEXPORT char *euc_kr_to_utf8(char *orig) {
 		}
 		utf8_append_from_wchar(&r, c);
 	}
+	*r = 0;
 	return (char *)res;
 }
 
+GRFEXPORT char *euc_kr_to_utf8(const char *orig) {
+	static uint8_t *res[4096]; // should be enough
+	return euc_kr_to_utf8_r(orig, (uint8_t *)&res);
+}
 

@@ -194,6 +194,20 @@ static void prv_grf_free_node(struct grf_node *node) {
 	free(node);
 }
 
+static void prv_grf_update_values(struct grf_handler *handler) {
+	/* compute new position for the table */
+	struct grf_node *cur;
+	uint32_t pos = 0;
+	cur = handler->first_node;
+	while(cur != NULL) {
+		uint32_t p=cur->pos+cur->len_aligned; // position of EOF
+		pos = MAX(pos, p);
+		cur = cur->next;
+	}
+	handler->table_offset = pos;
+	handler->filecount = handler->fast_table->count;
+}
+
 GRFEXPORT void *grf_new_by_fd(int fd, bool writemode) {
 	struct grf_handler *handler;
 
@@ -410,7 +424,7 @@ static bool prv_grf_load(struct grf_handler *handler) {
 				if (--hcall<=0) {
 					hcall = 100;
 					if (handler->callback != NULL) {
-						handler->callback(handler->callback_etc, handler, handler->filecount - result, handler->filecount);
+						if (!handler->callback(handler->callback_etc, handler, handler->filecount - result, handler->filecount)) return false;
 					}
 				}
 			}
@@ -483,7 +497,7 @@ static bool prv_grf_load(struct grf_handler *handler) {
 				if (--hcall<=0) {
 					hcall = 100;
 					if (handler->callback != NULL) {
-						handler->callback(handler->callback_etc, handler, handler->filecount - result, handler->filecount);
+						if (!handler->callback(handler->callback_etc, handler, handler->filecount - result, handler->filecount)) return false;
 					}
 				}
 			}
@@ -493,11 +507,7 @@ static bool prv_grf_load(struct grf_handler *handler) {
 			return false;
 	}
 	if (result != 0) return false;
-	if (handler->callback != NULL) {
-		handler->callback(handler->callback_etc, handler, handler->filecount, handler->filecount);
-	}
 	handler->wasted_space = wasted_space;
-
 	// sort entries (if needed)
 	// We use "bubble sort", as entries *should* already be sorted
 	// usually bubble sort isn't really optimized, however in our case it's just perfect
@@ -517,6 +527,12 @@ static bool prv_grf_load(struct grf_handler *handler) {
 		}
 	}
 	// sort OK! Oh yeah man!!
+	prv_grf_update_values(handler); // update stuff like "filecount"
+	// call the callback, if any~
+	if (handler->callback != NULL) {
+		handler->callback(handler->callback_etc, handler, handler->filecount, handler->filecount);
+	}
+
 	return true;
 }
 
@@ -835,20 +851,6 @@ GRFEXPORT void grf_free(void *tmphandler) {
 	hash_free_table(handler->fast_table);
 	if (handler->root != NULL) prv_grf_tree_table_free_node(handler->root);
 	free(handler);
-}
-
-static void prv_grf_update_values(struct grf_handler *handler) {
-	/* compute new position for the table */
-	struct grf_node *cur;
-	uint32_t pos = 0;
-	cur = handler->first_node;
-	while(cur != NULL) {
-		uint32_t p=cur->pos+cur->len_aligned; // position of EOF
-		pos = MAX(pos, p);
-		cur = cur->next;
-	}
-	handler->table_offset = pos;
-	handler->filecount = handler->fast_table->count;
 }
 
 GRFEXPORT bool grf_save(void *tmphandler) {
