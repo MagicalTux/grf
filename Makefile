@@ -5,6 +5,7 @@ TARGET=libgrf.so
 TARGET_WIN=grf.dll
 GB_TARGET=grfbuilder.bin
 GB_TARGET_WIN=grfbuilder.exe
+GB_REQ_DLL=mingwm10.dll QtCore4.dll QtGui4.dll
 BUILD=unknown
 LDFLAGS=--shared
 LDFLAGS_TEST=
@@ -13,11 +14,11 @@ ifndef DEBUG
 DEBUG=yes
 endif
 ifeq ($(DEBUG),no)
-CFLAGS=-O3 -Wall -Wno-attributes --std=gnu99
-CXXFLAGS=-O3 -Wall -Wno-attributes
+CFLAGS=-pipe -O3 -Wall -Wno-attributes --std=gnu99
+CXXFLAGS=-pipe -O3 -Wall -Wno-attributes
 else
-CFLAGS=-g -ggdb -O0 -Wall -Wno-attributes --std=gnu99 -D__DEBUG
-CXXFLAGS=-g -ggdb -O0 -Wall -Wno-attributes -D__DEBUG
+CFLAGS=-pipe -g -ggdb -O0 -Wall -Wno-attributes --std=gnu99 -D__DEBUG
+CXXFLAGS=-pipe -g -ggdb -O0 -Wall -Wno-attributes -D__DEBUG
 endif
 
 ZOBJS = adler32.o compress.o crc32.o gzio.o uncompr.o deflate.o trees.o \
@@ -68,8 +69,12 @@ endif
 QT_WIN=../qt/4.2.1
 QT_WIN_LIBS=-L$(QT_WIN)/lib -lQtGui4 -lQtCore4
 QT_WIN_INCLUDE=-I$(QT_WIN)/include -I$(QT_WIN)/include/QtCore -I$(QT_WIN)/include/QtGui -DQT_NO_DEBUG -DQT_GUI_LIB -DQT_CORE_LIB
-QT_LIN_LIBS=$(shell pkg-config --libs QtCore QtGui)
-QT_LIN_INCLUDE=$(shell pkg-config --cflags QtCore QtGui)
+#g++ -c -pipe -O2 -Wall -W -D_REENTRANT  -DQT_NO_DEBUG -DQT_GUI_LIB -DQT_CORE_LIB -DQT_SHARED -I/usr/share/qt4/mkspecs/linux-g++ -I. -I/usr/include/qt4/QtCore -I/usr/include/qt4/QtGui -I/usr/include/qt4 -I. -I. -I. -o main.o main.cpp
+#g++  -o grfbuilder main.o    -L/usr/lib64/qt4 -lQtGui -L/usr/lib64 -L/usr/lib64/qt4 -lpng -lSM -lICE -lXi -lXrender -lXrandr -lXcursor -lXinerama -lfreetype -lfontconfig -lXext -lX11 -lQtCore -lz -lm -ldl -lpthread
+QT_LIN_LIBS=$(shell pkg-config --libs QtGui QtCore)
+QT_LIN_LIBS+=-lpthread
+QT_LIN_INCLUDE=-I/usr/share/qt4/mkspecs/linux-g++ $(shell pkg-config --cflags QtGui QtCore)
+QT_LIN_INCLUDE+=-D_REENTRANT  -DQT_NO_DEBUG -DQT_GUI_LIB -DQT_CORE_LIB
 
 win32/%.o: %.c
 	@echo -en "  CC\t$<           \015"
@@ -93,7 +98,7 @@ win32/gb_%.o: grfbuilder/%.cpp
 
 linux/gb_%.o: grfbuilder/%.cpp
 	@echo -en " CXX\t$<           \015"
-	@$(CXX) $(CXXFLAGS) $(LINFLAGS) $(QT_LIN_INCLUDE) $(INCLUDES) -c -o $@ $<
+	$(CXX) $(CXXFLAGS) $(LINFLAGS) $(QT_LIN_INCLUDE) $(INCLUDES) -c -o $@ $<
 
 .PHONY: make_dirs test dist
 
@@ -124,7 +129,7 @@ endif
 
 $(GB_TARGET): $(patsubst %.o,linux/gb_%.o,$(GB_OBJECTS))
 	@echo -e "  LD\t$@              "
-	@$(CXX) $(CXXFLAGS) $(LINFLAGS) $(LDFLAGS) $(QT_LIN_INCLUDE) -o $@ $^ $(QT_LIN_LIBS)
+	$(CXX) $(CXXFLAGS) $(LINFLAGS) $(QT_LIN_INCLUDE) -o $@ $^ $(QT_LIN_LIBS)
 ifeq ($(DEBUG),no)
 	@echo -e " STRIP\t$@"
 	@$(STRIP) $@
@@ -132,7 +137,7 @@ endif
 
 $(GB_TARGET_WIN): $(patsubst %.o,win32/gb_%.o,$(GB_OBJECTS))
 	@echo -e "  LD\t$@              "
-	@$(CXX_WIN) $(CXXFLAGS) $(WINFLAGS) $(LDFLAGS) $(QT_WIN_INCLUDE) -o $@ $^ $(QT_WIN_LIBS)
+	@$(CXX_WIN) $(CXXFLAGS) $(WINFLAGS) $(QT_WIN_INCLUDE) -o $@ $^ $(QT_WIN_LIBS)
 ifeq ($(DEBUG),no)
 	@echo -e " STRIP\t$@"
 	@$(STRIP_WIN) $@
