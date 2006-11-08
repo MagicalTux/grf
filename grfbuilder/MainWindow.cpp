@@ -185,11 +185,16 @@ void MainWindow::on_actionStandard_triggered() {
 	ui.actionStandard->setChecked(true);
 }
 
+void MainWindow::on_action_Extract_All_triggered() {
+	this->on_btn_extractall_clicked();
+}
+
 void MainWindow::on_btn_extractall_clicked() {
 	void *cur_file;
 	int c=0;
 	if (this->grf == NULL) return;
 	QProgressDialog prog(tr("Extraction in progress..."), tr("Cancel"), 0, grf_filecount(this->grf), this);
+	prog.setWindowModality(Qt::WindowModal);
 	/* get files list */
 	cur_file = grf_get_file_first(this->grf);
 	while(cur_file != NULL) {

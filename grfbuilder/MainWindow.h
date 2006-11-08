@@ -19,7 +19,10 @@ private slots:
 	void on_btn_extractall_clicked();
 
 	void on_tab_sel_currentChanged(int);
+
+	// menu
 	void on_action_Open_triggered();
+	void on_action_Extract_All_triggered();
 	void on_action_Close_triggered();
 	void on_action_Quit_triggered();
 

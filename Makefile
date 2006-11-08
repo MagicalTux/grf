@@ -156,7 +156,7 @@ endif
 version.sh: includes/grf.h
 	cat $< | grep "define VERSION" | grep -E "MAJOR|MINOR|REVISION" | sed -e 's/^#define //;s/ /=/' >$@
 
-libgrf-%.zip: $(TARGET) $(TARGET_WIN) includes/libgrf.h $(wildcard examples/*) README QtCore4.dll QtGui4.dll mingwm10.dll grfbuilder.exe
+libgrf-%.zip: $(TARGET) $(TARGET_WIN) includes/libgrf.h $(wildcard examples/*) README QtCore4.dll QtGui4.dll mingwm10.dll grfbuilder.exe grfbuilder_fr.qm
 	$(RM) $@
 	zip -9r $@ $^ -x .svn '*.o'
 
@@ -204,12 +204,14 @@ grfbuilder/ui_MainWindow.h: grfbuilder/MainWindow.ui
 	@lrelease grfbuilder/grfbuilder_fr.ts
 grfbuilder/grfbuilder_fr.ts: $(wildcard grfbuilder/*.cpp grfbuilder/*.h)
 	@lupdate $^ -ts $@
+grfbuilder_fr.qm: grfbuilder/grfbuilder_fr.qm
+	cp $< $@
 
 %.dll: $(QT_WIN)/bin/%.dll
 	cp $< $@
 
 clean:
 	$(RM) -r linux $(TARGET) win32 $(TARGET_WIN) $(GB_TARGET) $(GB_TARGET_WIN) grf_test_win.exe grf_test_linux libgrf-*.zip version.sh
-	$(RM) grfbuilder/ui_MainWindow.h grfbuilder/moc_MainWindow.cpp grfbuilder/grfbuilder_fr.qm
+	$(RM) grfbuilder/ui_MainWindow.h grfbuilder/moc_MainWindow.cpp grfbuilder/grfbuilder_fr.qm grfbuilder_fr.qm
 	$(RM) mingwm10.dll QtCore4.dll QtGui4.dll
 
