@@ -379,6 +379,55 @@ GRFEXPORT void *grf_file_get_tree(void *handler) {
 	return ((struct grf_node *)handler)->tree_parent;
 }
 
+//  quickSort
+//
+//  This public-domain C implementation by Darel R. Finley.
+//  Edited by MagicalTux for libgrf
+//  http://alienryderflex.com/quicksort/
+//
+//  * Returns true if sort was successful, or false if the nested
+//    pivots went too deep, in which case your array will have
+//    been re-ordered, but probably not sorted correctly.
+//
+//  * This function assumes it is called with valid parameters.
+//
+//  * Example calls:
+//    quickSort(&myArray[0],5); // sorts elements 0, 1, 2, 3, and 4
+//    quickSort(&myArray[3],5); // sorts elements 3, 4, 5, 6, and 7
+
+#define PRV_GRF_QUICKSORT_MAX_LEVELS 1000
+static bool prv_grf_quicksort(struct grf_handler *handler, uint32_t elements) {
+  uint32_t beg[PRV_GRF_QUICKSORT_MAX_LEVELS], end[PRV_GRF_QUICKSORT_MAX_LEVELS];
+	int i=0, L, R;
+	struct grf_node *piv;
+	struct grf_node **arr;
+	
+	arr = (struct grf_node **)hash_foreach_val(handler->fast_table);
+
+  beg[0]=0; end[0]=elements;
+  while (i>=0) {
+    L=beg[i]; R=end[i]-1;
+    if (L<R) {
+      piv=arr[L]; if (i==PRV_GRF_QUICKSORT_MAX_LEVELS-1) return NULL;
+      while (L<R) {
+        while (arr[R]->pos>=piv->pos && L<R) R--; if (L<R) arr[L++]=arr[R];
+        while (arr[L]->pos<=piv->pos && L<R) L++; if (L<R) arr[R--]=arr[L]; }
+      arr[L]=piv; beg[i+1]=L+1; end[i+1]=end[i]; end[i++]=L; }
+    else {
+      i--; }}
+	// restore order~
+	piv = NULL;
+	for(unsigned int i=0;arr[i]!=NULL;i++) {
+		arr[i]->prev = piv;
+		if (piv!=NULL) piv->next = arr[i];
+		piv = arr[i];
+	}
+	piv->next = NULL;
+	handler->first_node = arr[0];
+	free(arr);
+  return true;
+}
+
 static bool prv_grf_load(struct grf_handler *handler) {
 	struct grf_header head;
 	struct stat grfstat;
@@ -581,12 +630,14 @@ static bool prv_grf_load(struct grf_handler *handler) {
 	}
 	if (result != 0) return false;
 	handler->wasted_space = wasted_space;
-	// sort entries (if needed)
-	// We use "bubble sort", as entries *should* already be sorted
-	// usually bubble sort isn't really optimized, however in our case it's just perfect
+	// sort entries using quicksort
+	prv_grf_update_values(handler); // update stuff like "filecount"
 	entry = handler->first_node;
 	if (entry == NULL) return true; // no files?
-	while(1) {
+	if (!prv_grf_quicksort(handler, handler->filecount)) return false;
+	// We use "bubble sort", as entries *should* already be sorted
+	// usually bubble sort isn't really optimized, however in our case it's just perfect
+/*	while(1) {
 		last = entry;
 		entry = last->next;
 		if (entry == NULL) break;
@@ -603,8 +654,8 @@ static bool prv_grf_load(struct grf_handler *handler) {
 			if (entry->prev != NULL) entry = entry->prev;
 		}
 	}
+//	*/
 	// sort OK! Oh yeah man!!
-	prv_grf_update_values(handler); // update stuff like "filecount"
 	// call the callback, if any~
 	if (handler->callback != NULL) {
 		handler->callback(handler->callback_etc, handler, handler->filecount, handler->filecount);
