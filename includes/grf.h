@@ -29,7 +29,7 @@
 
 #define VERSION_MAJOR 0
 #define VERSION_MINOR 1
-#define VERSION_REVISION 16
+#define VERSION_REVISION 17
 
 #ifdef __WIN32
 #define VERSION_TYPE "Win32"
@@ -84,7 +84,7 @@ struct grf_handler {
 #define GRF_HEADER_MAGIC "Master of Magic"
 #define GRF_FILE_OUTPUT_VERISON 0x200
 #define GRF_HASH_TABLE_SIZE 128
-#define GRF_TREE_HASH_SIZE 16
+#define GRF_TREE_HASH_SIZE 32
 
 #define GRF_FLAG_FILE 1
 #define GRF_FLAG_MIXCRYPT 2

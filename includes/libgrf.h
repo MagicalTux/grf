@@ -71,6 +71,7 @@ GRFEXPORT const char *grf_tree_get_name(void *); /* grf.c */
 GRFEXPORT void *grf_tree_get_file(void *); /* grf.c */
 GRFEXPORT void *grf_tree_get_parent(void *); /* grf.c */
 GRFEXPORT void *grf_file_get_tree(void *); /* grf.c */
+GRFEXPORT bool grf_tree_dir_count_files(void *); /* grf.c */
 GRFEXPORT void **grf_get_file_list(void *); /* grf.c */
 GRFEXPORT void *grf_get_file_next(void *); /* grf.c */
 GRFEXPORT void *grf_get_file_prev(void *); /* grf.c */

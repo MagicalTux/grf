@@ -3,146 +3,146 @@
     <name>MainWindow</name>
     <message>
         <source>Open File</source>
-        <translation type="unfinished"></translation>
+        <translation>Ouvrir un fichier</translation>
     </message>
     <message>
         <source>GRF Files (*.grf *.gpf)</source>
-        <translation type="unfinished"></translation>
+        <translation>Fichiers GRF (*.grf *.gpf)</translation>
     </message>
     <message>
         <source>GrfBuilder</source>
-        <translation type="unfinished"></translation>
+        <translation>GrfBuilder</translation>
     </message>
     <message>
         <source>Could not load this file in read/write mode.</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible d&apos;ouvrir le fichier en lecture/écriture.</translation>
     </message>
     <message>
         <source>The selected file doesn&apos;t look like a valid GRF file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Le fichier séléctionné ne semble pas être un fichier GRF valide.</translation>
     </message>
 </context>
 <context>
     <name>main_window</name>
     <message>
         <source>All files</source>
-        <translation type="unfinished"></translation>
+        <translation>Tout</translation>
     </message>
     <message>
         <source>Tree view</source>
-        <translation type="unfinished"></translation>
+        <translation>Arborescence</translation>
     </message>
     <message>
         <source>None</source>
-        <translation type="unfinished"></translation>
+        <translation>Aucune</translation>
     </message>
     <message>
         <source>Totally Low</source>
-        <translation type="unfinished"></translation>
+        <translation>Minime</translation>
     </message>
     <message>
         <source>Really Low</source>
-        <translation type="unfinished"></translation>
+        <translation>Très basse</translation>
     </message>
     <message>
         <source>Low</source>
-        <translation type="unfinished"></translation>
+        <translation>Basse</translation>
     </message>
     <message>
         <source>Almost Normal</source>
-        <translation type="unfinished"></translation>
+        <translation>Presque normale</translation>
     </message>
     <message>
         <source>Normal</source>
-        <translation type="unfinished"></translation>
+        <translation>Normale</translation>
     </message>
     <message>
         <source>More than Normal</source>
-        <translation type="unfinished"></translation>
+        <translation>Plus que normale</translation>
     </message>
     <message>
         <source>High</source>
-        <translation type="unfinished"></translation>
+        <translation>Haute</translation>
     </message>
     <message>
         <source>Really High</source>
-        <translation type="unfinished"></translation>
+        <translation>Très haute</translation>
     </message>
     <message>
         <source>Max</source>
-        <translation type="unfinished"></translation>
+        <translation>Maximale</translation>
     </message>
     <message>
         <source>&lt;p align=&quot;right&quot;&gt;Compression level:&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;p align=&quot;right&quot;&gt;Niveau de compression :&lt;/p&gt;</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Using this button, you can open an existing GRF file.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation type="unfinished"></translation>
+        <translation>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Ce bouton vous permet d&apos;ouvrir un fichier GRF existant.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <source>Open</source>
-        <translation type="unfinished"></translation>
+        <translation>Ouvrir</translation>
     </message>
     <message>
         <source>Extract</source>
-        <translation type="unfinished"></translation>
+        <translation>Extraire</translation>
     </message>
     <message>
         <source>Extract All</source>
-        <translation type="unfinished"></translation>
+        <translation>Tout extraire</translation>
     </message>
     <message>
         <source>Repack</source>
-        <translation type="unfinished"></translation>
+        <translation>Repacker</translation>
     </message>
     <message>
         <source>Move files</source>
-        <translation type="unfinished"></translation>
+        <translation>Déplacer</translation>
     </message>
     <message>
         <source>Decrypt</source>
-        <translation type="unfinished"></translation>
+        <translation>Décrypter</translation>
     </message>
     <message>
         <source>Recompress</source>
-        <translation type="unfinished"></translation>
+        <translation>Recompresser</translation>
     </message>
     <message>
         <source>Close</source>
-        <translation type="unfinished"></translation>
+        <translation>Fermer</translation>
     </message>
     <message>
         <source>Merge GRF</source>
-        <translation type="unfinished"></translation>
+        <translation>Fusionner GRF</translation>
     </message>
     <message>
         <source>Merge dir</source>
-        <translation type="unfinished"></translation>
+        <translation>Ajouter rép</translation>
     </message>
     <message>
         <source>Idx</source>
-        <translation type="unfinished"></translation>
+        <translation>Num</translation>
     </message>
     <message>
         <source>Comp. size</source>
-        <translation type="unfinished"></translation>
+        <translation>Comp</translation>
     </message>
     <message>
         <source>Real size</source>
-        <translation type="unfinished"></translation>
+        <translation>Taille</translation>
     </message>
     <message>
         <source>Position</source>
-        <translation type="unfinished"></translation>
+        <translation>Position</translation>
     </message>
     <message>
         <source>Filename</source>
-        <translation type="unfinished"></translation>
+        <translation>Nom</translation>
     </message>
     <message>
         <source>File size</source>
-        <translation type="unfinished"></translation>
+        <translation>Taille</translation>
     </message>
 </context>
 </TS>

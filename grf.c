@@ -342,6 +342,10 @@ GRFEXPORT bool grf_tree_is_dir(void *node) {
 	return ((struct grf_treenode *)node)->is_dir;
 }
 
+GRFEXPORT bool grf_tree_dir_count_files(void *node) {
+	return ((struct grf_treenode *)node)->subdir->count;
+}
+
 GRFEXPORT void *grf_tree_get_file(void *node) {
 	return ((struct grf_treenode *)node)->ptr;
 }

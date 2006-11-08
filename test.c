@@ -66,8 +66,7 @@ void test_load_file() {
 	void **list;
 //	char *fn = "/storage/win_d/Program Files/Gravity/fRO_II/data.grf";
 //	char *fn = "/storage/win_d/Program Files/Gravity/20060224_krodata.gpf";
-//	char *fn = "problemfix.gpf";
-	char *fn = "data.grf";
+	char *fn = "problemfix.gpf";
 	char *fn2 = "DATA/texTURE\\유저인터페이스/LOADING45.JPG";
 	int x;
 
