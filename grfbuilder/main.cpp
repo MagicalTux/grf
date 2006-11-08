@@ -7,13 +7,16 @@
 
 int main(int argc, char *argv[]) {
 	QApplication app(argc, argv);
-	MainWindow MW;
-
 	QString locale = QLocale::system().name();
 
 	QTranslator translator;
-	translator.load(QString("grfbuilder_") + locale);
-	app.installTranslator(&translator);
+	if (translator.load(QString("grfbuilder_") + locale, "/home/magicaltux/p/grf/grfbuilder/")) {
+		app.installTranslator(&translator);
+	} else {
+		printf("failed\n");
+	}
+
+	MainWindow MW;
 
 	MW.show();
 	return app.exec();

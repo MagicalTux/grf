@@ -233,12 +233,12 @@
      </column>
      <column>
       <property name="text" >
-       <string>Comp. size</string>
+       <string>Comp</string>
       </property>
      </column>
      <column>
       <property name="text" >
-       <string>Real size</string>
+       <string>Size</string>
       </property>
      </column>
      <column>

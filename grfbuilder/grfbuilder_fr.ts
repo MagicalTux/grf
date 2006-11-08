@@ -21,6 +21,14 @@
         <source>The selected file doesn&apos;t look like a valid GRF file.</source>
         <translation>Le fichier séléctionné ne semble pas être un fichier GRF valide.</translation>
     </message>
+    <message>
+        <source>[dir]</source>
+        <translation>[rép]</translation>
+    </message>
+    <message>
+        <source>GrfBuilder v1.0 (libgrf v%1.%2.%3) by MagicalTux</source>
+        <translation>GrfBuilder v1.0 (libgrf v%1.%2.%3) par MagicalTux</translation>
+    </message>
 </context>
 <context>
     <name>main_window</name>
@@ -74,7 +82,7 @@
     </message>
     <message>
         <source>&lt;p align=&quot;right&quot;&gt;Compression level:&lt;/p&gt;</source>
-        <translation>&lt;p align=&quot;right&quot;&gt;Niveau de compression :&lt;/p&gt;</translation>
+        <translation>&lt;p align=&quot;right&quot;&gt;Compression :&lt;/p&gt;</translation>
     </message>
     <message>
         <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Using this button, you can open an existing GRF file.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
@@ -118,7 +126,7 @@
     </message>
     <message>
         <source>Merge dir</source>
-        <translation>Ajouter rép</translation>
+        <translation>Ajouter rép.</translation>
     </message>
     <message>
         <source>Idx</source>
@@ -126,11 +134,11 @@
     </message>
     <message>
         <source>Comp. size</source>
-        <translation>Comp</translation>
+        <translation type="obsolete">Comp</translation>
     </message>
     <message>
         <source>Real size</source>
-        <translation>Taille</translation>
+        <translation type="obsolete">Taille</translation>
     </message>
     <message>
         <source>Position</source>
@@ -142,6 +150,14 @@
     </message>
     <message>
         <source>File size</source>
+        <translation>Taille</translation>
+    </message>
+    <message>
+        <source>Comp</source>
+        <translation>Comp</translation>
+    </message>
+    <message>
+        <source>Size</source>
         <translation>Taille</translation>
     </message>
 </context>

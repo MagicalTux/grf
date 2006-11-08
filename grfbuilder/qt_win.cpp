@@ -12,14 +12,12 @@
 MainWindow::MainWindow(QWidget *parent) : QWidget(parent) {
 	uint32_t version=grf_version();
 	uint8_t major, minor, revision;
-	char win_name[256];
-	this->grf = NULL;
 	major = (version >> 16) & 0xff;
 	minor = (version >> 8) & 0xff;
 	revision = version & 0xff;
+	this->grf = NULL;
 	ui.setupUi((QDialog*)this);
-	sprintf((char *)&win_name, "GrfBuilder v1.0 (libgrf v%d.%d.%d) by MagicalTux", major, minor, revision);
-	((QDialog*)this)->setWindowTitle(QApplication::translate("main_window", win_name, 0, QApplication::UnicodeUTF8));
+	((QDialog*)this)->setWindowTitle(tr("GrfBuilder v1.0 (libgrf v%1.%2.%3) by MagicalTux").arg(major).arg(minor).arg(revision));
 }
 
 bool MainWindow::progress_callback(void *grf, int pos, int max) {
@@ -38,7 +36,7 @@ void MainWindow::fillFilesTree(void *dir, QTreeWidget *parent) {
 		QTreeWidgetItem *__f = new QTreeWidgetItem(parent);
 		__f->setText(0, QString::fromUtf8(euc_kr_to_utf8(grf_tree_get_name(list[i])))); // name
 		if (grf_tree_is_dir(list[i])) {
-			__f->setText(1, QString("[dir]"));
+			__f->setText(1, tr("[dir]"));
 			MainWindow::fillFilesTree(list[i], __f);
 		} else {
 			void *f = grf_tree_get_file(list[i]);
@@ -54,7 +52,7 @@ void MainWindow::fillFilesTree(void *dir, QTreeWidgetItem *parent) {
 		QTreeWidgetItem *__f = new QTreeWidgetItem(parent);
 		__f->setText(0, QString::fromUtf8(euc_kr_to_utf8(grf_tree_get_name(list[i])))); // name
 		if (grf_tree_is_dir(list[i])) {
-			__f->setText(1, QString("[dir with %1 files]").arg(grf_tree_dir_count_files(list[i])));
+			__f->setText(1, tr("[dir]"));
 			MainWindow::fillFilesTree(list[i], __f);
 		} else {
 			void *f = grf_tree_get_file(list[i]);
@@ -111,7 +109,7 @@ void MainWindow::on_btn_open_clicked() {
 		__item->setText(1, QString("%1").arg(grf_file_get_storage_size(f))); // compsize
 		__item->setText(2, QString("%1").arg(grf_file_get_size(f))); // realsize
 		__item->setText(3, QString("%1").arg(grf_file_get_storage_pos(f))); // pos
-		__item->setText(4, QApplication::translate("main_window", euc_kr_to_utf8(grf_file_get_filename(f)), 0, QApplication::UnicodeUTF8)); // name
+		__item->setText(4, QString::fromUtf8(euc_kr_to_utf8(grf_file_get_filename(f)))); // name
 		f = grf_get_file_next(f);
 	}
 }

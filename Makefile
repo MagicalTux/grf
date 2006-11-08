@@ -196,13 +196,16 @@ endif
 ## SPECIFIC RULES
 grfbuilder/moc_qt_win.cpp: grfbuilder/qt_win.h
 	@moc $(QT_LIN_INCLUDE) $< -o $@
-grfbuilder/main.cpp: grfbuilder/qt_win.h grfbuilder/ui_qt_win.h
+grfbuilder/main.cpp: grfbuilder/qt_win.h grfbuilder/ui_qt_win.h 
 grfbuilder/qt_win.cpp: grfbuilder/qt_win.h grfbuilder/ui_qt_win.h
 grfbuilder/qt_win.h: grfbuilder/ui_qt_win.h
 grfbuilder/ui_qt_win.h: grfbuilder/qt_win.ui
 	@uic $< | sed -f grfbuilder/qt_win.sed >$@
+	@lrelease grfbuilder/grfbuilder_fr.ts
+grfbuilder/grfbuilder_fr.ts: $(wildcard grfbuilder/*.cpp grfbuilder/*.h)
+	@lupdate $^ -ts $@
 
 clean:
 	$(RM) -r linux $(TARGET) win32 $(TARGET_WIN) $(GB_TARGET) $(GB_TARGET_WIN) grf_test_win.exe grf_test_linux libgrf-*.zip version.sh
-	$(RM) grfbuilder/ui_qt_win.h grfbuilder/moc_qt_win.cpp
+	$(RM) grfbuilder/ui_qt_win.h grfbuilder/moc_qt_win.cpp grfbuilder/grfbuilder_fr.qm
 
