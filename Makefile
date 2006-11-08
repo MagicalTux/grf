@@ -194,11 +194,11 @@ endif
 endif
 
 ## SPECIFIC RULES
-grfbuilder/moc_qt_win.cpp: grfbuilder/qt_win.h
+grfbuilder/moc_MainWindow.cpp: grfbuilder/MainWindow.h
 	@moc $(QT_LIN_INCLUDE) $< -o $@
-grfbuilder/main.cpp: grfbuilder/qt_win.h grfbuilder/ui_qt_win.h 
-grfbuilder/qt_win.cpp: grfbuilder/qt_win.h grfbuilder/ui_qt_win.h
-grfbuilder/qt_win.h: grfbuilder/ui_qt_win.h
+grfbuilder/main.cpp: grfbuilder/MainWindow.h grfbuilder/ui_MainWindow.h 
+grfbuilder/MainWindow.cpp: grfbuilder/MainWindow.h grfbuilder/ui_MainWindow.h
+grfbuilder/MainWindow.h: grfbuilder/ui_MainWindow.h
 grfbuilder/ui_MainWindow.h: grfbuilder/MainWindow.ui
 	@uic $< >$@
 	@lrelease grfbuilder/grfbuilder_fr.ts

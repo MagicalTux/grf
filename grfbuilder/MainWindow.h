@@ -18,7 +18,7 @@ private slots:
 	void on_tab_sel_currentChanged(int);
 
 private:
-	Ui::main_window ui;
+	Ui::MainWindow ui;
 	QFile grf_file;
 	void fillFilesTree(void *, QTreeWidget *);
 	void fillFilesTree(void *, QTreeWidgetItem *);

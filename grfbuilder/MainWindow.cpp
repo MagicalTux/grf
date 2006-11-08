@@ -16,7 +16,7 @@ MainWindow::MainWindow(QWidget *parent) : QWidget(parent) {
 	minor = (version >> 8) & 0xff;
 	revision = version & 0xff;
 	this->grf = NULL;
-	ui.setupUi((QDialog*)this);
+	ui.setupUi((QMainWindow*)this);
 	((QDialog*)this)->setWindowTitle(tr("GrfBuilder v1.0 (libgrf v%1.%2.%3) by MagicalTux").arg(major).arg(minor).arg(revision));
 }
 

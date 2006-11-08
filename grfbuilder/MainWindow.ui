@@ -62,7 +62,7 @@
              <number>6</number>
             </property>
             <item row="0" column="0" >
-             <widget class="QTreeWidget" name="view_allfiles_2" >
+             <widget class="QTreeWidget" name="view_allfiles" >
               <property name="dragEnabled" >
                <bool>true</bool>
               </property>
