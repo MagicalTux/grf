@@ -8,18 +8,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>688</width>
-    <height>332</height>
+    <width>692</width>
+    <height>301</height>
    </rect>
   </property>
   <property name="minimumSize" >
    <size>
-    <width>650</width>
-    <height>320</height>
+    <width>512</width>
+    <height>256</height>
    </size>
-  </property>
-  <property name="windowTitle" >
-   <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget" >
    <layout class="QGridLayout" >
@@ -322,7 +319,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>688</width>
+     <width>692</width>
      <height>29</height>
     </rect>
    </property>

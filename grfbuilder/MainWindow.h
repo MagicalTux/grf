@@ -17,6 +17,8 @@ private slots:
 	void on_btn_open_clicked();
 	void on_btn_close_clicked();
 	void on_tab_sel_currentChanged(int);
+	void on_action_Open_triggered();
+	void on_action_Close_triggered();
 
 private:
 	Ui::MainWindow ui;

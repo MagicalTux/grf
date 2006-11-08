@@ -77,6 +77,10 @@ void MainWindow::on_tab_sel_currentChanged(int idx) {
 	ui.view_filestree->sortItems(0, Qt::AscendingOrder);
 }
 
+void MainWindow::on_action_Open_triggered() {
+	this->on_btn_open_clicked();
+}
+
 void MainWindow::on_btn_open_clicked() {
 	QString str = QFileDialog::getOpenFileName(this, tr("Open File"),
 			NULL, tr("GRF Files (*.grf *.gpf)"));
@@ -112,6 +116,10 @@ void MainWindow::on_btn_open_clicked() {
 		__item->setText(4, QString::fromUtf8(euc_kr_to_utf8(grf_file_get_filename(f)))); // name
 		f = grf_get_file_next(f);
 	}
+}
+
+void MainWindow::on_action_Close_triggered() {
+	this->on_btn_close_clicked();
 }
 
 void MainWindow::on_btn_close_clicked() {
