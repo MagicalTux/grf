@@ -2,6 +2,8 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QFile>
+#include <QProgressDialog>
+#include <QDir>
 #include "MainWindow.h"
 
 /* libgrf */
@@ -114,8 +116,25 @@ void MainWindow::on_btn_open_clicked() {
 		__item->setText(2, QString("%1").arg(grf_file_get_size(f))); // realsize
 		__item->setText(3, QString("%1").arg(grf_file_get_storage_pos(f))); // pos
 		__item->setText(4, QString::fromUtf8(euc_kr_to_utf8(grf_file_get_filename(f)))); // name
+//		__item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsUserCheckable | Qt::ItemIsEnabled | Qt::ItemIsDragEnabled | Qt::ItemIsEditable);
 		f = grf_get_file_next(f);
 	}
+	// enable buttons
+	ui.btn_extract->setEnabled(false);
+	ui.btn_extractall->setEnabled(true);
+	ui.btn_repack->setEnabled(false);
+	ui.btn_close->setEnabled(true);
+	ui.btn_mergegrf->setEnabled(false);
+	ui.btn_mergedir->setEnabled(false);
+	// menuitems
+	ui.action_Extract->setEnabled(false);
+	ui.action_Extract_All->setEnabled(true);
+	ui.actionMove_files->setEnabled(false);
+	ui.actionDecrypt->setEnabled(false);
+	ui.actionRecompress->setEnabled(false);
+	ui.action_Close->setEnabled(true);
+	ui.action_Merge_GRF->setEnabled(false);
+	ui.actionMerge_Dir->setEnabled(false);
 }
 
 void MainWindow::on_action_Close_triggered() {
@@ -132,12 +151,84 @@ void MainWindow::on_btn_close_clicked() {
 		ui.view_allfiles->clear();
 		ui.view_filestree->clear();
 		ui.tab_sel->setCurrentIndex(0);
-//		QList<QTreeWidgetItem *> list = ui.view_allfiles->findItems("", Qt::MatchContains | Qt::MatchRecursive);
-//		printf("list.size()=%d\n", list.size());
-//		for(int i=list.size()-1;i>=0;i--) {
-//			QTreeWidgetItem *x = (QTreeWidgetItem *)list.at(i);
-//			delete x;
-//		}
+		// disable buttons
+		ui.btn_extract->setEnabled(false);
+		ui.btn_extractall->setEnabled(false);
+		ui.btn_repack->setEnabled(false);
+		ui.btn_close->setEnabled(false);
+		ui.btn_mergegrf->setEnabled(false);
+		ui.btn_mergedir->setEnabled(false);
+		// menuitems
+		ui.action_Extract->setEnabled(false);
+		ui.action_Extract_All->setEnabled(false);
+		ui.actionMove_files->setEnabled(false);
+		ui.actionDecrypt->setEnabled(false);
+		ui.actionRecompress->setEnabled(false);
+		ui.action_Close->setEnabled(false);
+		ui.action_Merge_GRF->setEnabled(false);
+		ui.actionMerge_Dir->setEnabled(false);
 	}
 }
+
+void MainWindow::on_actionUnicode_triggered() {
+	ui.actionUnicode->setChecked(true);
+	ui.actionStandard->setChecked(false);
+}
+
+void MainWindow::on_action_Quit_triggered() {
+//	QCoreApplication::exit();
+	this->close();
+}
+
+void MainWindow::on_actionStandard_triggered() {
+	ui.actionUnicode->setChecked(false);
+	ui.actionStandard->setChecked(true);
+}
+
+void MainWindow::on_btn_extractall_clicked() {
+	void *cur_file;
+	int c=0;
+	if (this->grf == NULL) return;
+	QProgressDialog prog(tr("Extraction in progress..."), tr("Cancel"), 0, grf_filecount(this->grf), this);
+	/* get files list */
+	cur_file = grf_get_file_first(this->grf);
+	while(cur_file != NULL) {
+		c++;
+		prog.setValue(c);
+		if (prog.wasCanceled()) break;
+		QCoreApplication::processEvents();
+		if (ui.actionUnicode->isChecked()) {
+			size_t size;
+			QString name(QString::fromUtf8(euc_kr_to_utf8(grf_file_get_filename(cur_file))));
+			size = grf_file_get_size(cur_file);
+#ifdef __WIN32
+			name.replace("/", "\\");
+			QString dirname(name);
+			dirname.resize(name.lastIndexOf("\\"));
+#else
+			name.replace("\\", "/");
+			QString dirname(name);
+			dirname.resize(name.lastIndexOf("/"));
+#endif
+			QDir foo(dirname);
+			foo.mkpath(".");
+			QFile output(name);
+			if (!output.open(QIODevice::WriteOnly)) {
+				cur_file = grf_get_file_next(cur_file);
+				continue;
+			}
+			if (grf_file_put_contents_to_fd(cur_file, output.handle()) != size) {
+				output.close();
+				cur_file = grf_get_file_next(cur_file);
+				continue;
+			}
+		} else {
+			grf_put_contents_to_file(cur_file, grf_file_get_filename(cur_file));
+		}
+		cur_file = grf_get_file_next(cur_file);
+	}
+	prog.reset();
+	prog.close();
+}
+
 

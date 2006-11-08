@@ -205,7 +205,11 @@ grfbuilder/ui_MainWindow.h: grfbuilder/MainWindow.ui
 grfbuilder/grfbuilder_fr.ts: $(wildcard grfbuilder/*.cpp grfbuilder/*.h)
 	@lupdate $^ -ts $@
 
+%.dll: $(QT_WIN)/bin/%.dll
+	cp $< $@
+
 clean:
 	$(RM) -r linux $(TARGET) win32 $(TARGET_WIN) $(GB_TARGET) $(GB_TARGET_WIN) grf_test_win.exe grf_test_linux libgrf-*.zip version.sh
 	$(RM) grfbuilder/ui_MainWindow.h grfbuilder/moc_MainWindow.cpp grfbuilder/grfbuilder_fr.qm
+	$(RM) mingwm10.dll QtCore4.dll QtGui4.dll
 

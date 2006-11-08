@@ -39,7 +39,7 @@
     </message>
     <message>
         <source>MainWindow</source>
-        <translation>MainWindow</translation>
+        <translation type="obsolete">MainWindow</translation>
     </message>
     <message>
         <source>&amp;Open</source>
@@ -228,6 +228,26 @@
     <message>
         <source>&amp;Repack</source>
         <translation>&amp;Repacker</translation>
+    </message>
+    <message>
+        <source>&amp;Unicode</source>
+        <translation>&amp;Unicode</translation>
+    </message>
+    <message>
+        <source>&amp;Standard</source>
+        <translation>&amp;Standard</translation>
+    </message>
+    <message>
+        <source>E&amp;xtract type</source>
+        <translation>Type d&apos;e&amp;xtraction</translation>
+    </message>
+    <message>
+        <source>Extraction in progress...</source>
+        <translation>Extraction en cours...</translation>
+    </message>
+    <message>
+        <source>Cancel</source>
+        <translation>Annuler</translation>
     </message>
 </context>
 <context>

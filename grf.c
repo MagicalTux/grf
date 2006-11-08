@@ -5,7 +5,11 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#include <stdio.h>
 #include <grf.h>
+#ifndef __WIN32
+#include <libgen.h>
+#endif
 
 /* BEGIN: INCLUDE FROM GRFIO.C */
 
@@ -186,6 +190,19 @@ static unsigned char * decode_filename(unsigned char *buf, int len) {
 }
 
 /* END: INCLUDE FROM GRFIO.C */
+
+#ifdef __WIN32
+/* compatibility : function missing in windows. */
+
+static char *dirname(char *d) {
+	if (d == NULL) return ".";
+	for(int i=strlen(d)-1;i>=0;i--) if ((*(d+i)=='/') || (*(d+i)=='\\')) {
+		*(d+i)=0;
+		return d;
+	}
+	return ".";
+}
+#endif
 
 static void prv_grf_free_node(struct grf_node *node) {
 	free(node->filename);
@@ -682,6 +699,103 @@ GRFEXPORT uint32_t grf_file_get_contents(void *tmphandler, void *target) {
 	free(comp);
 	return count;
 }
+
+GRFEXPORT uint32_t grf_file_put_contents_to_fd(void *file, int fd) {
+	uint32_t size;
+	void *ptr;
+	uint32_t p=0;
+	size = grf_file_get_size(file);
+	if (size == 0) return 0;
+	ptr = malloc(size);
+	if (ptr == NULL) return 0;
+	if (grf_file_get_contents(file, ptr) != size) {
+		free(ptr);
+		return 0;
+	}
+	while(1) {
+		int i=write(fd, ptr+p, size-p);
+		if (i<=0) {
+			free(ptr);
+			return 0;
+		}
+		p+=i;
+		if (p==size) break;
+	}
+	free(ptr);
+	return size;
+}
+
+static bool prv_grf_do_mkdir(char *name) {
+	char *n = strdup(name);
+	char *b = strdup(dirname(n));
+	struct stat s;
+	memset(&s, 0, sizeof(s));
+	free(n);
+	stat(b, &s);
+	if ((s.st_mode & S_IFDIR) == S_IFDIR) { free(b); return true; } /* already good */
+#ifdef __WIN32
+	if (mkdir(b) == 0) 
+#else
+	if (mkdir(b, 0755) == 0) 
+#endif
+	{
+		free(b);
+		return true;
+	}
+	prv_grf_do_mkdir(b);
+#ifdef __WIN32
+	if (mkdir(b) != 0)
+#else
+	if (mkdir(b, 0755) != 0)
+#endif
+	{
+		return false;
+	}
+	free(b);
+	return true;
+}
+
+GRFEXPORT bool grf_put_contents_to_file(void *file, const char *fn) {
+	int i,p=0;
+	char *name;
+	size_t len, size;
+	void *ptr;
+	FILE *f;
+	name = strdup(fn);
+	len = strlen(name);
+	size = grf_file_get_size(file);
+	if (size == 0) return false;
+	for(i=0;i<len;i++) if (*(name+i)=='\\') *(name+i) = '/';
+	prv_grf_do_mkdir(name);
+	f = fopen(name, "wb");
+	if (f==NULL) {
+		free(name);
+		return false;
+	}
+	ptr = malloc(size);
+	if ((ptr==NULL) || (grf_file_get_contents(file, ptr) != size)) {
+		free(ptr);
+		free(name);
+		fclose(f);
+		return false;
+	}
+	while(1) {
+		int i=fwrite(ptr+p, 1, size-p, f);
+		if (i<=0) {
+			free(ptr);
+			free(name);
+			fclose(f);
+			return 0;
+		}
+		p+=i;
+		if (p==size) break;
+	}
+	free(ptr);
+	fclose(f);
+	free(name);
+	return true;
+}
+
 
 inline struct grf_node *prv_grf_find_free_space(struct grf_handler *handler, size_t size, struct grf_node *inode) {
 	// find a "leak" between two files, to put our own file

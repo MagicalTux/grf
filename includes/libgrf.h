@@ -63,6 +63,8 @@ GRFEXPORT uint32_t grf_file_get_size(void *); /* grf.c */
 GRFEXPORT uint32_t grf_file_get_storage_pos(void *); /* grf.c */
 GRFEXPORT uint32_t grf_file_get_storage_size(void *); /* grf.c */
 GRFEXPORT uint32_t grf_file_get_contents(void *, void *); /* grf.c */
+GRFEXPORT uint32_t grf_file_put_contents_to_fd(void *, int); /* grf.c */
+GRFEXPORT bool grf_put_contents_to_file(void *, const char *); /* grf.c */
 GRFEXPORT void grf_create_tree(void *); /* grf.c */
 GRFEXPORT void *grf_tree_get_root(void *); /* grf.c */
 GRFEXPORT void **grf_tree_list_node(void *); /* grf.c */

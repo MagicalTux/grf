@@ -60,9 +60,6 @@
             </property>
             <item row="0" column="0" >
              <widget class="QTreeWidget" name="view_allfiles" >
-              <property name="dragEnabled" >
-               <bool>true</bool>
-              </property>
               <property name="columnCount" >
                <number>5</number>
               </property>
@@ -251,6 +248,9 @@
       </item>
       <item>
        <widget class="QPushButton" name="btn_extract" >
+        <property name="enabled" >
+         <bool>false</bool>
+        </property>
         <property name="text" >
          <string>Extract</string>
         </property>
@@ -258,6 +258,9 @@
       </item>
       <item>
        <widget class="QPushButton" name="btn_extractall" >
+        <property name="enabled" >
+         <bool>false</bool>
+        </property>
         <property name="text" >
          <string>Extract All</string>
         </property>
@@ -265,6 +268,9 @@
       </item>
       <item>
        <widget class="QPushButton" name="btn_repack" >
+        <property name="enabled" >
+         <bool>false</bool>
+        </property>
         <property name="text" >
          <string>Repack</string>
         </property>
@@ -291,6 +297,9 @@
       </item>
       <item>
        <widget class="QPushButton" name="btn_close" >
+        <property name="enabled" >
+         <bool>false</bool>
+        </property>
         <property name="text" >
          <string>Close</string>
         </property>
@@ -298,6 +307,9 @@
       </item>
       <item>
        <widget class="QPushButton" name="btn_mergegrf" >
+        <property name="enabled" >
+         <bool>false</bool>
+        </property>
         <property name="text" >
          <string>Merge GRF</string>
         </property>
@@ -305,10 +317,29 @@
       </item>
       <item>
        <widget class="QPushButton" name="btn_mergedir" >
+        <property name="enabled" >
+         <bool>false</bool>
+        </property>
         <property name="text" >
          <string>Merge dir</string>
         </property>
        </widget>
+      </item>
+      <item>
+       <spacer>
+        <property name="orientation" >
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeType" >
+         <enum>QSizePolicy::Expanding</enum>
+        </property>
+        <property name="sizeHint" >
+         <size>
+          <width>20</width>
+          <height>40</height>
+         </size>
+        </property>
+       </spacer>
       </item>
      </layout>
     </item>
@@ -328,6 +359,13 @@
      <string>&amp;?</string>
     </property>
     <addaction name="actionAbout" />
+   </widget>
+   <widget class="QMenu" name="menuExtract_type" >
+    <property name="title" >
+     <string>E&amp;xtract type</string>
+    </property>
+    <addaction name="actionUnicode" />
+    <addaction name="actionStandard" />
    </widget>
    <widget class="QMenu" name="menuFile" >
     <property name="title" >
@@ -351,6 +389,7 @@
     <addaction name="action_Quit" />
    </widget>
    <addaction name="menuFile" />
+   <addaction name="menuExtract_type" />
    <addaction name="menu" />
   </widget>
   <widget class="QStatusBar" name="statusbar" />
@@ -363,6 +402,9 @@
    </property>
   </action>
   <action name="action_Extract" >
+   <property name="enabled" >
+    <bool>false</bool>
+   </property>
    <property name="text" >
     <string>&amp;Extract</string>
    </property>
@@ -371,6 +413,9 @@
    </property>
   </action>
   <action name="action_Extract_All" >
+   <property name="enabled" >
+    <bool>false</bool>
+   </property>
    <property name="text" >
     <string>Extract &amp;All</string>
    </property>
@@ -379,21 +424,33 @@
    </property>
   </action>
   <action name="actionMove_files" >
+   <property name="enabled" >
+    <bool>false</bool>
+   </property>
    <property name="text" >
     <string>Move files</string>
    </property>
   </action>
   <action name="actionDecrypt" >
+   <property name="enabled" >
+    <bool>false</bool>
+   </property>
    <property name="text" >
     <string>Decrypt</string>
    </property>
   </action>
   <action name="actionRecompress" >
+   <property name="enabled" >
+    <bool>false</bool>
+   </property>
    <property name="text" >
     <string>Recompress</string>
    </property>
   </action>
   <action name="action_Close" >
+   <property name="enabled" >
+    <bool>false</bool>
+   </property>
    <property name="text" >
     <string>&amp;Close</string>
    </property>
@@ -402,6 +459,9 @@
    </property>
   </action>
   <action name="action_Merge_GRF" >
+   <property name="enabled" >
+    <bool>false</bool>
+   </property>
    <property name="text" >
     <string>&amp;Merge GRF</string>
    </property>
@@ -410,6 +470,9 @@
    </property>
   </action>
   <action name="actionMerge_Dir" >
+   <property name="enabled" >
+    <bool>false</bool>
+   </property>
    <property name="text" >
     <string>Merge &amp;Dir</string>
    </property>
@@ -431,6 +494,28 @@
    </property>
    <property name="shortcut" >
     <string>Ctrl+?</string>
+   </property>
+  </action>
+  <action name="actionUnicode" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="checked" >
+    <bool>true</bool>
+   </property>
+   <property name="text" >
+    <string>&amp;Unicode</string>
+   </property>
+  </action>
+  <action name="actionStandard" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="checked" >
+    <bool>false</bool>
+   </property>
+   <property name="text" >
+    <string>&amp;Standard</string>
    </property>
   </action>
  </widget>

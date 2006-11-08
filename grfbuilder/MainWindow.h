@@ -16,9 +16,15 @@ public:
 private slots:
 	void on_btn_open_clicked();
 	void on_btn_close_clicked();
+	void on_btn_extractall_clicked();
+
 	void on_tab_sel_currentChanged(int);
 	void on_action_Open_triggered();
 	void on_action_Close_triggered();
+	void on_action_Quit_triggered();
+
+	void on_actionUnicode_triggered();
+	void on_actionStandard_triggered();
 
 private:
 	Ui::MainWindow ui;
@@ -27,6 +33,7 @@ private:
 	void fillFilesTree(void *, QTreeWidgetItem *);
 	void *grf;
 	bool grf_has_tree;
+	void do_mkdir(QString *);
 };
 
 #endif
