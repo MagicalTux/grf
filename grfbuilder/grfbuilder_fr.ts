@@ -23,7 +23,7 @@
     </message>
     <message>
         <source>[dir]</source>
-        <translation>[rép]</translation>
+        <translation type="obsolete">[rép]</translation>
     </message>
     <message>
         <source>GrfBuilder v1.0 (libgrf v%1.%2.%3) by MagicalTux</source>

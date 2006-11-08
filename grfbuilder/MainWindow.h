@@ -32,8 +32,8 @@ private slots:
 private:
 	Ui::MainWindow ui;
 	QFile grf_file;
-	void fillFilesTree(void *, QTreeWidget *);
-	void fillFilesTree(void *, QTreeWidgetItem *);
+	unsigned int fillFilesTree(void *, QTreeWidget *);
+	unsigned int fillFilesTree(void *, QTreeWidgetItem *);
 	void *grf;
 	bool grf_has_tree;
 	void do_mkdir(QString *);

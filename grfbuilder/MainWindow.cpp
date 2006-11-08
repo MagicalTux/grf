@@ -32,36 +32,48 @@ static bool grf_callback_caller(void *MW_, void *grf, int pos, int max) {
 	return MW->progress_callback(grf, pos, max);
 }
 
-void MainWindow::fillFilesTree(void *dir, QTreeWidget *parent) {
+unsigned int MainWindow::fillFilesTree(void *dir, QTreeWidget *parent) {
 	void **list = grf_tree_list_node(dir);
+	unsigned int total_size = 0;
 	for(int i=0;list[i]!=NULL;i++) {
+		unsigned int s;
 		QTreeWidgetItem *__f = new QTreeWidgetItem(parent);
 		__f->setText(0, QString::fromUtf8(euc_kr_to_utf8(grf_tree_get_name(list[i])))); // name
 		if (grf_tree_is_dir(list[i])) {
-			__f->setText(1, tr("[dir]"));
-			MainWindow::fillFilesTree(list[i], __f);
+			s=MainWindow::fillFilesTree(list[i], __f);
+			total_size += s;
+			__f->setText(1, QString("[%1]").arg(s));
 		} else {
 			void *f = grf_tree_get_file(list[i]);
-			__f->setText(1, QString("%1").arg(grf_file_get_size(f)));
+			s = grf_file_get_size(f);
+			total_size += s;
+			__f->setText(1, QString("%1").arg(s));
 		}
 	}
-	delete list;
+	delete list; 
+	return total_size;
 }
 
-void MainWindow::fillFilesTree(void *dir, QTreeWidgetItem *parent) {
+unsigned int MainWindow::fillFilesTree(void *dir, QTreeWidgetItem *parent) {
 	void **list = grf_tree_list_node(dir);
+	unsigned int total_size = 0;
 	for(int i=0;list[i]!=NULL;i++) {
+		unsigned int s;
 		QTreeWidgetItem *__f = new QTreeWidgetItem(parent);
 		__f->setText(0, QString::fromUtf8(euc_kr_to_utf8(grf_tree_get_name(list[i])))); // name
 		if (grf_tree_is_dir(list[i])) {
-			__f->setText(1, tr("[dir]"));
-			MainWindow::fillFilesTree(list[i], __f);
+			s=MainWindow::fillFilesTree(list[i], __f);
+			total_size += s;
+			__f->setText(1, QString("[%1]").arg(s));
 		} else {
 			void *f = grf_tree_get_file(list[i]);
-			__f->setText(1, QString("%1").arg(grf_file_get_size(f)));
+			s = grf_file_get_size(f);
+			total_size += s;
+			__f->setText(1, QString("%1").arg(s));
 		}
 	}
 	delete list;
+	return total_size;
 }
 
 void MainWindow::on_tab_sel_currentChanged(int idx) {
