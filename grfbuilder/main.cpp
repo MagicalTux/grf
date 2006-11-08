@@ -1,9 +1,19 @@
 #include <QApplication>
+#include <QTranslator>
+#include <QLocale>
 #include "qt_win.h"
+
+#include <stdio.h>
 
 int main(int argc, char *argv[]) {
 	QApplication app(argc, argv);
 	MainWindow MW;
+
+	QString locale = QLocale::system().name();
+
+	QTranslator translator;
+	translator.load(QString("grfbuilder_") + locale);
+	app.installTranslator(&translator);
 
 	MW.show();
 	return app.exec();
