@@ -19,6 +19,7 @@ extern "C" {
 /* We're most likely using ANSI C (C89), which does not provide bool, etc..
  * Let's use typedef for a few things... */
 typedef unsigned int uint32_t;
+typedef unsigned char uint8_t;
 #ifndef __bool_true_false_are_defined
 typedef int bool;
 #define true 1
@@ -46,7 +47,7 @@ GRFEXPORT char *grf_versionstring(void); /* main.c */
 GRFEXPORT char *grf_versionstring_r(char *, size_t); /* main.c */
 GRFEXPORT void *grf_new(const char *, bool); /* grf.c */
 GRFEXPORT void *grf_new_by_fd(int, bool); /* grf.c */
-GRFEXPORT void grf_set_callback(void *, bool (*)(void *etc, void *grf, int cur, int max), void *etc);
+GRFEXPORT void grf_set_callback(void *, bool (*)(void *etc, void *grf, int cur, int max), void *etc); /* grf.c */
 GRFEXPORT void *grf_load(const char *, bool); /* grf.c */
 GRFEXPORT void *grf_load_from_new(void *); /* grf.c */
 GRFEXPORT bool grf_save(void *); /* grf.c */
@@ -59,8 +60,17 @@ GRFEXPORT void *grf_file_add(void *, char *, void *, size_t); /* grf.c */
 GRFEXPORT void *grf_file_add_path(void *, char *, char *); /* grf.c */
 GRFEXPORT const char *grf_file_get_filename(void *); /* grf.c */
 GRFEXPORT uint32_t grf_file_get_size(void *); /* grf.c */
+GRFEXPORT uint32_t grf_file_get_storage_pos(void *); /* grf.c */
+GRFEXPORT uint32_t grf_file_get_storage_size(void *); /* grf.c */
 GRFEXPORT uint32_t grf_file_get_contents(void *, void *); /* grf.c */
 GRFEXPORT void grf_create_tree(void *); /* grf.c */
+GRFEXPORT void *grf_tree_get_root(void *); /* grf.c */
+GRFEXPORT void **grf_tree_list_node(void *); /* grf.c */
+GRFEXPORT bool grf_tree_is_dir(void *); /* grf.c */
+GRFEXPORT const char *grf_tree_get_name(void *); /* grf.c */
+GRFEXPORT void *grf_tree_get_file(void *); /* grf.c */
+GRFEXPORT void *grf_tree_get_parent(void *); /* grf.c */
+GRFEXPORT void *grf_file_get_tree(void *); /* grf.c */
 GRFEXPORT void **grf_get_file_list(void *); /* grf.c */
 GRFEXPORT void *grf_get_file_next(void *); /* grf.c */
 GRFEXPORT void *grf_get_file_prev(void *); /* grf.c */

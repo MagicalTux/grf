@@ -15,11 +15,15 @@ public:
 private slots:
 	void on_btn_open_clicked();
 	void on_btn_close_clicked();
+	void on_tab_sel_currentChanged(int);
 
 private:
 	Ui::main_window ui;
 	QFile grf_file;
+	void fillFilesTree(void *, QTreeWidget *);
+	void fillFilesTree(void *, QTreeWidgetItem *);
 	void *grf;
+	bool grf_has_tree;
 };
 
 #endif

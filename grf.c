@@ -249,61 +249,113 @@ static void prv_grf_tree_table_free_node(struct grf_treenode *node) {
 	if (node->is_dir) {
 		hash_free_table(node->subdir);
 	}
+	if (node->name != NULL) free(node->name); // does not apply to root
 	free(node);
+}
+
+static void prv_grf_reg_tree_node(struct grf_treenode *root, struct grf_node *cur_node) {
+	char *fn = cur_node->filename;
+	char dirname[4096];
+	struct grf_treenode *parent = root;
+	struct grf_treenode *new;
+	while(1) {
+		size_t pos;
+		// locate either / or \ in filename...
+		for(pos=0;(*(fn+pos)!=0) && (*(fn+pos)!='/') && (*(fn+pos)!='\\');pos++);
+		memcpy(&dirname, fn, pos+1);
+		if (*(fn+pos)==0) break; // record file~
+		// this is a directory, check if already existing...
+		dirname[pos] = 0;
+		fn+=pos+1;
+		new = hash_lookup(parent->subdir, dirname);
+		if (new != NULL) { // found it !
+			if (!new->is_dir) {
+				// bogus grf file: directory with same name as a file... convert to directory !
+				new->is_dir = true;
+				new->subdir = hash_create_table(GRF_TREE_HASH_SIZE, prv_grf_tree_table_free_node);
+			}
+			parent = new;
+			continue;
+		}
+		// not found -> create a new node
+		new = (struct grf_treenode *)calloc(1, sizeof(struct grf_treenode));
+		memset(new, 0, sizeof(struct grf_treenode));
+		new->is_dir = true;
+		new->subdir = hash_create_table(GRF_TREE_HASH_SIZE, prv_grf_tree_table_free_node);
+		new->parent = parent;
+		new->name = strdup((char *)&dirname);
+		hash_add_element(parent->subdir, (char *)&dirname, new);
+		parent = new;
+	}
+	// record file
+	new = (struct grf_treenode *)calloc(1, sizeof(struct grf_treenode));
+	memset(new, 0, sizeof(struct grf_treenode));
+	new->is_dir = false;
+	new->ptr = cur_node;
+	new->parent = parent;
+	cur_node->tree_parent = new;
+	new->name = strdup((char *)&dirname);
+	hash_add_element(parent->subdir, (char *)&dirname, new);
 }
 
 GRFEXPORT void grf_create_tree(void *tmphandler) {
 	struct grf_node *cur_node;
 	struct grf_handler *handler = tmphandler;
+	uint32_t i=0, j=100;
 	if (handler->root != NULL) return;
 	// the idea is simple : get to each file and scan them~
 	// First, create the root node...
 	handler->root = (struct grf_treenode *)calloc(1, sizeof(struct grf_treenode));
 	memset(handler->root, 0, sizeof(struct grf_treenode));
 	handler->root->is_dir = true; // root is a directory, that's common knowledge
+	handler->root->name = NULL; // root does not have a name
 	handler->root->subdir = hash_create_table(GRF_TREE_HASH_SIZE, prv_grf_tree_table_free_node);
 	// now, list all files in the archive
 	cur_node = handler->first_node;
 	while(cur_node != NULL) {
-		char *fn = cur_node->filename;
-		char dirname[128];
-		struct grf_treenode *parent = handler->root;
-		struct grf_treenode *new;
-		while(1) {
-			size_t pos;
-			// locate either / or \ in filename...
-			for(pos=0;(*(fn+pos)!=0) && (*(fn+pos)!='/') && (*(fn+pos)!='\\');pos++);
-			memcpy(&dirname, fn, pos);
-			if (*(fn+pos)==0) break; // record file~
-			// this is a directory, check if already existing...
-			dirname[pos] = 0;
-			fn+=pos+1;
-			new = hash_lookup(parent->subdir, dirname);
-			if (new != NULL) { // found it !
-				if (!new->is_dir) {
-					// bogus grf file: directory with same name as a file... convert to directory !
-					new->is_dir = true;
-					new->subdir = hash_create_table(GRF_TREE_HASH_SIZE, prv_grf_tree_table_free_node);
-				}
-				parent = new;
-				continue;
-			}
-			// not found -> create a new node
-			new = (struct grf_treenode *)calloc(1, sizeof(struct grf_treenode));
-			memset(new, 0, sizeof(struct grf_treenode));
-			new->is_dir = true;
-			new->subdir = hash_create_table(GRF_TREE_HASH_SIZE, prv_grf_tree_table_free_node);
-			hash_add_element(parent->subdir, (char *)&dirname, new);
-			parent = new;
-		}
-		// record file
-		new = (struct grf_treenode *)calloc(1, sizeof(struct grf_treenode));
-		memset(new, 0, sizeof(struct grf_treenode));
-		new->is_dir = false;
-		new->ptr = cur_node;
-		hash_add_element(parent->subdir, (char *)&dirname, new);
+		prv_grf_reg_tree_node(handler->root, cur_node);
 		cur_node = cur_node->next;
+		i++;
+		if (--j<=0) {
+			j=100;
+			if (handler->callback != NULL) {
+				handler->callback(handler->callback_etc, handler, i, handler->filecount);
+			}
+		}
 	}
+	if (handler->callback != NULL) {
+		handler->callback(handler->callback_etc, handler, handler->filecount, handler->filecount);
+	}
+}
+
+GRFEXPORT void *grf_tree_get_root(void *handler) {
+	return ((struct grf_handler *)handler)->root;
+}
+
+GRFEXPORT void **grf_tree_list_node(void *tmpnode) {
+	struct grf_treenode *node = tmpnode;
+	if (!node->is_dir) return NULL;
+	return hash_foreach_val(node->subdir);
+}
+
+GRFEXPORT bool grf_tree_is_dir(void *node) {
+	return ((struct grf_treenode *)node)->is_dir;
+}
+
+GRFEXPORT void *grf_tree_get_file(void *node) {
+	return ((struct grf_treenode *)node)->ptr;
+}
+
+GRFEXPORT const char *grf_tree_get_name(void *node) {
+	return ((struct grf_treenode *)node)->name;
+}
+
+GRFEXPORT void *grf_tree_get_parent(void *node) {
+	return ((struct grf_treenode *)node)->parent;
+}
+
+GRFEXPORT void *grf_file_get_tree(void *handler) {
+	return ((struct grf_node *)handler)->tree_parent;
 }
 
 static bool prv_grf_load(struct grf_handler *handler) {
@@ -515,13 +567,17 @@ static bool prv_grf_load(struct grf_handler *handler) {
 	if (entry == NULL) return true; // no files?
 	while(1) {
 		last = entry;
-		entry = entry->next;
+		entry = last->next;
 		if (entry == NULL) break;
 		if (entry->pos < last->pos) {
+			// Current case (in chained list): ]n p[last]n p[entry]n p[ (but entry.pos < last.pos)
+			// What we want: ]n p[entry]n p[last]n p[
 			entry->prev = last->prev;
-			last->prev = entry;
 			last->next = entry->next;
+			last->prev = entry;
 			entry->next = last;
+			if (entry->prev != NULL) entry->prev->next = entry;
+			if (last->next != NULL) last->next->prev = last;
 			if (entry->prev != NULL) entry = entry->prev;
 			if (entry->prev != NULL) entry = entry->prev;
 		}
@@ -592,6 +648,14 @@ GRFEXPORT uint32_t grf_file_get_size(void *tmphandler) {
 	struct grf_node *handler;
 	handler = (struct grf_node *)tmphandler;
 	return handler->size;
+}
+
+GRFEXPORT uint32_t grf_file_get_storage_pos(void *handler) {
+	return ((struct grf_node *)handler)->pos;
+}
+
+GRFEXPORT uint32_t grf_file_get_storage_size(void *handler) {
+	return ((struct grf_node *)handler)->len_aligned;
 }
 
 GRFEXPORT uint32_t grf_file_get_contents(void *tmphandler, void *target) {
@@ -669,7 +733,7 @@ GRFEXPORT void *grf_file_add(void *tmphandler, char *filename, void *ptr, size_t
 		ptr_file = calloc(1, sizeof(struct grf_node));
 		ptr_file->filename = strdup(filename);
 		hash_add_element(handler->fast_table, ptr_file->filename, ptr_file);
-		// FIXME: Check handler->root and update arbo if needed
+		if (handler->root != NULL) prv_grf_reg_tree_node(handler->root, ptr_file);
 	}
 	// filename: replace '/' with '\\'
 	for(int i=0;*(ptr_file->filename+i)!=0;i++) if (*(ptr_file->filename+i)=='/') *(ptr_file->filename+i)='\\';

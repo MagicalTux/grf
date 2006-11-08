@@ -29,7 +29,7 @@ ifeq ($(UNAME),Linux)
 # *****
 # *** Linux config
 # *****
-# TODO: Go back to gcc32/g++32
+# TODO: Put back gcc32/g++32
 CC=gcc
 CXX=g++
 STRIP=strip
@@ -51,7 +51,7 @@ CXX_WIN=i586-mingw32msvc-g++
 STRIP_WIN=i586-mingw32msvc-strip
 endif
 BUILD=Linux
-WINFLAGS=-D__WIN32
+WINFLAGS=-D__WIN32 -mwindows
 LINFLAGS=-fPIC -DPIC
 
 else
@@ -115,7 +115,7 @@ linux/gb_%.o: grfbuilder/%.cpp
 ifeq ($(BUILD),unknown)
 all: ;@echo "Unknown system $(UNAME) !"
 else
-all: make_dirs $(TARGET) grf_test_linux $(GB_TARGET) $(TARGET_WIN) grf_test_win.exe $(GB_TARGET_WIN)
+all: make_dirs $(TARGET) grf_test_linux $(TARGET_WIN) grf_test_win.exe $(GB_TARGET_WIN)
 endif
 
 make_dirs:
@@ -156,7 +156,7 @@ endif
 version.sh: includes/grf.h
 	cat $< | grep "define VERSION" | grep -E "MAJOR|MINOR|REVISION" | sed -e 's/^#define //;s/ /=/' >$@
 
-libgrf-%.zip: $(TARGET) $(TARGET_WIN) includes/libgrf.h $(wildcard examples/*) README
+libgrf-%.zip: $(TARGET) $(TARGET_WIN) includes/libgrf.h $(wildcard examples/*) README QtCore4.dll QtGui4.dll mingwm10.dll grfbuilder.exe
 	$(RM) $@
 	zip -9r $@ $^ -x .svn '*.o'
 

@@ -54,6 +54,7 @@
 struct grf_node {
 	struct grf_node *prev, *next;
 	struct grf_handler *parent;
+	struct grf_treenode *tree_parent;
 	char *filename, flags;
 	uint32_t size, len, len_aligned, pos;
 	int cycle;
@@ -61,8 +62,10 @@ struct grf_node {
 
 struct grf_treenode {
 	bool is_dir;
+	char *name;
 	hash_table *subdir;
 	struct grf_node *ptr;
+	struct grf_treenode *parent;
 };
 
 struct grf_handler {
