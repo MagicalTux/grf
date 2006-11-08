@@ -2,10 +2,11 @@
 #define __QTWIN_H_FILE
 
 #include <QFile>
+#include <QMainWindow>
 
 #include "ui_MainWindow.h"
 
-class MainWindow : public QWidget {
+class MainWindow : public QMainWindow {
 	Q_OBJECT
 
 public:

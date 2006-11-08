@@ -9,14 +9,14 @@
 
 #include <stdio.h>
 
-MainWindow::MainWindow(QWidget *parent) : QWidget(parent) {
+MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 	uint32_t version=grf_version();
 	uint8_t major, minor, revision;
 	major = (version >> 16) & 0xff;
 	minor = (version >> 8) & 0xff;
 	revision = version & 0xff;
 	this->grf = NULL;
-	ui.setupUi((QMainWindow*)this);
+	ui.setupUi(this);
 	((QDialog*)this)->setWindowTitle(tr("GrfBuilder v1.0 (libgrf v%1.%2.%3) by MagicalTux").arg(major).arg(minor).arg(revision));
 }
 

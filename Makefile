@@ -1,6 +1,6 @@
 #!make
 OBJECTS=main.o zlib.o hash_tables.o grf.o euc_kr.o
-GB_OBJECTS=$(patsubst grfbuilder/%.cpp,%.o,$(wildcard grfbuilder/*.cpp)) moc_MainWindow.o
+GB_OBJECTS=main.o MainWindow.o moc_MainWindow.o
 TARGET=libgrf.so
 TARGET_WIN=grf.dll
 GB_TARGET=grfbuilder.bin
