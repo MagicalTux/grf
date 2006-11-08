@@ -1,7 +1,7 @@
 #include <QApplication>
 #include <QTranslator>
 #include <QLocale>
-#include "qt_win.h"
+#include "MainWindow.h"
 
 #include <stdio.h>
 

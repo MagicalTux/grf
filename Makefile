@@ -1,6 +1,6 @@
 #!make
 OBJECTS=main.o zlib.o hash_tables.o grf.o euc_kr.o
-GB_OBJECTS=$(patsubst grfbuilder/%.cpp,%.o,$(wildcard grfbuilder/*.cpp)) moc_qt_win.o
+GB_OBJECTS=$(patsubst grfbuilder/%.cpp,%.o,$(wildcard grfbuilder/*.cpp)) moc_MainWindow.o
 TARGET=libgrf.so
 TARGET_WIN=grf.dll
 GB_TARGET=grfbuilder.bin
@@ -199,13 +199,13 @@ grfbuilder/moc_qt_win.cpp: grfbuilder/qt_win.h
 grfbuilder/main.cpp: grfbuilder/qt_win.h grfbuilder/ui_qt_win.h 
 grfbuilder/qt_win.cpp: grfbuilder/qt_win.h grfbuilder/ui_qt_win.h
 grfbuilder/qt_win.h: grfbuilder/ui_qt_win.h
-grfbuilder/ui_qt_win.h: grfbuilder/qt_win.ui
-	@uic $< | sed -f grfbuilder/qt_win.sed >$@
+grfbuilder/ui_MainWindow.h: grfbuilder/MainWindow.ui
+	@uic $< >$@
 	@lrelease grfbuilder/grfbuilder_fr.ts
 grfbuilder/grfbuilder_fr.ts: $(wildcard grfbuilder/*.cpp grfbuilder/*.h)
 	@lupdate $^ -ts $@
 
 clean:
 	$(RM) -r linux $(TARGET) win32 $(TARGET_WIN) $(GB_TARGET) $(GB_TARGET_WIN) grf_test_win.exe grf_test_linux libgrf-*.zip version.sh
-	$(RM) grfbuilder/ui_qt_win.h grfbuilder/moc_qt_win.cpp grfbuilder/grfbuilder_fr.qm
+	$(RM) grfbuilder/ui_MainWindow.h grfbuilder/moc_MainWindow.cpp grfbuilder/grfbuilder_fr.qm
 

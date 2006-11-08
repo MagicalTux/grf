@@ -1,0 +1,443 @@
+<ui version="4.0" >
+ <author></author>
+ <comment></comment>
+ <exportmacro></exportmacro>
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>688</width>
+    <height>332</height>
+   </rect>
+  </property>
+  <property name="minimumSize" >
+   <size>
+    <width>650</width>
+    <height>320</height>
+   </size>
+  </property>
+  <property name="windowTitle" >
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget" >
+   <layout class="QGridLayout" >
+    <property name="margin" >
+     <number>9</number>
+    </property>
+    <property name="spacing" >
+     <number>6</number>
+    </property>
+    <item row="0" column="0" >
+     <layout class="QGridLayout" >
+      <property name="margin" >
+       <number>0</number>
+      </property>
+      <property name="spacing" >
+       <number>6</number>
+      </property>
+      <item row="0" column="0" >
+       <widget class="QTabWidget" name="tab_sel" >
+        <property name="currentIndex" >
+         <number>0</number>
+        </property>
+        <widget class="QWidget" name="grf_allfiles" >
+         <attribute name="title" >
+          <string>All files</string>
+         </attribute>
+         <layout class="QGridLayout" >
+          <property name="margin" >
+           <number>9</number>
+          </property>
+          <property name="spacing" >
+           <number>6</number>
+          </property>
+          <item row="0" column="0" >
+           <layout class="QGridLayout" >
+            <property name="margin" >
+             <number>0</number>
+            </property>
+            <property name="spacing" >
+             <number>6</number>
+            </property>
+            <item row="0" column="0" >
+             <widget class="QTreeWidget" name="view_allfiles_2" >
+              <property name="dragEnabled" >
+               <bool>true</bool>
+              </property>
+              <property name="columnCount" >
+               <number>5</number>
+              </property>
+              <property name="sortingEnabled" >
+               <bool>true</bool>
+              </property>
+              <column>
+               <property name="text" >
+                <string>Idx</string>
+               </property>
+              </column>
+              <column>
+               <property name="text" >
+                <string>Comp</string>
+               </property>
+              </column>
+              <column>
+               <property name="text" >
+                <string>Size</string>
+               </property>
+              </column>
+              <column>
+               <property name="text" >
+                <string>Position</string>
+               </property>
+              </column>
+              <column>
+               <property name="text" >
+                <string>Filename</string>
+               </property>
+              </column>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+        <widget class="QWidget" name="grf_treeview" >
+         <attribute name="title" >
+          <string>Tree view</string>
+         </attribute>
+         <layout class="QGridLayout" >
+          <property name="margin" >
+           <number>9</number>
+          </property>
+          <property name="spacing" >
+           <number>6</number>
+          </property>
+          <item row="0" column="0" >
+           <layout class="QGridLayout" >
+            <property name="margin" >
+             <number>0</number>
+            </property>
+            <property name="spacing" >
+             <number>6</number>
+            </property>
+            <item row="0" column="0" >
+             <widget class="QTreeWidget" name="view_filestree" >
+              <column>
+               <property name="text" >
+                <string>Filename</string>
+               </property>
+              </column>
+              <column>
+               <property name="text" >
+                <string>File size</string>
+               </property>
+              </column>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item row="1" column="0" >
+     <layout class="QHBoxLayout" >
+      <property name="margin" >
+       <number>0</number>
+      </property>
+      <property name="spacing" >
+       <number>6</number>
+      </property>
+      <item>
+       <widget class="QLabel" name="textLabel1" >
+        <property name="text" >
+         <string>&lt;p align="right">Compression level:&lt;/p></string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QComboBox" name="combo_complevel" >
+        <property name="currentIndex" >
+         <number>5</number>
+        </property>
+        <item>
+         <property name="text" >
+          <string>None</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>Totally Low</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>Really Low</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>Low</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>Almost Normal</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>Normal</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>More than Normal</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>High</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>Really High</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>Max</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item>
+       <widget class="QProgressBar" name="progbar" >
+        <property name="value" >
+         <number>0</number>
+        </property>
+        <property name="orientation" >
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="invertedAppearance" >
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+    <item rowspan="2" row="0" column="1" >
+     <layout class="QVBoxLayout" >
+      <property name="margin" >
+       <number>0</number>
+      </property>
+      <property name="spacing" >
+       <number>1</number>
+      </property>
+      <item>
+       <widget class="QPushButton" name="btn_open" >
+        <property name="whatsThis" >
+         <string>&lt;html>&lt;head>&lt;meta name="qrichtext" content="1" />&lt;/head>&lt;body style=" white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;">&lt;p style=" margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;">Using this button, you can open an existing GRF file.&lt;/p>&lt;/body>&lt;/html></string>
+        </property>
+        <property name="text" >
+         <string>Open</string>
+        </property>
+        <property name="flat" >
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btn_extract" >
+        <property name="text" >
+         <string>Extract</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btn_extractall" >
+        <property name="text" >
+         <string>Extract All</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btn_repack" >
+        <property name="text" >
+         <string>Repack</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QComboBox" name="combo_repack" >
+        <item>
+         <property name="text" >
+          <string>Move files</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>Decrypt</string>
+         </property>
+        </item>
+        <item>
+         <property name="text" >
+          <string>Recompress</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btn_close" >
+        <property name="text" >
+         <string>Close</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btn_mergegrf" >
+        <property name="text" >
+         <string>Merge GRF</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btn_mergedir" >
+        <property name="text" >
+         <string>Merge dir</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar" >
+   <property name="geometry" >
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>688</width>
+     <height>29</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menu" >
+    <property name="title" >
+     <string>&amp;?</string>
+    </property>
+    <addaction name="actionAbout" />
+   </widget>
+   <widget class="QMenu" name="menuFile" >
+    <property name="title" >
+     <string>&amp;File</string>
+    </property>
+    <widget class="QMenu" name="menu_Repack" >
+     <property name="title" >
+      <string>&amp;Repack</string>
+     </property>
+     <addaction name="actionMove_files" />
+     <addaction name="actionDecrypt" />
+     <addaction name="actionRecompress" />
+    </widget>
+    <addaction name="action_Open" />
+    <addaction name="action_Extract" />
+    <addaction name="action_Extract_All" />
+    <addaction name="menu_Repack" />
+    <addaction name="action_Close" />
+    <addaction name="action_Merge_GRF" />
+    <addaction name="actionMerge_Dir" />
+    <addaction name="action_Quit" />
+   </widget>
+   <addaction name="menuFile" />
+   <addaction name="menu" />
+  </widget>
+  <widget class="QStatusBar" name="statusbar" />
+  <action name="action_Open" >
+   <property name="text" >
+    <string>&amp;Open</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+O</string>
+   </property>
+  </action>
+  <action name="action_Extract" >
+   <property name="text" >
+    <string>&amp;Extract</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+E</string>
+   </property>
+  </action>
+  <action name="action_Extract_All" >
+   <property name="text" >
+    <string>Extract &amp;All</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+A</string>
+   </property>
+  </action>
+  <action name="actionMove_files" >
+   <property name="text" >
+    <string>Move files</string>
+   </property>
+  </action>
+  <action name="actionDecrypt" >
+   <property name="text" >
+    <string>Decrypt</string>
+   </property>
+  </action>
+  <action name="actionRecompress" >
+   <property name="text" >
+    <string>Recompress</string>
+   </property>
+  </action>
+  <action name="action_Close" >
+   <property name="text" >
+    <string>&amp;Close</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+W</string>
+   </property>
+  </action>
+  <action name="action_Merge_GRF" >
+   <property name="text" >
+    <string>&amp;Merge GRF</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+M</string>
+   </property>
+  </action>
+  <action name="actionMerge_Dir" >
+   <property name="text" >
+    <string>Merge &amp;Dir</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+D</string>
+   </property>
+  </action>
+  <action name="action_Quit" >
+   <property name="text" >
+    <string>&amp;Quit</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+Q</string>
+   </property>
+  </action>
+  <action name="actionAbout" >
+   <property name="text" >
+    <string>&amp;About</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+?</string>
+   </property>
+  </action>
+ </widget>
+ <pixmapfunction></pixmapfunction>
+ <resources/>
+ <connections/>
+</ui>

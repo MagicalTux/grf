@@ -2,7 +2,7 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QFile>
-#include "qt_win.h"
+#include "MainWindow.h"
 
 /* libgrf */
 #include <libgrf.h>
