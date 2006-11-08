@@ -249,6 +249,10 @@
         <source>Cancel</source>
         <translation>Annuler</translation>
     </message>
+    <message>
+        <source>Extracting file %1...</source>
+        <translation>Extraction de %1...</translation>
+    </message>
 </context>
 <context>
     <name>main_window</name>

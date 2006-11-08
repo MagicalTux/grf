@@ -192,6 +192,7 @@ void MainWindow::on_action_Extract_All_triggered() {
 void MainWindow::on_btn_extractall_clicked() {
 	void *cur_file;
 	int c=0;
+	int n=10;
 	if (this->grf == NULL) return;
 	QProgressDialog prog(tr("Extraction in progress..."), tr("Cancel"), 0, grf_filecount(this->grf), this);
 	prog.setWindowModality(Qt::WindowModal);
@@ -201,10 +202,14 @@ void MainWindow::on_btn_extractall_clicked() {
 		c++;
 		prog.setValue(c);
 		if (prog.wasCanceled()) break;
-		QCoreApplication::processEvents();
+		QString name(QString::fromUtf8(euc_kr_to_utf8(grf_file_get_filename(cur_file))));
+		if (--n<=0) {
+			n = 10;
+			prog.setLabelText(tr("Extracting file %1...").arg(name));
+			QCoreApplication::processEvents();
+		}
 		if (ui.actionUnicode->isChecked()) {
 			size_t size;
-			QString name(QString::fromUtf8(euc_kr_to_utf8(grf_file_get_filename(cur_file))));
 			size = grf_file_get_size(cur_file);
 #ifdef __WIN32
 			name.replace("/", "\\");
