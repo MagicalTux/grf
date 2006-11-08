@@ -54,7 +54,7 @@ void MainWindow::fillFilesTree(void *dir, QTreeWidgetItem *parent) {
 		QTreeWidgetItem *__f = new QTreeWidgetItem(parent);
 		__f->setText(0, QString::fromUtf8(euc_kr_to_utf8(grf_tree_get_name(list[i])))); // name
 		if (grf_tree_is_dir(list[i])) {
-			__f->setText(1, QString("[dir]"));
+			__f->setText(1, QString("[dir with %1 files]").arg(grf_tree_dir_count_files(list[i])));
 			MainWindow::fillFilesTree(list[i], __f);
 		} else {
 			void *f = grf_tree_get_file(list[i]);
