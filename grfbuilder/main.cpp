@@ -13,7 +13,7 @@ int main(int argc, char *argv[]) {
 	if (translator.load(QString("grfbuilder_") + locale, "/home/magicaltux/p/grf/grfbuilder/")) {
 		app.installTranslator(&translator);
 	} else {
-		printf("failed\n");
+		printf("Locale initialisation failed!\n");
 	}
 
 	MainWindow MW;

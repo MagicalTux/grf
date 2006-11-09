@@ -1,5 +1,16 @@
 <!DOCTYPE TS><TS>
 <context>
+    <name>Dialog</name>
+    <message>
+        <source>Dialog</source>
+        <translation>Dialog</translation>
+    </message>
+    <message>
+        <source>Close</source>
+        <translation>Fermer</translation>
+    </message>
+</context>
+<context>
     <name>MainWindow</name>
     <message>
         <source>Open File</source>
@@ -119,7 +130,7 @@
     </message>
     <message>
         <source>Idx</source>
-        <translation>Num</translation>
+        <translation type="obsolete">Num</translation>
     </message>
     <message>
         <source>Comp</source>
@@ -252,6 +263,10 @@
     <message>
         <source>Extracting file %1...</source>
         <translation>Extraction de %1...</translation>
+    </message>
+    <message>
+        <source>id</source>
+        <translation>id</translation>
     </message>
 </context>
 <context>

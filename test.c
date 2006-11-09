@@ -64,11 +64,14 @@ void test_load_file() {
 	void *handler, *fhandler;
 	void *filec;
 	void **list;
-//	char *fn = "/storage/win_d/Program Files/Gravity/fRO_II/data.grf";
+	char *fn = "/storage/win_d/Program Files/Gravity/fRO_II/data.grf";
+//	char *fn = "/storage/win_d/Program Files/Gravity/RO/data.grf";
 //	char *fn = "/storage/win_d/Program Files/Gravity/20060224_krodata.gpf";
-	char *fn = "problemfix.gpf";
+//	char *fn = "problemfix.gpf";
+//	char *fn = "data.grf";
 	char *fn2 = "DATA/texTURE\\유저인터페이스/LOADING45.JPG";
 	int x;
+	unsigned int y;
 
 // test
 #if 0
@@ -114,7 +117,13 @@ grf_free(handler);
 	printf(" - test_load_file(): checking chained list integrity\n");
 	fhandler = grf_get_file_first(handler);
 	x = 0;
+	y = 0;
 	while(fhandler != NULL) {
+		int y2 = grf_file_get_storage_pos(fhandler);
+		if (y2 < y) {
+			printf("SORT ERROR\n");
+		}
+		y = y2;
 		fhandler = grf_get_file_next(fhandler);
 		x++;
 	}

@@ -4,6 +4,7 @@
 #include <QFile>
 #include <QProgressDialog>
 #include <QDir>
+#include <QImage>
 #include "MainWindow.h"
 
 /* libgrf */
@@ -18,7 +19,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 	minor = (version >> 8) & 0xff;
 	revision = version & 0xff;
 	this->grf = NULL;
+	this->image_viewer = NULL;
 	ui.setupUi(this);
+	ui.view_allfiles->setColumnHidden(0, true);
 	((QDialog*)this)->setWindowTitle(tr("GrfBuilder v1.0 (libgrf v%1.%2.%3) by MagicalTux").arg(major).arg(minor).arg(revision));
 }
 
@@ -32,7 +35,7 @@ static bool grf_callback_caller(void *MW_, void *grf, int pos, int max) {
 	return MW->progress_callback(grf, pos, max);
 }
 
-unsigned int MainWindow::fillFilesTree(void *dir, QTreeWidget *parent) {
+unsigned int MainWindow::fillFilesTree(void *dir, QTreeWidgetItem *parent) {
 	void **list = grf_tree_list_node(dir);
 	unsigned int total_size = 0;
 	for(int i=0;list[i]!=NULL;i++) {
@@ -50,11 +53,11 @@ unsigned int MainWindow::fillFilesTree(void *dir, QTreeWidget *parent) {
 			__f->setText(1, QString("%1").arg(s));
 		}
 	}
-	delete list; 
+	delete list;
 	return total_size;
 }
 
-unsigned int MainWindow::fillFilesTree(void *dir, QTreeWidgetItem *parent) {
+unsigned int MainWindow::fillFilesTree(void *dir, QTreeWidget *parent) {
 	void **list = grf_tree_list_node(dir);
 	unsigned int total_size = 0;
 	for(int i=0;list[i]!=NULL;i++) {
@@ -98,8 +101,6 @@ void MainWindow::on_action_Open_triggered() {
 void MainWindow::on_btn_open_clicked() {
 	QString str = QFileDialog::getOpenFileName(this, tr("Open File"),
 			NULL, tr("GRF Files (*.grf *.gpf)"));
-	void *f;
-	int i;
 
 	if (str.size() == 0) return;
 
@@ -119,18 +120,18 @@ void MainWindow::on_btn_open_clicked() {
 		return;
 	}
 	ui.tab_sel->setCurrentIndex(0);
-	f = grf_get_file_first(this->grf);
-	i=0;
-	while(f != NULL) {
+	this->grf_list = grf_get_file_list(this->grf);
+	for(int i=0;this->grf_list[i]!=NULL;i++) {
+		void *f = this->grf_list[i];
 		QTreeWidgetItem *__item = new QTreeWidgetItem(ui.view_allfiles);
-		__item->setText(0, QString("%1").arg(i++)); // idx
+		__item->setText(0, QString("%1").arg(i));
 		__item->setText(1, QString("%1").arg(grf_file_get_storage_size(f))); // compsize
 		__item->setText(2, QString("%1").arg(grf_file_get_size(f))); // realsize
 		__item->setText(3, QString("%1").arg(grf_file_get_storage_pos(f))); // pos
 		__item->setText(4, QString::fromUtf8(euc_kr_to_utf8(grf_file_get_filename(f)))); // name
 //		__item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsUserCheckable | Qt::ItemIsEnabled | Qt::ItemIsDragEnabled | Qt::ItemIsEditable);
-		f = grf_get_file_next(f);
 	}
+	ui.view_allfiles->sortItems(4, Qt::AscendingOrder);
 	// enable buttons
 	ui.btn_extract->setEnabled(false);
 	ui.btn_extractall->setEnabled(true);
@@ -159,6 +160,7 @@ void MainWindow::on_btn_close_clicked() {
 		this->grf_file.close();
 		this->grf = NULL;
 		this->grf_has_tree = false;
+		delete this->grf_list;
 		ui.progbar->setValue(0);
 		ui.view_allfiles->clear();
 		ui.view_filestree->clear();
@@ -187,6 +189,12 @@ void MainWindow::on_actionUnicode_triggered() {
 	ui.actionStandard->setChecked(false);
 }
 
+void MainWindow::CloseEvent(QCloseEvent *ev) {
+	printf("test\n");
+	if (this->image_viewer) delete this->image_viewer;
+	ev->accept();
+}
+
 void MainWindow::on_action_Quit_triggered() {
 //	QCoreApplication::exit();
 	this->close();
@@ -205,13 +213,9 @@ void MainWindow::on_btn_extractall_clicked() {
 	void *cur_file;
 	int c=0;
 	int n = 1;
-	int x;
 	if (this->grf == NULL) return;
 	QProgressDialog prog(tr("Extraction in progress..."), tr("Cancel"), 0, grf_filecount(this->grf), this);
 	prog.setWindowModality(Qt::WindowModal);
-	x = grf_filecount(this->grf)/100;
-	if (x<5) x=5;
-	if (x>150) x=150;
 	/* get files list */
 	cur_file = grf_get_file_first(this->grf);
 	while(cur_file != NULL) {
@@ -219,8 +223,9 @@ void MainWindow::on_btn_extractall_clicked() {
 		prog.setValue(c);
 		if (prog.wasCanceled()) break;
 		QString name(QString::fromUtf8(euc_kr_to_utf8(grf_file_get_filename(cur_file))));
-		if (--n<=0) {
-			n = x;
+		n -= grf_file_get_size(cur_file);
+		if (n<=0) {
+			n = 5000000;
 			prog.setLabelText(tr("Extracting file %1...").arg(name));
 			QCoreApplication::processEvents();
 		}
@@ -257,4 +262,66 @@ void MainWindow::on_btn_extractall_clicked() {
 	prog.close();
 }
 
+void MainWindow::on_view_allfiles_doubleClicked(const QModelIndex idx) {
+	// item = ui.view_allfiles->currentItem()
+	// item = ui.view_allfiles->topLevelItem(idx.row())
+	int id=ui.view_allfiles->topLevelItem(idx.row())->text(0).toInt();
+//	printf("x=%d\n", ui.view_allfiles->topLevelItem(idx.row())->text(0).toInt());
+//	printf("x=%s\n", grf_file_get_filename(this->grf_list[id]));
+	if ( 
+				(!ui.view_allfiles->topLevelItem(idx.row())->text(4).toLower().endsWith(".bmp"))
+		&&	(!ui.view_allfiles->topLevelItem(idx.row())->text(4).toLower().endsWith(".jpg"))
+		&&	(!ui.view_allfiles->topLevelItem(idx.row())->text(4).toLower().endsWith(".jpeg"))
+		&&	(!ui.view_allfiles->topLevelItem(idx.row())->text(4).toLower().endsWith(".png"))
+		&&	(!ui.view_allfiles->topLevelItem(idx.row())->text(4).toLower().endsWith(".gif"))
+		) return;
+	QByteArray im_data(grf_file_get_size(this->grf_list[id]), 0);
+	if (grf_file_get_contents(this->grf_list[id], im_data.data()) != grf_file_get_size(this->grf_list[id])) return;
+	QImage im;
+	if (!im.loadFromData(im_data)) return;
+
+	if (this->image_viewer) delete this->image_viewer;
+
+	QLabel *label;
+	QHBoxLayout *hboxLayout;
+	QVBoxLayout *vboxLayout;
+	QSpacerItem *spacerItem;
+	QPushButton *closeButton;
+	QDialog *Dialog = new QDialog;
+
+	Dialog->setObjectName(QString::fromUtf8("Dialog"));
+	Dialog->resize(QSize(16, 16).expandedTo(Dialog->minimumSizeHint()));
+	vboxLayout = new QVBoxLayout(Dialog);
+	vboxLayout->setSpacing(6);
+	vboxLayout->setMargin(9);
+	vboxLayout->setObjectName(QString::fromUtf8("vboxLayout"));
+	label = new QLabel(Dialog);
+	label->setObjectName(QString::fromUtf8("label"));
+
+	vboxLayout->addWidget(label);
+
+	hboxLayout = new QHBoxLayout();
+	hboxLayout->setSpacing(6);
+	hboxLayout->setMargin(0);
+	hboxLayout->setObjectName(QString::fromUtf8("hboxLayout"));
+	spacerItem = new QSpacerItem(131, 31, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+	hboxLayout->addItem(spacerItem);
+
+	closeButton = new QPushButton(Dialog);
+	closeButton->setObjectName(QString::fromUtf8("closeButton"));
+
+	hboxLayout->addWidget(closeButton);
+
+	vboxLayout->addLayout(hboxLayout);
+
+	QObject::connect(closeButton, SIGNAL(clicked()), Dialog, SLOT(reject()));
+
+	Dialog->setWindowTitle(QApplication::translate("Dialog", "Dialog", 0, QApplication::UnicodeUTF8));
+	closeButton->setText(QApplication::translate("Dialog", "Close", 0, QApplication::UnicodeUTF8));
+	label->setPixmap(QPixmap::fromImage(im));
+
+	Dialog->show();
+	this->image_viewer = Dialog;
+};
 
