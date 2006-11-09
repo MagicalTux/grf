@@ -379,6 +379,19 @@ GRFEXPORT void *grf_file_get_tree(void *handler) {
 	return ((struct grf_node *)handler)->tree_parent;
 }
 
+static void prv_grf_update_node_table(struct grf_handler *handler) {
+	struct grf_node *cur;
+	int i=0;
+	if (handler->node_table != NULL) free(handler->node_table);
+	handler->node_table = calloc(handler->filecount + 1, sizeof(void *));
+	cur = handler->first_node;
+	while(cur != NULL) {
+		handler->node_table[i] = cur;
+		cur->id = i++;
+		cur = cur->next;
+	}
+}
+
 //  quickSort
 //
 //  This public-domain C implementation by Darel R. Finley.
@@ -425,7 +438,8 @@ static bool prv_grf_quicksort(struct grf_handler *handler, uint32_t elements) {
 	piv->next = NULL;
 	handler->first_node = arr[0];
 	free(arr);
-  return true;
+	prv_grf_update_node_table(handler);
+	return true;
 }
 
 static bool prv_grf_load(struct grf_handler *handler) {
@@ -728,6 +742,14 @@ GRFEXPORT uint32_t grf_file_get_storage_pos(void *handler) {
 
 GRFEXPORT uint32_t grf_file_get_storage_size(void *handler) {
 	return ((struct grf_node *)handler)->len_aligned;
+}
+
+GRFEXPORT uint32_t grf_file_get_id(void *node) {
+	return ((struct grf_node *)node)->id;
+}
+
+GRFEXPORT void *grf_get_file_by_id(void *handler, uint32_t id) {
+	return ((struct grf_handler *)handler)->node_table[id];
 }
 
 GRFEXPORT uint32_t grf_file_get_contents(void *tmphandler, void *target) {

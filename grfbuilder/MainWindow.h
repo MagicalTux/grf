@@ -1,6 +1,10 @@
 #ifndef __QTWIN_H_FILE
 #define __QTWIN_H_FILE
 
+#define GRFBUILDER_VERSION_MAJOR 0
+#define GRFBUILDER_VERSION_MINOR 1
+#define GRFBUILDER_VERSION_REVISION 19
+
 #include <QFile>
 #include <QMainWindow>
 
@@ -14,12 +18,14 @@ public:
 	bool progress_callback(void *, int pos, int max);
 
 protected:
-	void CloseEvent(QCloseEvent *);
+	void closeEvent(QCloseEvent *);
 
 private slots:
 	void on_btn_open_clicked();
 	void on_btn_close_clicked();
 	void on_btn_extractall_clicked();
+
+	void on_view_allfiles_customContextMenuRequested(const QPoint);
 
 	void on_tab_sel_currentChanged(int);
 
@@ -30,6 +36,7 @@ private slots:
 	void on_action_Extract_All_triggered();
 	void on_action_Close_triggered();
 	void on_action_Quit_triggered();
+	void on_actionAbout_triggered();
 
 	void on_actionUnicode_triggered();
 	void on_actionStandard_triggered();
@@ -43,7 +50,7 @@ private:
 	void *grf;
 	bool grf_has_tree;
 	void do_mkdir(QString *);
-	void **grf_list;
+	void do_display_wav(void *);
 };
 
 #endif

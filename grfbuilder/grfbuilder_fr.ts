@@ -3,11 +3,15 @@
     <name>Dialog</name>
     <message>
         <source>Dialog</source>
-        <translation>Dialog</translation>
+        <translation type="obsolete">Dialog</translation>
     </message>
     <message>
         <source>Close</source>
         <translation>Fermer</translation>
+    </message>
+    <message>
+        <source>Image Preview</source>
+        <translation>Prévisualisation d&apos;image</translation>
     </message>
 </context>
 <context>
@@ -38,7 +42,7 @@
     </message>
     <message>
         <source>GrfBuilder v1.0 (libgrf v%1.%2.%3) by MagicalTux</source>
-        <translation>GrfBuilder v1.0 (libgrf v%1.%2.%3) par MagicalTux</translation>
+        <translation type="obsolete">GrfBuilder v1.0 (libgrf v%1.%2.%3) par MagicalTux</translation>
     </message>
     <message>
         <source>All files</source>
@@ -242,11 +246,11 @@
     </message>
     <message>
         <source>&amp;Unicode</source>
-        <translation>&amp;Unicode</translation>
+        <translation type="obsolete">&amp;Unicode</translation>
     </message>
     <message>
         <source>&amp;Standard</source>
-        <translation>&amp;Standard</translation>
+        <translation type="obsolete">&amp;Standard</translation>
     </message>
     <message>
         <source>E&amp;xtract type</source>
@@ -267,6 +271,30 @@
     <message>
         <source>id</source>
         <translation>id</translation>
+    </message>
+    <message>
+        <source>&amp;Unicode extraction</source>
+        <translation>Extraction &amp;Unicode</translation>
+    </message>
+    <message>
+        <source>&amp;ANSI extraction</source>
+        <translation>Extraction &amp;ANSI</translation>
+    </message>
+    <message>
+        <source>Images &amp;Transparency</source>
+        <translation>&amp;Transparence des images</translation>
+    </message>
+    <message>
+        <source>&amp;Options</source>
+        <translation>&amp;Options</translation>
+    </message>
+    <message>
+        <source>GrfBuilder v%1.%2.%3 (libgrf v%4.%5.%6) by MagicalTux</source>
+        <translation>GrfBuilder v%1.%2.%3 (libgrf v%4.%5.%6) par MagicalTux</translation>
+    </message>
+    <message>
+        <source>&lt;p align=&quot;center&quot;&gt;&lt;b&gt;GrfBuilder v%1.%2.%3 by MagicalTux&lt;/b&gt;&lt;/p&gt;&lt;p align=&quot;left&quot;&gt;Linked against libgrf v%4.%5.%6 (also by MagicalTux)&lt;br /&gt;This tool is designed to allow easy read and write access to GRF files.&lt;br /&gt;This was developped for the sole purpose of demonstrating that Gravity need better developpers.&lt;/p&gt;&lt;p align=&quot;left&quot;&gt;You can contact MagicalTux on &lt;a href=&quot;http://ookoo.org/cgi-bin/cgi-irc/irc.cgi&quot;&gt;irc://irc.ookoo.org/ooKoo&lt;/a&gt;&lt;/p&gt;</source>
+        <translation type="unfinished">&lt;p align=&quot;center&quot;&gt;&lt;b&gt;GrfBuilder v%1.%2.%3 par MagicalTux&lt;/b&gt;&lt;/p&gt;&lt;p align=&quot;left&quot;&gt;Lié à la libgrf v%4.%5.%6 (aussi par MagicalTux)&lt;br /&gt;Cet outil a été conçu pour permettre un accès simple en lecture et en écriture aux fichiers GRF.&lt;br /&gt;Il a été développé dans le seul but de démontrer que Gravity a besoin de meilleurs développeurs.&lt;/p&gt;&lt;p align=&quot;left&quot;&gt;Vous pouvez contacter MagicalTux sur &lt;a href=&quot;http://ookoo.org/cgi-bin/cgi-irc/irc.cgi&quot;&gt;irc://irc.ookoo.org/ooKoo&lt;/a&gt;&lt;/p&gt;</translation>
     </message>
 </context>
 <context>

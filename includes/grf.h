@@ -29,7 +29,7 @@
 
 #define VERSION_MAJOR 0
 #define VERSION_MINOR 1
-#define VERSION_REVISION 18
+#define VERSION_REVISION 19
 
 #ifdef __WIN32
 #define VERSION_TYPE "Win32"
@@ -56,7 +56,7 @@ struct grf_node {
 	struct grf_handler *parent;
 	struct grf_treenode *tree_parent;
 	char *filename, flags;
-	uint32_t size, len, len_aligned, pos;
+	uint32_t size, len, len_aligned, pos, id;
 	int cycle;
 };
 
@@ -78,6 +78,7 @@ struct grf_handler {
 	struct grf_treenode *root;
 	bool (* callback)(void *, void *, int, int);
 	void *callback_etc;
+	struct grf_node **node_table;
 };
 
 #define GRF_HEADER_SIZE 0x2e /* sizeof(grf_header) */

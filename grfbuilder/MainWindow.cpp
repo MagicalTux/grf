@@ -6,6 +6,11 @@
 #include <QDir>
 #include <QImage>
 #include "MainWindow.h"
+#ifdef __WIN32
+#include <windows.h> /* Sleep() */
+#else
+#include <unistd.h> /* usleep() */
+#endif
 
 /* libgrf */
 #include <libgrf.h>
@@ -22,7 +27,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 	this->image_viewer = NULL;
 	ui.setupUi(this);
 	ui.view_allfiles->setColumnHidden(0, true);
-	((QDialog*)this)->setWindowTitle(tr("GrfBuilder v1.0 (libgrf v%1.%2.%3) by MagicalTux").arg(major).arg(minor).arg(revision));
+	((QDialog*)this)->setWindowTitle(tr("GrfBuilder v%1.%2.%3 (libgrf v%4.%5.%6) by MagicalTux"
+		).arg(GRFBUILDER_VERSION_MAJOR).arg(GRFBUILDER_VERSION_MINOR).arg(GRFBUILDER_VERSION_REVISION).arg(major).arg(minor).arg(revision));
+//	ui.view_allfiles->contextMenuEvent = this->contextMenuEvent;
 }
 
 bool MainWindow::progress_callback(void *grf, int pos, int max) {
@@ -101,6 +108,7 @@ void MainWindow::on_action_Open_triggered() {
 void MainWindow::on_btn_open_clicked() {
 	QString str = QFileDialog::getOpenFileName(this, tr("Open File"),
 			NULL, tr("GRF Files (*.grf *.gpf)"));
+	void *f;
 
 	if (str.size() == 0) return;
 
@@ -120,16 +128,16 @@ void MainWindow::on_btn_open_clicked() {
 		return;
 	}
 	ui.tab_sel->setCurrentIndex(0);
-	this->grf_list = grf_get_file_list(this->grf);
-	for(int i=0;this->grf_list[i]!=NULL;i++) {
-		void *f = this->grf_list[i];
+	f = grf_get_file_first(this->grf);
+	while(f != NULL) {
 		QTreeWidgetItem *__item = new QTreeWidgetItem(ui.view_allfiles);
-		__item->setText(0, QString("%1").arg(i));
+		__item->setText(0, QString("%1").arg(grf_file_get_id(f)));
 		__item->setText(1, QString("%1").arg(grf_file_get_storage_size(f))); // compsize
 		__item->setText(2, QString("%1").arg(grf_file_get_size(f))); // realsize
 		__item->setText(3, QString("%1").arg(grf_file_get_storage_pos(f))); // pos
 		__item->setText(4, QString::fromUtf8(euc_kr_to_utf8(grf_file_get_filename(f)))); // name
 //		__item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsUserCheckable | Qt::ItemIsEnabled | Qt::ItemIsDragEnabled | Qt::ItemIsEditable);
+		f = grf_get_file_next(f);
 	}
 	ui.view_allfiles->sortItems(4, Qt::AscendingOrder);
 	// enable buttons
@@ -160,7 +168,6 @@ void MainWindow::on_btn_close_clicked() {
 		this->grf_file.close();
 		this->grf = NULL;
 		this->grf_has_tree = false;
-		delete this->grf_list;
 		ui.progbar->setValue(0);
 		ui.view_allfiles->clear();
 		ui.view_filestree->clear();
@@ -189,10 +196,33 @@ void MainWindow::on_actionUnicode_triggered() {
 	ui.actionStandard->setChecked(false);
 }
 
-void MainWindow::CloseEvent(QCloseEvent *ev) {
-	printf("test\n");
+void MainWindow::closeEvent(QCloseEvent *ev) {
 	if (this->image_viewer) delete this->image_viewer;
 	ev->accept();
+}
+
+void MainWindow::on_actionAbout_triggered() {
+	uint32_t version=grf_version();
+	uint8_t major, minor, revision;
+	major = (version >> 16) & 0xff;
+	minor = (version >> 8) & 0xff;
+	revision = version & 0xff;
+	QMessageBox::information(this, tr("GrfBuilder"),
+		tr(
+			"<p align=\"center\"><b>GrfBuilder v%1.%2.%3 by MagicalTux</b></p>"
+			"<p align=\"left\">Linked against libgrf v%4.%5.%6 (also by MagicalTux)<br />"
+			"This tool is designed to allow easy read and write access to GRF files.<br />"
+			"This was developped for the sole purpose of demonstrating that Gravity need better developpers."
+			"</p>"
+			"<p align=\"left\">You can contact MagicalTux on <a href=\"http://ookoo.org/cgi-bin/cgi-irc/irc.cgi\">irc://irc.ookoo.org/ooKoo</a></p>"
+		).arg(GRFBUILDER_VERSION_MAJOR).arg(GRFBUILDER_VERSION_MINOR).arg(GRFBUILDER_VERSION_REVISION).arg(major).arg(minor).arg(revision)
+	);
+}
+
+void MainWindow::on_view_allfiles_customContextMenuRequested(const QPoint point) {
+	QMenu menu(this);
+	menu.addAction(ui.action_Extract_All);
+	menu.exec(ui.view_allfiles->viewport()->mapToGlobal(point));
 }
 
 void MainWindow::on_action_Quit_triggered() {
@@ -262,23 +292,77 @@ void MainWindow::on_btn_extractall_clicked() {
 	prog.close();
 }
 
+void MainWindow::do_display_wav(void *f) {
+	QString name;
+	QFile tmp;
+	name.fromUtf8(euc_kr_to_utf8(grf_file_get_filename(f)));
+	QMessageBox mb(tr("GrfBuilder"), tr("Currently playing file %1. Press \"Ok\" to stop.").arg(name), QMessageBox::Information, 0, 0, 0, this);
+	mb.show();
+	for(int i=0;1;i++) {
+		tmp.setFileName(QString("%1_tmp.wav").arg(i));
+		if (!tmp.exists()) break;
+	}
+	if (!tmp.open(QIODevice::WriteOnly)) return;
+	if (grf_file_put_contents_to_fd(f, tmp.handle()) != grf_file_get_size(f)) {
+		tmp.remove();
+		return;
+	}
+	tmp.close();
+	QSound snd(tmp.fileName());
+	snd.play();
+	int x=400;
+	while(1) {
+		QCoreApplication::processEvents();
+//		if (snd.isFinished()) break;
+		if (--x<0) break;
+		if (!mb.isVisible()) break;
+#ifdef __WIN32
+		Sleep(10);
+#else
+		usleep(10000);
+#endif
+	}
+	tmp.remove();
+	printf("end\n");
+}
+
 void MainWindow::on_view_allfiles_doubleClicked(const QModelIndex idx) {
 	// item = ui.view_allfiles->currentItem()
 	// item = ui.view_allfiles->topLevelItem(idx.row())
 	int id=ui.view_allfiles->topLevelItem(idx.row())->text(0).toInt();
 //	printf("x=%d\n", ui.view_allfiles->topLevelItem(idx.row())->text(0).toInt());
-//	printf("x=%s\n", grf_file_get_filename(this->grf_list[id]));
-	if ( 
-				(!ui.view_allfiles->topLevelItem(idx.row())->text(4).toLower().endsWith(".bmp"))
+	void *f = grf_get_file_by_id(this->grf, id);
+	bool is_image = false;
+	if (ui.view_allfiles->topLevelItem(idx.row())->text(4).toLower().endsWith(".wav")) return this->do_display_wav(grf_get_file_by_id(this->grf, id));
+	if (
+			(!ui.view_allfiles->topLevelItem(idx.row())->text(4).toLower().endsWith(".bmp"))
 		&&	(!ui.view_allfiles->topLevelItem(idx.row())->text(4).toLower().endsWith(".jpg"))
 		&&	(!ui.view_allfiles->topLevelItem(idx.row())->text(4).toLower().endsWith(".jpeg"))
 		&&	(!ui.view_allfiles->topLevelItem(idx.row())->text(4).toLower().endsWith(".png"))
 		&&	(!ui.view_allfiles->topLevelItem(idx.row())->text(4).toLower().endsWith(".gif"))
+		&&	(!ui.view_allfiles->topLevelItem(idx.row())->text(4).toLower().endsWith(".gat"))
 		) return;
-	QByteArray im_data(grf_file_get_size(this->grf_list[id]), 0);
-	if (grf_file_get_contents(this->grf_list[id], im_data.data()) != grf_file_get_size(this->grf_list[id])) return;
+	QByteArray im_data(grf_file_get_size(f), 0);
+	if (grf_file_get_contents(f, im_data.data()) != grf_file_get_size(f)) return;
 	QImage im;
-	if (!im.loadFromData(im_data)) return;
+	if (ui.view_allfiles->topLevelItem(idx.row())->text(4).toLower().endsWith(".gat")) {
+		const char *data = im_data.constData();
+		int sx = *(int*)(data+6);
+		int sy = *(int*)(data+10);
+		im = QImage(sx, sy, QImage::Format_Indexed8);
+		im.setNumColors(2);
+		im.setColor(0, qRgb(0,0,0));
+		im.setColor(1, qRgb(255,255,255));
+		for(int y=0;y<sy;y++) {
+			for(int x=0;x<sx;x++) {
+				int type = *(int*)(data + ((y*sx + x) * 20+14+16));
+				im.setPixel(x,y, type?0:1);
+			}
+		}
+	} else {
+		if (!im.loadFromData(im_data)) return;
+		is_image = true;
+	}
 
 	if (this->image_viewer) delete this->image_viewer;
 
@@ -317,9 +401,13 @@ void MainWindow::on_view_allfiles_doubleClicked(const QModelIndex idx) {
 
 	QObject::connect(closeButton, SIGNAL(clicked()), Dialog, SLOT(reject()));
 
-	Dialog->setWindowTitle(QApplication::translate("Dialog", "Dialog", 0, QApplication::UnicodeUTF8));
+	Dialog->setWindowTitle(QApplication::translate("Dialog", "Image Preview", 0, QApplication::UnicodeUTF8));
 	closeButton->setText(QApplication::translate("Dialog", "Close", 0, QApplication::UnicodeUTF8));
-	label->setPixmap(QPixmap::fromImage(im));
+	QPixmap im_pixmap(QPixmap::fromImage(im));
+	if ((ui.actionImages_Transparency->isChecked()) && (is_image)) {
+		im_pixmap.setMask(QBitmap::fromImage(im.createHeuristicMask()));
+	}
+	label->setPixmap(im_pixmap);
 
 	Dialog->show();
 	this->image_viewer = Dialog;
