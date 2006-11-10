@@ -18,18 +18,21 @@
 #include <stdio.h>
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
+	this->grf = NULL;
+	this->image_viewer = NULL;
+	ui.setupUi(this);
+	ui.view_allfiles->setColumnHidden(0, true);
+}
+
+void MainWindow::RetranslateStrings() {
 	uint32_t version=grf_version();
 	uint8_t major, minor, revision;
 	major = (version >> 16) & 0xff;
 	minor = (version >> 8) & 0xff;
 	revision = version & 0xff;
-	this->grf = NULL;
-	this->image_viewer = NULL;
-	ui.setupUi(this);
-	ui.view_allfiles->setColumnHidden(0, true);
+	ui.retranslateUi(this);
 	((QDialog*)this)->setWindowTitle(tr("GrfBuilder v%1.%2.%3 (libgrf v%4.%5.%6) by MagicalTux"
 		).arg(GRFBUILDER_VERSION_MAJOR).arg(GRFBUILDER_VERSION_MINOR).arg(GRFBUILDER_VERSION_REVISION).arg(major).arg(minor).arg(revision));
-//	ui.view_allfiles->contextMenuEvent = this->contextMenuEvent;
 }
 
 bool MainWindow::progress_callback(void *grf, int pos, int max) {
@@ -198,6 +201,7 @@ void MainWindow::on_actionUnicode_triggered() {
 
 void MainWindow::closeEvent(QCloseEvent *ev) {
 	if (this->image_viewer) delete this->image_viewer;
+	this->on_btn_close_clicked();
 	ev->accept();
 }
 
@@ -293,11 +297,15 @@ void MainWindow::on_btn_extractall_clicked() {
 }
 
 void MainWindow::do_display_wav(void *f) {
-	QString name;
 	QFile tmp;
-	name.fromUtf8(euc_kr_to_utf8(grf_file_get_filename(f)));
-	QMessageBox mb(tr("GrfBuilder"), tr("Currently playing file %1. Press \"Ok\" to stop.").arg(name), QMessageBox::Information, 0, 0, 0, this);
+#ifndef __WIN32
+	if (!QSound::isAvailable()) {
+		QMessageBox::warning(this, tr("GrfBuilder"), tr("Your computer has no audio support. Please make sure you have an audio device available and retry."), QMessageBox::Cancel, QMessageBox::Cancel);
+		return;
+	}
+	QMessageBox mb(tr("GrfBuilder"), tr("Currently playing file `%1'. Press \"Ok\" to stop.").arg(QString::fromUtf8(euc_kr_to_utf8(grf_file_get_filename(f)))), QMessageBox::Information, 0, 0, 0, this);
 	mb.show();
+#endif
 	for(int i=0;1;i++) {
 		tmp.setFileName(QString("%1_tmp.wav").arg(i));
 		if (!tmp.exists()) break;
@@ -310,20 +318,16 @@ void MainWindow::do_display_wav(void *f) {
 	tmp.close();
 	QSound snd(tmp.fileName());
 	snd.play();
-	int x=400;
+#ifndef __WIN32
 	while(1) {
 		QCoreApplication::processEvents();
-//		if (snd.isFinished()) break;
-		if (--x<0) break;
+		if (snd.isFinished()) break;
 		if (!mb.isVisible()) break;
-#ifdef __WIN32
-		Sleep(10);
-#else
 		usleep(10000);
-#endif
 	}
+	snd.stop();
+#endif
 	tmp.remove();
-	printf("end\n");
 }
 
 void MainWindow::on_view_allfiles_doubleClicked(const QModelIndex idx) {
@@ -356,7 +360,7 @@ void MainWindow::on_view_allfiles_doubleClicked(const QModelIndex idx) {
 		for(int y=0;y<sy;y++) {
 			for(int x=0;x<sx;x++) {
 				int type = *(int*)(data + ((y*sx + x) * 20+14+16));
-				im.setPixel(x,y, type?0:1);
+				im.setPixel(x,sy-y-1, type?0:1);
 			}
 		}
 	} else {
@@ -412,4 +416,18 @@ void MainWindow::on_view_allfiles_doubleClicked(const QModelIndex idx) {
 	Dialog->show();
 	this->image_viewer = Dialog;
 };
+
+void MainWindow::on_actionEn_triggered() {
+	QCoreApplication::removeTranslator(&this->translator);
+	this->RetranslateStrings();
+}
+
+void MainWindow::on_actionFr_triggered() {
+	this->on_actionEn_triggered();
+	if (this->translator.load("grfbuilder_fr")) {
+		QCoreApplication::installTranslator(&this->translator);
+		this->RetranslateStrings();
+	}
+}
+
 

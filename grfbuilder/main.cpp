@@ -1,5 +1,4 @@
 #include <QApplication>
-#include <QTranslator>
 #include <QLocale>
 #include "MainWindow.h"
 
@@ -9,15 +8,14 @@ int main(int argc, char *argv[]) {
 	QApplication app(argc, argv);
 	QString locale = QLocale::system().name();
 
-	QTranslator translator;
-	if (translator.load(QString("grfbuilder_") + locale, "/home/magicaltux/p/grf/grfbuilder/")) {
-		app.installTranslator(&translator);
+	MainWindow MW;
+	if (MW.translator.load(QString("grfbuilder_") + locale)) {
+		app.installTranslator(&MW.translator);
 	} else {
 		printf("Locale initialisation failed!\n");
 	}
-
-	MainWindow MW;
-
+ 
+	MW.RetranslateStrings();
 	MW.show();
 	return app.exec();
 }

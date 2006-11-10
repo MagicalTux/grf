@@ -446,6 +446,9 @@
     <addaction name="separator" />
     <addaction name="actionUnicode" />
     <addaction name="actionStandard" />
+    <addaction name="separator" />
+    <addaction name="actionEn" />
+    <addaction name="actionFr" />
    </widget>
    <addaction name="menuFile" />
    <addaction name="menuOptions" />
@@ -586,6 +589,16 @@
    </property>
    <property name="text" >
     <string>Images &amp;Transparency</string>
+   </property>
+  </action>
+  <action name="actionEn" >
+   <property name="text" >
+    <string>English</string>
+   </property>
+  </action>
+  <action name="actionFr" >
+   <property name="text" >
+    <string>Français</string>
    </property>
   </action>
  </widget>

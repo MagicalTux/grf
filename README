@@ -8,4 +8,13 @@ You can submit bugs by mailing me (magicaltux@ookoo.org).
 If you use my library, you can drop me an email, it'll give me more motivation
 and will allow you to have more updates :)
 
+Audio support on Linux with Qt
+==============================
+
+You need to compile your Qt library and include NAS support.
+
+Gentoo:
+echo "x11-libs/qt nas" >>/etc/portage/package.use
+
+Configure: add option -system-nas-sound
 

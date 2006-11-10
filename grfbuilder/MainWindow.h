@@ -3,10 +3,11 @@
 
 #define GRFBUILDER_VERSION_MAJOR 0
 #define GRFBUILDER_VERSION_MINOR 1
-#define GRFBUILDER_VERSION_REVISION 19
+#define GRFBUILDER_VERSION_REVISION 20
 
 #include <QFile>
 #include <QMainWindow>
+#include <QTranslator>
 
 #include "ui_MainWindow.h"
 
@@ -16,6 +17,8 @@ class MainWindow : public QMainWindow {
 public:
 	MainWindow(QWidget *parent = 0);
 	bool progress_callback(void *, int pos, int max);
+	QTranslator translator;
+	void RetranslateStrings();
 
 protected:
 	void closeEvent(QCloseEvent *);
@@ -37,6 +40,9 @@ private slots:
 	void on_action_Close_triggered();
 	void on_action_Quit_triggered();
 	void on_actionAbout_triggered();
+
+	void on_actionEn_triggered();
+	void on_actionFr_triggered();
 
 	void on_actionUnicode_triggered();
 	void on_actionStandard_triggered();
