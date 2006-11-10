@@ -211,20 +211,6 @@ static void prv_grf_free_node(struct grf_node *node) {
 	free(node);
 }
 
-static void prv_grf_update_values(struct grf_handler *handler) {
-	/* compute new position for the table */
-	struct grf_node *cur;
-	uint32_t pos = 0;
-	cur = handler->first_node;
-	while(cur != NULL) {
-		uint32_t p=cur->pos+cur->len_aligned; // position of EOF
-		pos = MAX(pos, p);
-		cur = cur->next;
-	}
-	handler->table_offset = pos;
-	handler->filecount = handler->fast_table->count;
-}
-
 GRFEXPORT void *grf_new_by_fd(int fd, bool writemode) {
 	struct grf_handler *handler;
 
@@ -645,7 +631,7 @@ static bool prv_grf_load(struct grf_handler *handler) {
 	if (result != 0) return false;
 	handler->wasted_space = wasted_space;
 	// sort entries using quicksort
-	prv_grf_update_values(handler); // update stuff like "filecount"
+	handler->filecount = handler->fast_table->count;
 	entry = handler->first_node;
 	if (entry == NULL) return true; // no files?
 	if (!prv_grf_quicksort(handler, handler->filecount)) return false;
@@ -876,8 +862,10 @@ inline struct grf_node *prv_grf_find_free_space(struct grf_handler *handler, siz
 	// our files are sorted, that's a good thing:)
 	// We just have to return the node where the space is available, the other func will
 	// insert his new node just after this one, so everything stays cool
-	// FIXME: Handle case where "inode" is the first node
 	struct grf_node *cur = handler->first_node;
+	// case: inode is the first node (and is not null)
+	if ((cur == inode) && (cur != NULL)) cur = cur->next;
+	// case: there's no (other) file
 	if (cur == NULL) return NULL; /* special case : nothing in the grf */
 	while(cur->next != NULL) {
 		struct grf_node *next = cur->next;
@@ -998,6 +986,7 @@ static bool prv_grf_write_header(struct grf_handler *handler) {
 	lseek(handler->fd, 0, SEEK_SET);
 	result = write(handler->fd, (void *)&file_header, sizeof(struct grf_header));
 	if (result != sizeof(struct grf_header)) return false;
+	handler->need_save = false;
 	return true;
 }
 
@@ -1035,6 +1024,7 @@ static bool prv_grf_write_table(struct grf_handler *handler) {
 	list_element **files_list;
 	files_list = hash_foreach(handler->fast_table);
 	void *table, *pos;
+	struct grf_node *prev;
 
 	if (files_list != NULL) {
 		for(int i=0;files_list[i]!=NULL;i++) {
@@ -1079,11 +1069,31 @@ static bool prv_grf_write_table(struct grf_handler *handler) {
 	
 	*(uint32_t *)(pos) = table_size; /* compressed size */
 	table_size += 8;
+	/* compute new position for the table */
+	prev = prv_grf_find_free_space(handler, table_size, NULL);
+	if (prev == NULL) { // no files
+		handler->table_offset = 0;
+	} else {
+		handler->table_offset = prev->pos + prev->len_aligned + GRF_HEADER_SIZE;
+	}
 	lseek(handler->fd, handler->table_offset + GRF_HEADER_SIZE, SEEK_SET);
 	if (write(handler->fd, (char *)pos, table_size) != table_size) { free(pos); return false; }
 	free(pos);
-	ftruncate(handler->fd, handler->table_offset + GRF_HEADER_SIZE + table_size);
-	handler->need_save = false;
+	if (prev == NULL) { // no file found in archive -> truncate at end of table
+		ftruncate(handler->fd, handler->table_offset + GRF_HEADER_SIZE + table_size);
+	} else if (prev->next == NULL) { // file was EOF -> truncate at end of table 
+		ftruncate(handler->fd, handler->table_offset + GRF_HEADER_SIZE + table_size);
+	} else { // some files are after us, truncate at end of last file
+		struct grf_node *cur;
+		uint32_t pos = 0;
+		cur = handler->first_node;
+		while(cur != NULL) { // TODO: Optimize this (as we know that files are sorted, optimization is possible)
+			uint32_t p=cur->pos+cur->len_aligned; // position of EOF
+			pos = MAX(pos, p);
+			cur = cur->next;
+		}
+		ftruncate(handler->fd, pos);
+	}
 	return true;
 }
 
@@ -1113,9 +1123,9 @@ GRFEXPORT bool grf_save(void *tmphandler) {
 	handler = (struct grf_handler *)tmphandler;
 	if (handler == NULL) return false;
 
-	prv_grf_update_values(handler);
-	if (prv_grf_write_header(handler) != true) { return false; }
+	handler->filecount = handler->fast_table->count;
 	if (prv_grf_write_table(handler) != true) { return false; }
+	if (prv_grf_write_header(handler) != true) { return false; }
 
 	return true;
 }

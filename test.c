@@ -57,6 +57,7 @@ void test_new_handler() {
 		grf_free(handler);
 		exit(3);
 	}
+	printf(" - test_new_handler(): Adding some files (randomly generated)\n", handler);
 	grf_free(handler);
 }
 

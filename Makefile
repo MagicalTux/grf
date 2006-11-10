@@ -11,7 +11,7 @@ TARGET_WIN=grf.dll
 GB_TARGET=grfbuilder.bin
 GB_TARGET64=grfbuilder_64.bin
 GB_TARGET_WIN=grfbuilder.exe
-GB_LOCALES=grfbuilder_fr.qm
+GB_LOCALES=grfbuilder_fr.qm grfbuilder_de.qm grfbuilder_es.qm
 GB_REQ_DLL=mingwm10.dll QtCore4.dll QtGui4.dll
 BUILD=unknown
 LDFLAGS=--shared
@@ -241,10 +241,11 @@ grfbuilder/MainWindow.cpp: grfbuilder/MainWindow.h grfbuilder/ui_MainWindow.h
 grfbuilder/MainWindow.h: grfbuilder/ui_MainWindow.h
 grfbuilder/ui_MainWindow.h: grfbuilder/MainWindow.ui
 	@uic $< >$@
-	@lrelease grfbuilder/grfbuilder_fr.ts
-grfbuilder/grfbuilder_fr.ts: $(wildcard grfbuilder/*.cpp grfbuilder/*.h) grfbuilder/ui_MainWindow.h
+grfbuilder/grfbuilder_%.qm: grfbuilder/locales/grfbuilder_%.ts
+	@lrelease $< -qm $@
+grfbuilder/grfbuilder_%.ts: $(wildcard grfbuilder/*.cpp grfbuilder/*.h) grfbuilder/ui_MainWindow.h
 	@lupdate $^ -ts $@
-grfbuilder_fr.qm: grfbuilder/grfbuilder_fr.qm
+grfbuilder_%.qm: grfbuilder/grfbuilder_%.qm
 	cp $< $@
 
 %.dll: $(QT_WIN)/bin/%.dll
@@ -253,5 +254,5 @@ grfbuilder_fr.qm: grfbuilder/grfbuilder_fr.qm
 clean:
 	$(RM) -r linux $(TARGET) $(TARGET64) win32 $(TARGET_WIN) $(GB_TARGET) $(GB_TARGET64) $(GB_TARGET_WIN) grf_test_win.exe grf_test_linux libgrf-*.zip version.sh
 	$(RM) grfbuilder/ui_MainWindow.h grfbuilder/moc_MainWindow.cpp grfbuilder/grfbuilder_fr.qm grfbuilder_fr.qm
-	$(RM) mingwm10.dll QtCore4.dll QtGui4.dll
+	$(RM) mingwm10.dll QtCore4.dll QtGui4.dll $(GB_LOCALES) $(patsubst %,grfbuilder/%,$(GB_LOCALES))
 
