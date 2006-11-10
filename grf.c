@@ -503,8 +503,8 @@ static bool prv_grf_load(struct grf_handler *handler) {
 				fn_len = strlen(entry->filename);
 				memcpy((void *)&tmpentry, pos, sizeof(struct grf_table_entry_data));
 				pos += sizeof(struct grf_table_entry_data);
-				if ((tmpentry.flags & GRF_FLAG_FILE) == 0) {
-					// do not register "directory" entries
+				if ( ((tmpentry.flags & GRF_FLAG_FILE) == 0) || (tmpentry.size == 0)) {
+					// do not register "directory" entries and empty(bogus) files
 					free(entry->filename);
 					free(entry);
 					continue;
@@ -586,7 +586,7 @@ static bool prv_grf_load(struct grf_handler *handler) {
 			pos = table;
 			pos_max = table + posinfo[1];
 			result = handler->filecount;
-			wasted_space = handler->table_offset + 8;
+			wasted_space = grfstat.st_size - GRF_HEADER_SIZE - 8 - posinfo[0]; // in theory, all this space should be used for files
 			while(pos < pos_max) {
 				size_t av_len = pos_max - pos;
 				int fn_len = prv_grf_strnlen((char *)pos, av_len);
@@ -599,8 +599,8 @@ static bool prv_grf_load(struct grf_handler *handler) {
 				pos += fn_len + 1;
 				memcpy((void *)&tmpentry, pos, sizeof(struct grf_table_entry_data));
 				pos += sizeof(struct grf_table_entry_data);
-				if ((tmpentry.flags & GRF_FLAG_FILE) == 0) {
-					// do not register "directory" entries
+				if ( ((tmpentry.flags & GRF_FLAG_FILE) == 0) || (tmpentry.size == 0)) {
+					// do not register "directory" entries and empty(bogus) files
 					free(entry->filename);
 					free(entry);
 					continue;
@@ -649,28 +649,29 @@ static bool prv_grf_load(struct grf_handler *handler) {
 	entry = handler->first_node;
 	if (entry == NULL) return true; // no files?
 	if (!prv_grf_quicksort(handler, handler->filecount)) return false;
-	// We use "bubble sort", as entries *should* already be sorted
-	// usually bubble sort isn't really optimized, however in our case it's just perfect
-/*	while(1) {
-		last = entry;
-		entry = last->next;
-		if (entry == NULL) break;
-		if (entry->pos < last->pos) {
-			// Current case (in chained list): ]n p[last]n p[entry]n p[ (but entry.pos < last.pos)
-			// What we want: ]n p[entry]n p[last]n p[
-			entry->prev = last->prev;
-			last->next = entry->next;
-			last->prev = entry;
-			entry->next = last;
-			if (entry->prev != NULL) entry->prev->next = entry;
-			if (last->next != NULL) last->next->prev = last;
-			if (entry->prev != NULL) entry = entry->prev;
-			if (entry->prev != NULL) entry = entry->prev;
-		}
-	}
-//	*/
-	// sort OK! Oh yeah man!!
 	// call the callback, if any~
+	struct grf_node *x = handler->first_node;
+	uint32_t prev=0;
+	while(x != NULL) {
+		if (prev > x->pos+x->len_aligned) {
+			struct grf_node *x2;
+#if 0
+			printf("******** OVERLAP :\n");
+			x=x->prev;
+			printf("file %s at %u-%u: s=%u l=%u l_=%u\n", x->filename, x->pos+GRF_HEADER_SIZE, x->pos+x->len_aligned+GRF_HEADER_SIZE, x->size, x->len, x->len_aligned);
+			x=x->next;
+			printf("file %s at %u-%u: s=%u l=%u l_=%u\n", x->filename, x->pos+GRF_HEADER_SIZE, x->pos+x->len_aligned+GRF_HEADER_SIZE, x->size, x->len, x->len_aligned);
+#endif
+			// drop the second one
+			x2 = x;
+			x = x->next;
+			handler->wasted_space += x2->len_aligned;
+			hash_del_element(handler->fast_table, x2->filename);
+			continue;
+		}
+		prev=x->pos+x->len_aligned;
+		x=x->next;
+	}
 	if (handler->callback != NULL) {
 		handler->callback(handler->callback_etc, handler, handler->filecount, handler->filecount);
 	}
@@ -1025,7 +1026,6 @@ GRFEXPORT void grf_set_compression_level(void *tmphandler, int level) {
 	struct grf_handler *handler = tmphandler;
 	handler->compression_level = level;
 }
-
 
 static bool prv_grf_write_table(struct grf_handler *handler) {
 	// Step 1 : generate a proper table
