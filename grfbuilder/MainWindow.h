@@ -27,12 +27,15 @@ private slots:
 	void on_btn_open_clicked();
 	void on_btn_close_clicked();
 	void on_btn_extractall_clicked();
+	void on_listFilter_currentIndexChanged(QString);
 
 	void on_view_allfiles_customContextMenuRequested(const QPoint);
+	void on_viewSearch_customContextMenuRequested(const QPoint);
 
 	void on_tab_sel_currentChanged(int);
 
 	void on_view_allfiles_doubleClicked(const QModelIndex);
+	void on_viewSearch_doubleClicked(const QModelIndex);
 
 	// menu
 	void on_action_Open_triggered();
@@ -51,12 +54,16 @@ private:
 	Ui::MainWindow ui;
 	QFile grf_file;
 	QDialog *image_viewer;
+	QString last_search;
 	unsigned int fillFilesTree(void *, QTreeWidget *);
 	unsigned int fillFilesTree(void *, QTreeWidgetItem *);
 	void *grf;
 	bool grf_has_tree;
 	void do_mkdir(QString *);
 	void do_display_wav(void *);
+	void DoUpdateFilter(QString);
+	void MainWindow::doOpenFileById(int, QString);
+	QString showSizeAsString(unsigned int);
 };
 
 #endif

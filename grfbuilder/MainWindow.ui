@@ -1,7 +1,4 @@
 <ui version="4.0" >
- <author></author>
- <comment></comment>
- <exportmacro></exportmacro>
  <class>MainWindow</class>
  <widget class="QMainWindow" name="MainWindow" >
   <property name="geometry" >
@@ -26,6 +23,240 @@
     <property name="spacing" >
      <number>6</number>
     </property>
+    <item row="0" column="0" >
+     <widget class="QTabWidget" name="tab_sel" >
+      <property name="enabled" >
+       <bool>true</bool>
+      </property>
+      <property name="currentIndex" >
+       <number>0</number>
+      </property>
+      <widget class="QWidget" name="grf_allfiles" >
+       <attribute name="title" >
+        <string>All files</string>
+       </attribute>
+       <layout class="QGridLayout" >
+        <property name="margin" >
+         <number>9</number>
+        </property>
+        <property name="spacing" >
+         <number>6</number>
+        </property>
+        <item row="0" column="0" >
+         <layout class="QGridLayout" >
+          <property name="margin" >
+           <number>0</number>
+          </property>
+          <property name="spacing" >
+           <number>0</number>
+          </property>
+          <item row="0" column="0" >
+           <widget class="QTreeWidget" name="view_allfiles" >
+            <property name="contextMenuPolicy" >
+             <enum>Qt::CustomContextMenu</enum>
+            </property>
+            <property name="frameShape" >
+             <enum>QFrame::NoFrame</enum>
+            </property>
+            <property name="frameShadow" >
+             <enum>QFrame::Plain</enum>
+            </property>
+            <property name="selectionMode" >
+             <enum>QAbstractItemView::ExtendedSelection</enum>
+            </property>
+            <property name="sortingEnabled" >
+             <bool>true</bool>
+            </property>
+            <property name="columnCount" >
+             <number>5</number>
+            </property>
+            <column>
+             <property name="text" >
+              <string>id</string>
+             </property>
+            </column>
+            <column>
+             <property name="text" >
+              <string>Comp</string>
+             </property>
+            </column>
+            <column>
+             <property name="text" >
+              <string>Size</string>
+             </property>
+            </column>
+            <column>
+             <property name="text" >
+              <string>Position</string>
+             </property>
+            </column>
+            <column>
+             <property name="text" >
+              <string>Filename</string>
+             </property>
+            </column>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="grf_treeview" >
+       <attribute name="title" >
+        <string>Tree view</string>
+       </attribute>
+       <layout class="QGridLayout" >
+        <property name="margin" >
+         <number>9</number>
+        </property>
+        <property name="spacing" >
+         <number>6</number>
+        </property>
+        <item row="0" column="0" >
+         <layout class="QGridLayout" >
+          <property name="margin" >
+           <number>0</number>
+          </property>
+          <property name="spacing" >
+           <number>0</number>
+          </property>
+          <item row="0" column="0" >
+           <widget class="QTreeWidget" name="view_filestree" >
+            <property name="contextMenuPolicy" >
+             <enum>Qt::CustomContextMenu</enum>
+            </property>
+            <property name="frameShape" >
+             <enum>QFrame::NoFrame</enum>
+            </property>
+            <property name="frameShadow" >
+             <enum>QFrame::Plain</enum>
+            </property>
+            <column>
+             <property name="text" >
+              <string>Filename</string>
+             </property>
+            </column>
+            <column>
+             <property name="text" >
+              <string>File size</string>
+             </property>
+            </column>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tab" >
+       <attribute name="title" >
+        <string>Search result</string>
+       </attribute>
+       <layout class="QGridLayout" >
+        <property name="margin" >
+         <number>9</number>
+        </property>
+        <property name="spacing" >
+         <number>6</number>
+        </property>
+        <item row="0" column="0" >
+         <layout class="QGridLayout" >
+          <property name="margin" >
+           <number>0</number>
+          </property>
+          <property name="spacing" >
+           <number>6</number>
+          </property>
+          <item row="0" column="0" >
+           <widget class="QTreeWidget" name="viewSearch" >
+            <property name="contextMenuPolicy" >
+             <enum>Qt::CustomContextMenu</enum>
+            </property>
+            <property name="frameShape" >
+             <enum>QFrame::NoFrame</enum>
+            </property>
+            <property name="frameShadow" >
+             <enum>QFrame::Plain</enum>
+            </property>
+            <property name="selectionMode" >
+             <enum>QAbstractItemView::ExtendedSelection</enum>
+            </property>
+            <property name="sortingEnabled" >
+             <bool>true</bool>
+            </property>
+            <property name="columnCount" >
+             <number>5</number>
+            </property>
+            <column>
+             <property name="text" >
+              <string>id</string>
+             </property>
+            </column>
+            <column>
+             <property name="text" >
+              <string>Comp</string>
+             </property>
+            </column>
+            <column>
+             <property name="text" >
+              <string>Size</string>
+             </property>
+            </column>
+            <column>
+             <property name="text" >
+              <string>Position</string>
+             </property>
+            </column>
+            <column>
+             <property name="text" >
+              <string>Filename</string>
+             </property>
+            </column>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+    </item>
+    <item row="1" column="0" >
+     <layout class="QHBoxLayout" >
+      <property name="margin" >
+       <number>0</number>
+      </property>
+      <property name="spacing" >
+       <number>6</number>
+      </property>
+      <item>
+       <widget class="QComboBox" name="listFilter" >
+        <property name="sizePolicy" >
+         <sizepolicy>
+          <hsizetype>7</hsizetype>
+          <vsizetype>0</vsizetype>
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="editable" >
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QProgressBar" name="progbar" >
+        <property name="value" >
+         <number>0</number>
+        </property>
+        <property name="orientation" >
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="invertedAppearance" >
+         <bool>false</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </item>
     <item rowspan="2" row="0" column="1" >
      <layout class="QVBoxLayout" >
       <property name="margin" >
@@ -175,226 +406,6 @@
       </item>
      </layout>
     </item>
-    <item row="1" column="0" >
-     <layout class="QHBoxLayout" >
-      <property name="margin" >
-       <number>0</number>
-      </property>
-      <property name="spacing" >
-       <number>6</number>
-      </property>
-      <item>
-       <widget class="QLabel" name="textLabel1" >
-        <property name="text" >
-         <string>&lt;p align="right">Compression level:&lt;/p></string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QComboBox" name="combo_complevel" >
-        <property name="currentIndex" >
-         <number>5</number>
-        </property>
-        <item>
-         <property name="text" >
-          <string>None</string>
-         </property>
-        </item>
-        <item>
-         <property name="text" >
-          <string>Totally Low</string>
-         </property>
-        </item>
-        <item>
-         <property name="text" >
-          <string>Really Low</string>
-         </property>
-        </item>
-        <item>
-         <property name="text" >
-          <string>Low</string>
-         </property>
-        </item>
-        <item>
-         <property name="text" >
-          <string>Almost Normal</string>
-         </property>
-        </item>
-        <item>
-         <property name="text" >
-          <string>Normal</string>
-         </property>
-        </item>
-        <item>
-         <property name="text" >
-          <string>More than Normal</string>
-         </property>
-        </item>
-        <item>
-         <property name="text" >
-          <string>High</string>
-         </property>
-        </item>
-        <item>
-         <property name="text" >
-          <string>Really High</string>
-         </property>
-        </item>
-        <item>
-         <property name="text" >
-          <string>Max</string>
-         </property>
-        </item>
-       </widget>
-      </item>
-      <item>
-       <widget class="QProgressBar" name="progbar" >
-        <property name="value" >
-         <number>0</number>
-        </property>
-        <property name="orientation" >
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="invertedAppearance" >
-         <bool>false</bool>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item row="0" column="0" >
-     <layout class="QGridLayout" >
-      <property name="margin" >
-       <number>0</number>
-      </property>
-      <property name="spacing" >
-       <number>6</number>
-      </property>
-      <item row="0" column="0" >
-       <widget class="QTabWidget" name="tab_sel" >
-        <property name="currentIndex" >
-         <number>0</number>
-        </property>
-        <widget class="QWidget" name="grf_allfiles" >
-         <attribute name="title" >
-          <string>All files</string>
-         </attribute>
-         <layout class="QGridLayout" >
-          <property name="margin" >
-           <number>9</number>
-          </property>
-          <property name="spacing" >
-           <number>6</number>
-          </property>
-          <item row="0" column="0" >
-           <layout class="QGridLayout" >
-            <property name="margin" >
-             <number>0</number>
-            </property>
-            <property name="spacing" >
-             <number>0</number>
-            </property>
-            <item row="0" column="0" >
-             <widget class="QTreeWidget" name="view_allfiles" >
-              <property name="contextMenuPolicy" >
-               <enum>Qt::CustomContextMenu</enum>
-              </property>
-              <property name="frameShape" >
-               <enum>QFrame::NoFrame</enum>
-              </property>
-              <property name="frameShadow" >
-               <enum>QFrame::Plain</enum>
-              </property>
-              <property name="selectionMode" >
-               <enum>QAbstractItemView::ExtendedSelection</enum>
-              </property>
-              <property name="columnCount" >
-               <number>5</number>
-              </property>
-              <property name="sortingEnabled" >
-               <bool>true</bool>
-              </property>
-              <column>
-               <property name="text" >
-                <string>id</string>
-               </property>
-              </column>
-              <column>
-               <property name="text" >
-                <string>Comp</string>
-               </property>
-              </column>
-              <column>
-               <property name="text" >
-                <string>Size</string>
-               </property>
-              </column>
-              <column>
-               <property name="text" >
-                <string>Position</string>
-               </property>
-              </column>
-              <column>
-               <property name="text" >
-                <string>Filename</string>
-               </property>
-              </column>
-             </widget>
-            </item>
-           </layout>
-          </item>
-         </layout>
-        </widget>
-        <widget class="QWidget" name="grf_treeview" >
-         <attribute name="title" >
-          <string>Tree view</string>
-         </attribute>
-         <layout class="QGridLayout" >
-          <property name="margin" >
-           <number>9</number>
-          </property>
-          <property name="spacing" >
-           <number>6</number>
-          </property>
-          <item row="0" column="0" >
-           <layout class="QGridLayout" >
-            <property name="margin" >
-             <number>0</number>
-            </property>
-            <property name="spacing" >
-             <number>0</number>
-            </property>
-            <item row="0" column="0" >
-             <widget class="QTreeWidget" name="view_filestree" >
-              <property name="contextMenuPolicy" >
-               <enum>Qt::CustomContextMenu</enum>
-              </property>
-              <property name="frameShape" >
-               <enum>QFrame::NoFrame</enum>
-              </property>
-              <property name="frameShadow" >
-               <enum>QFrame::Plain</enum>
-              </property>
-              <column>
-               <property name="text" >
-                <string>Filename</string>
-               </property>
-              </column>
-              <column>
-               <property name="text" >
-                <string>File size</string>
-               </property>
-              </column>
-             </widget>
-            </item>
-           </layout>
-          </item>
-         </layout>
-        </widget>
-       </widget>
-      </item>
-     </layout>
-    </item>
    </layout>
   </widget>
   <widget class="QMenuBar" name="menubar" >
@@ -406,12 +417,6 @@
      <height>29</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menu" >
-    <property name="title" >
-     <string>&amp;?</string>
-    </property>
-    <addaction name="actionAbout" />
-   </widget>
    <widget class="QMenu" name="menuFile" >
     <property name="title" >
      <string>&amp;File</string>
@@ -433,15 +438,31 @@
     <addaction name="actionMerge_Dir" />
     <addaction name="action_Quit" />
    </widget>
-   <widget class="QMenu" name="menuExtract_type" >
+   <widget class="QMenu" name="menu" >
     <property name="title" >
-     <string>E&amp;xtract type</string>
+     <string>&amp;?</string>
     </property>
+    <addaction name="actionAbout" />
    </widget>
    <widget class="QMenu" name="menuOptions" >
     <property name="title" >
      <string>&amp;Options</string>
     </property>
+    <widget class="QMenu" name="menuCompression_level" >
+     <property name="title" >
+      <string>Compression level</string>
+     </property>
+     <addaction name="actionC0" />
+     <addaction name="actionC1" />
+     <addaction name="actionC2" />
+     <addaction name="actionC3" />
+     <addaction name="actionC4" />
+     <addaction name="actionC5" />
+     <addaction name="actionC6" />
+     <addaction name="actionC7" />
+     <addaction name="actionC8" />
+     <addaction name="actionC9" />
+    </widget>
     <addaction name="actionImages_Transparency" />
     <addaction name="separator" />
     <addaction name="actionUnicode" />
@@ -449,6 +470,8 @@
     <addaction name="separator" />
     <addaction name="actionEn" />
     <addaction name="actionFr" />
+    <addaction name="separator" />
+    <addaction name="menuCompression_level" />
    </widget>
    <addaction name="menuFile" />
    <addaction name="menuOptions" />
@@ -601,8 +624,87 @@
     <string>Français</string>
    </property>
   </action>
+  <action name="actionC0" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="text" >
+    <string>None</string>
+   </property>
+  </action>
+  <action name="actionC1" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="text" >
+    <string>Totally Low</string>
+   </property>
+  </action>
+  <action name="actionC2" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="text" >
+    <string>Really Low</string>
+   </property>
+  </action>
+  <action name="actionC3" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="text" >
+    <string>Low</string>
+   </property>
+  </action>
+  <action name="actionC4" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="text" >
+    <string>Almost Normal</string>
+   </property>
+  </action>
+  <action name="actionC5" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="text" >
+    <string>Normal</string>
+   </property>
+  </action>
+  <action name="actionC6" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="text" >
+    <string>More than Normal</string>
+   </property>
+  </action>
+  <action name="actionC7" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="text" >
+    <string>High</string>
+   </property>
+  </action>
+  <action name="actionC8" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="text" >
+    <string>Really High</string>
+   </property>
+  </action>
+  <action name="actionC9" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="text" >
+    <string>Max</string>
+   </property>
+  </action>
  </widget>
- <pixmapfunction></pixmapfunction>
  <resources/>
  <connections/>
 </ui>
