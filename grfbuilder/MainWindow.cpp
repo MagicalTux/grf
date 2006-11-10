@@ -21,6 +21,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 	this->grf = NULL;
 	this->image_viewer = NULL;
 	ui.setupUi(this);
+	this->setCompressionLevel(5);
 	ui.view_allfiles->setColumnHidden(0, true);
 	ui.viewSearch->setColumnHidden(0, true);
 }
@@ -468,6 +469,22 @@ void MainWindow::on_actionEn_triggered() {
 void MainWindow::on_actionFr_triggered() {
 	this->on_actionEn_triggered();
 	if (this->translator.load("grfbuilder_fr")) {
+		QCoreApplication::installTranslator(&this->translator);
+		this->RetranslateStrings();
+	}
+}
+
+void MainWindow::on_actionDe_triggered() {
+	this->on_actionEn_triggered();
+	if (this->translator.load("grfbuilder_de")) {
+		QCoreApplication::installTranslator(&this->translator);
+		this->RetranslateStrings();
+	}
+}
+
+void MainWindow::on_actionEs_triggered() {
+	this->on_actionEn_triggered();
+	if (this->translator.load("grfbuilder_es")) {
 		QCoreApplication::installTranslator(&this->translator);
 		this->RetranslateStrings();
 	}

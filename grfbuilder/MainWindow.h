@@ -3,7 +3,7 @@
 
 #define GRFBUILDER_VERSION_MAJOR 0
 #define GRFBUILDER_VERSION_MINOR 1
-#define GRFBUILDER_VERSION_REVISION 20
+#define GRFBUILDER_VERSION_REVISION 21
 
 #include <QFile>
 #include <QMainWindow>
@@ -57,6 +57,8 @@ private slots:
 
 	void on_actionEn_triggered();
 	void on_actionFr_triggered();
+	void on_actionDe_triggered();
+	void on_actionEs_triggered();
 
 	void on_actionUnicode_triggered();
 	void on_actionStandard_triggered();

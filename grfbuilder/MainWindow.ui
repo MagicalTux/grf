@@ -468,7 +468,9 @@
     <addaction name="actionUnicode" />
     <addaction name="actionStandard" />
     <addaction name="separator" />
+    <addaction name="actionDe" />
     <addaction name="actionEn" />
+    <addaction name="actionEs" />
     <addaction name="actionFr" />
     <addaction name="separator" />
     <addaction name="menuCompression_level" />
@@ -702,6 +704,16 @@
    </property>
    <property name="text" >
     <string>Max</string>
+   </property>
+  </action>
+  <action name="actionDe" >
+   <property name="text" >
+    <string>Deutsch</string>
+   </property>
+  </action>
+  <action name="actionEs" >
+   <property name="text" >
+    <string>Español</string>
    </property>
   </action>
  </widget>
