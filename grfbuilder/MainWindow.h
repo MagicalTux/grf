@@ -73,7 +73,7 @@ private:
 	void do_mkdir(QString *);
 	void do_display_wav(void *);
 	void DoUpdateFilter(QString);
-	void MainWindow::doOpenFileById(int, QString);
+	void doOpenFileById(int, QString);
 	QString showSizeAsString(unsigned int);
 	void setCompressionLevel(int);
 };
