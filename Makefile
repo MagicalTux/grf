@@ -243,7 +243,7 @@ grfbuilder/ui_MainWindow.h: grfbuilder/MainWindow.ui
 	@uic $< >$@
 grfbuilder/grfbuilder_%.qm: grfbuilder/locales/grfbuilder_%.ts
 	@lrelease $< -qm $@
-grfbuilder/grfbuilder_%.ts: $(wildcard grfbuilder/*.cpp grfbuilder/*.h) grfbuilder/ui_MainWindow.h
+grfbuilder/locales/grfbuilder_%.ts: $(wildcard grfbuilder/*.cpp grfbuilder/*.h) grfbuilder/ui_MainWindow.h
 	@lupdate $^ -ts $@
 grfbuilder_%.qm: grfbuilder/grfbuilder_%.qm
 	cp $< $@
