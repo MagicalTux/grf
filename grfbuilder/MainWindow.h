@@ -43,6 +43,17 @@ private slots:
 	void on_action_Close_triggered();
 	void on_action_Quit_triggered();
 	void on_actionAbout_triggered();
+	// compression
+	void on_actionC0_triggered();
+	void on_actionC1_triggered();
+	void on_actionC2_triggered();
+	void on_actionC3_triggered();
+	void on_actionC4_triggered();
+	void on_actionC5_triggered();
+	void on_actionC6_triggered();
+	void on_actionC7_triggered();
+	void on_actionC8_triggered();
+	void on_actionC9_triggered();
 
 	void on_actionEn_triggered();
 	void on_actionFr_triggered();
@@ -64,6 +75,7 @@ private:
 	void DoUpdateFilter(QString);
 	void MainWindow::doOpenFileById(int, QString);
 	QString showSizeAsString(unsigned int);
+	void setCompressionLevel(int);
 };
 
 #endif

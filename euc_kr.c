@@ -24,7 +24,8 @@ static uint32_t euc_kr_utf8_strlen(const uint8_t *euckr) {
 			c+=2; /* total size of a korean UTF8 char is 3 bytes */
 			continue;
 		}
-		return 0; /* should not happen -> throw fatal */
+		c+=5; // max length, as we don't know what will happen
+//		return 0; /* should not happen -> throw fatal */
 	}
 	return c;
 }
@@ -91,9 +92,9 @@ GRFEXPORT char *euc_kr_to_utf8_r(const char *orig, uint8_t *res) {
 			continue;
 		}
 		if (x <= 0xa0 || x >= 0xff || x == 0xc9) {
-			/* unexpected */
-			free(res);
-			return NULL;
+			/* unexpected: skip character and hope tomorrow will be a better day */
+			t++; continue;
+//			return NULL;
 		}
 		t++;
 		x2 = *t; t++;

@@ -1,11 +1,19 @@
 #include <QApplication>
+#include <QMessageBox>
 #include <QLocale>
 #include "MainWindow.h"
+#include <libgrf.h>
 
 #include <stdio.h>
 
 int main(int argc, char *argv[]) {
 	QApplication app(argc, argv);
+
+	if (grf_version() < (0x113)) { // 0.1.19
+		QMessageBox::warning(NULL, "GrfBuilder", "I need at least libgrf v0.1.19 to run. Make sure you have the last one installed.", QMessageBox::Cancel, QMessageBox::Cancel);
+		return 1;
+	}
+
 	QString locale = QLocale::system().name();
 
 	MainWindow MW;

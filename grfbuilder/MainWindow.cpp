@@ -158,6 +158,7 @@ void MainWindow::on_btn_open_clicked() {
 		__item->setText(1, this->showSizeAsString(grf_file_get_storage_size(f))); // compsize
 		__item->setText(2, this->showSizeAsString(grf_file_get_size(f))); // realsize
 		__item->setText(3, QString("%1").arg(grf_file_get_storage_pos(f))); // pos
+		if (euc_kr_to_utf8(grf_file_get_filename(f)) == NULL) printf("ARGH %s\n", grf_file_get_filename(f));
 		__item->setText(4, QString::fromUtf8(euc_kr_to_utf8(grf_file_get_filename(f)))); // name
 //		__item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsUserCheckable | Qt::ItemIsEnabled | Qt::ItemIsDragEnabled | Qt::ItemIsEditable);
 		f = grf_get_file_next(f);
@@ -501,4 +502,28 @@ void MainWindow::on_listFilter_currentIndexChanged(QString text) {
 	this->DoUpdateFilter(text);
 	ui.tab_sel->setCurrentIndex(2);
 }
+
+void MainWindow::setCompressionLevel(int lvl) {
+	ui.actionC0->setChecked(lvl==0);
+	ui.actionC1->setChecked(lvl==1);
+	ui.actionC2->setChecked(lvl==2);
+	ui.actionC3->setChecked(lvl==3);
+	ui.actionC4->setChecked(lvl==4);
+	ui.actionC5->setChecked(lvl==5);
+	ui.actionC6->setChecked(lvl==6);
+	ui.actionC7->setChecked(lvl==7);
+	ui.actionC8->setChecked(lvl==8);
+	ui.actionC9->setChecked(lvl==9);
+}
+
+void MainWindow::on_actionC0_triggered() { this->setCompressionLevel(0); }
+void MainWindow::on_actionC1_triggered() { this->setCompressionLevel(1); }
+void MainWindow::on_actionC2_triggered() { this->setCompressionLevel(2); }
+void MainWindow::on_actionC3_triggered() { this->setCompressionLevel(3); }
+void MainWindow::on_actionC4_triggered() { this->setCompressionLevel(4); }
+void MainWindow::on_actionC5_triggered() { this->setCompressionLevel(5); }
+void MainWindow::on_actionC6_triggered() { this->setCompressionLevel(6); }
+void MainWindow::on_actionC7_triggered() { this->setCompressionLevel(7); }
+void MainWindow::on_actionC8_triggered() { this->setCompressionLevel(8); }
+void MainWindow::on_actionC9_triggered() { this->setCompressionLevel(9); }
 
