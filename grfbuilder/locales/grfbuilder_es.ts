@@ -388,12 +388,12 @@
     <message>
         <location filename="../ui_MainWindow.h" line="477"/>
         <source>Deutsch</source>
-        <translation type="unfinished"></translation>
+        <translation>Deutsch</translation>
     </message>
     <message encoding="UTF-8">
         <location filename="../ui_MainWindow.h" line="478"/>
         <source>Español</source>
-        <translation type="unfinished"></translation>
+        <translation>Español</translation>
     </message>
 </context>
 </TS>
