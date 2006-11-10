@@ -48,13 +48,13 @@ static bool grf_callback_caller(void *MW_, void *grf, int pos, int max) {
 
 QString MainWindow::showSizeAsString(unsigned int s) {
 	if (s > (1024*1024*1024*1.4)) {
-		return QString("%1 GiB").arg((double)(s / (1024*1024*1024)), 0, 'f', 1);
+		return tr("%1 GiB").arg((double)(s / (1024*1024*1024)), 0, 'f', 1);
 	}
 	if (s > (1024*1024*1.4)) {
-		return QString("%1 MiB").arg((double)(s / (1024*1024)), 0, 'f', 1);
+		return tr("%1 MiB").arg((double)(s / (1024*1024)), 0, 'f', 1);
 	}
 	if (s > (1024*1.4)) {
-		return QString("%1 kiB").arg((double)(s / (1024)), 0, 'f', 1);
+		return tr("%1 kiB").arg((double)(s / (1024)), 0, 'f', 1);
 	}
 	return QString("%1").arg(s);
 }
