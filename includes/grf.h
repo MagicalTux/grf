@@ -69,7 +69,8 @@ struct grf_treenode {
 };
 
 struct grf_handler {
-	uint32_t filecount, table_offset, wasted_space;
+	uint32_t filecount, table_offset, table_size, wasted_space;
+	uint32_t version;
 	int fd;
 	int compression_level;
 	bool need_save, write_mode;
@@ -102,11 +103,11 @@ struct grf_handler {
 // should we use pragma pack ?
 struct grf_header {
 	char header_magic[16] __attribute__ ((__packed__)); // "Master of Magic" + 0x00
-	char header_key[14] __attribute__ ((__packed__)); // 0x01 -> 0x0e
+	char header_key[14] __attribute__ ((__packed__)); // 0x01 -> 0x0e, or 0x00 -> 0x00 (no crypt)
 	uint32_t offset __attribute__ ((__packed__)); // offset of file table
 	uint32_t seed __attribute__ ((__packed__));
 	uint32_t filecount __attribute__ ((__packed__)); // Real filecount = filecount - seed - 7
-	uint32_t version __attribute__ ((__packed__)); // we only know about 0x200
+	uint32_t version __attribute__ ((__packed__)); // 0x102 0x103 0x200 0xCACA
 };
 
 struct grf_table_entry_data {

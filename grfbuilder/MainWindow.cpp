@@ -24,6 +24,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 	this->setCompressionLevel(5);
 	ui.view_allfiles->setColumnHidden(0, true);
 	ui.viewSearch->setColumnHidden(0, true);
+	ui.view_filestree->setColumnHidden(2, true);
 }
 
 void MainWindow::RetranslateStrings() {
@@ -72,11 +73,13 @@ unsigned int MainWindow::fillFilesTree(void *dir, QTreeWidgetItem *parent) {
 			total_size += s;
 //			__f->setText(1, QString("[%1]").arg(s));
 			__f->setText(1, QString("[") + this->showSizeAsString(s) + QString("]")); // realsize
+			__f->setText(2, "-1");
 		} else {
 			void *f = grf_tree_get_file(list[i]);
 			s = grf_file_get_size(f);
 			total_size += s;
 			__f->setText(1, this->showSizeAsString(s)); // realsize
+			__f->setText(2, QString("%1").arg(grf_file_get_id(f)));
 		}
 	}
 	delete list;
@@ -94,11 +97,13 @@ unsigned int MainWindow::fillFilesTree(void *dir, QTreeWidget *parent) {
 			s=MainWindow::fillFilesTree(list[i], __f);
 			total_size += s;
 			__f->setText(1, QString("[") + this->showSizeAsString(s) + QString("]")); // realsize
+			__f->setText(2, "-1");
 		} else {
 			void *f = grf_tree_get_file(list[i]);
 			s = grf_file_get_size(f);
 			total_size += s;
 			__f->setText(1, this->showSizeAsString(s)); // realsize
+			__f->setText(2, QString("%1").arg(grf_file_get_id(f)));
 		}
 	}
 	delete list;
@@ -361,7 +366,32 @@ void MainWindow::do_display_wav(void *f) {
 }
 
 void MainWindow::on_viewSearch_doubleClicked(const QModelIndex idx) {
-	this->doOpenFileById(ui.viewSearch->topLevelItem(idx.row())->text(0).toInt(), ui.viewSearch->topLevelItem(idx.row())->text(4));
+	this->doOpenFileById(ui.viewSearch->topLevelItem(idx.row())->text(0).toInt());
+}
+
+static QTreeWidgetItem *getFilestreeItemRecursive(const QModelIndex idx, const QTreeWidget *cur) {
+	const QTreeWidgetItem *bla;
+	if (idx.parent() != QModelIndex()) {
+		bla = getFilestreeItemRecursive(idx.parent(), cur);
+		return bla->child(idx.row());
+	}
+	return cur->topLevelItem(idx.row());
+}
+
+static QTreeWidgetItem *getFilestreeItemRecursive(const QModelIndex idx, const QTreeWidgetItem *cur) {
+	const QTreeWidgetItem *bla = cur;
+	if (idx.parent() != QModelIndex()) {
+		bla = getFilestreeItemRecursive(idx.parent(), cur);
+	}
+	return bla->child(idx.row());
+}
+
+void MainWindow::on_view_filestree_doubleClicked(const QModelIndex idx) {
+	QTreeWidgetItem *item = getFilestreeItemRecursive(idx, ui.view_filestree);
+//	printf("p=%d\n", item->text(2).toInt());
+	if (item->text(2).toInt() == -1) return;
+	this->doOpenFileById(item->text(2).toInt());
+//	this->doOpenFileById(ui.view_filestree->topLevelItem(idx.row())->text(2).toInt(), ui.view_filestree->topLevelItem(idx.row())->text(0));
 }
 
 void MainWindow::on_view_allfiles_doubleClicked(const QModelIndex idx) {
@@ -369,25 +399,27 @@ void MainWindow::on_view_allfiles_doubleClicked(const QModelIndex idx) {
 	// item = ui.view_allfiles->topLevelItem(idx.row())
 //	int id=ui.view_allfiles->topLevelItem(idx.row())->text(0).toInt();
 //	printf("x=%d\n", ui.view_allfiles->topLevelItem(idx.row())->text(0).toInt());
-	this->doOpenFileById(ui.view_allfiles->topLevelItem(idx.row())->text(0).toInt(), ui.view_allfiles->topLevelItem(idx.row())->text(4));
+	this->doOpenFileById(ui.view_allfiles->topLevelItem(idx.row())->text(0).toInt());
 }
 
-void MainWindow::doOpenFileById(int id, QString name) {
+void MainWindow::doOpenFileById(int id) {
 	void *f = grf_get_file_by_id(this->grf, id);
 	bool is_image = false;
-	if (name.toLower().endsWith(".wav")) return this->do_display_wav(grf_get_file_by_id(this->grf, id));
+	QString name(grf_file_get_filename(f));
+	name = name.toLower();
+	if (name.endsWith(".wav")) return this->do_display_wav(grf_get_file_by_id(this->grf, id));
 	if (
-			(!name.toLower().endsWith(".bmp"))
-		&&	(!name.toLower().endsWith(".jpg"))
-		&&	(!name.toLower().endsWith(".jpeg"))
-		&&	(!name.toLower().endsWith(".png"))
-		&&	(!name.toLower().endsWith(".gif"))
-		&&	(!name.toLower().endsWith(".gat"))
+			(!name.endsWith(".bmp"))
+		&&	(!name.endsWith(".jpg"))
+		&&	(!name.endsWith(".jpeg"))
+		&&	(!name.endsWith(".png"))
+		&&	(!name.endsWith(".gif"))
+		&&	(!name.endsWith(".gat"))
 		) return;
 	QByteArray im_data(grf_file_get_size(f), 0);
 	if (grf_file_get_contents(f, im_data.data()) != grf_file_get_size(f)) return;
 	QImage im;
-	if (name.toLower().endsWith(".gat")) {
+	if (name.endsWith(".gat")) {
 		const char *data = im_data.constData();
 		int sx = *(int*)(data+6);
 		int sy = *(int*)(data+10);

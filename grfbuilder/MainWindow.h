@@ -35,6 +35,7 @@ private slots:
 	void on_tab_sel_currentChanged(int);
 
 	void on_view_allfiles_doubleClicked(const QModelIndex);
+	void on_view_filestree_doubleClicked(const QModelIndex);
 	void on_viewSearch_doubleClicked(const QModelIndex);
 
 	// menu
@@ -75,7 +76,7 @@ private:
 	void do_mkdir(QString *);
 	void do_display_wav(void *);
 	void DoUpdateFilter(QString);
-	void doOpenFileById(int, QString);
+	void doOpenFileById(int);
 	QString showSizeAsString(unsigned int);
 	void setCompressionLevel(int);
 };
