@@ -243,6 +243,32 @@ GRFEXPORT void grf_set_callback(void *tmphandler, bool (*callback)(void *, void 
 	((struct grf_handler *)tmphandler)->callback_etc = etc;
 }
 
+GRFEXPORT bool grf_repack(void *tmphandler, int repack_type, bool (*callback)(void *handler, void *etc, uint32_t pos, uint32_t max, char *currentname), void *etc) {
+	struct grf_handler *handler = tmphandler;
+	struct grf_node *node = handler->first_node;
+	uint32_t i=0;
+	if (!handler->write_mode) return false; /* opened in read-only mode -> repack fails */
+	switch(repack_type) {
+		case GRF_REPACK_FAST: case GRF_REPACK_DECRYPT: case GRF_REPACK_RECOMPRESS: break;
+		default: return false; /* bad parameter */
+	}
+	// ok, let's go!
+	// First operation: enumerate files, and find a gap
+	while(node != NULL) {
+		struct grf_node *next = node->next;
+		i++;
+		if (next == NULL) break; /* can't remove void at end */
+		if (node->pos+node->len_aligned < next->pos) { // found a gap !
+			handler->need_save = true;
+			callback(handler, handler->etc, i, handler->filecount, next->filename);
+			void *filemem = malloc(next->len_aligned);
+			int p=0;
+			lseek(handler->fd, next->pos, SEEK_SET);
+			while (p<next->len_aligned) p+=read(handler->fd, filemem+p, next->len_aligned - p);
+			// TODO: continue code
+	}
+}
+
 static inline size_t prv_grf_strnlen(const char *str, const size_t maxlen) {
 	for(size_t i=0;i<maxlen;i++) if (*(str+i)==0) return i;
 	return maxlen;
