@@ -19,6 +19,8 @@ public:
 	bool progress_callback(void *, int pos, int max);
 	QTranslator translator;
 	void RetranslateStrings();
+	int repack_type;
+	int compression_level;
 
 protected:
 	void closeEvent(QCloseEvent *);
@@ -56,6 +58,10 @@ private slots:
 	void on_actionC8_triggered();
 	void on_actionC9_triggered();
 
+	void on_actionMove_files_triggered();
+	void on_actionDecrypt_triggered();
+	void on_actionRecompress_triggered();
+
 	void on_actionEn_triggered();
 	void on_actionFr_triggered();
 	void on_actionDe_triggered();
@@ -79,6 +85,7 @@ private:
 	void doOpenFileById(int);
 	QString showSizeAsString(unsigned int);
 	void setCompressionLevel(int);
+	void setRepackType(int);
 };
 
 #endif

@@ -270,6 +270,7 @@ GRFEXPORT bool grf_repack(void *tmphandler, uint8_t repack_type) {
 	handler->need_save = true;
 	handler->version = i;
 	// First operation: enumerate files, and find a gap
+	i=0;
 	while(node != NULL) {
 		struct grf_node *next = node->next;
 		i++;
@@ -309,6 +310,7 @@ GRFEXPORT bool grf_repack(void *tmphandler, uint8_t repack_type) {
 			// no need to move file, but...
 			if (repack_type >= GRF_REPACK_DECRYPT) {
 				if (next->cycle >= 0) {
+					if (handler->callback != NULL) handler->callback(handler, handler->callback_etc, i, handler->filecount, next->filename);
 					filemem = malloc(next->len_aligned);
 					p=0;
 					lseek(handler->fd, next->pos + GRF_HEADER_SIZE, SEEK_SET);

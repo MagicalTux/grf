@@ -22,6 +22,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 	this->image_viewer = NULL;
 	ui.setupUi(this);
 	this->setCompressionLevel(5);
+	this->setRepackType(GRF_REPACK_FAST);
 	ui.view_allfiles->setColumnHidden(0, true);
 	ui.viewSearch->setColumnHidden(0, true);
 	ui.view_filestree->setColumnHidden(2, true);
@@ -151,6 +152,7 @@ void MainWindow::on_btn_open_clicked() {
 	this->grf = grf_new_by_fd(this->grf_file.handle(), true);
 	this->grf_has_tree = false;
 	grf_set_callback(this->grf, grf_callback_caller, (void *)this);
+	grf_set_compression_level(this->grf, this->compression_level);
 	this->grf = grf_load_from_new(this->grf);
 	if (this->grf == NULL) {
 		QMessageBox::warning(this, tr("GrfBuilder"), tr("The selected file doesn't look like a valid GRF file."), QMessageBox::Cancel, QMessageBox::Cancel);
@@ -180,9 +182,6 @@ void MainWindow::on_btn_open_clicked() {
 	// menuitems
 	ui.action_Extract->setEnabled(false);
 	ui.action_Extract_All->setEnabled(true);
-	ui.actionMove_files->setEnabled(false);
-	ui.actionDecrypt->setEnabled(false);
-	ui.actionRecompress->setEnabled(false);
 	ui.action_Close->setEnabled(true);
 	ui.action_Merge_GRF->setEnabled(false);
 	ui.actionMerge_Dir->setEnabled(false);
@@ -214,9 +213,6 @@ void MainWindow::on_btn_close_clicked() {
 		// menuitems
 		ui.action_Extract->setEnabled(false);
 		ui.action_Extract_All->setEnabled(false);
-		ui.actionMove_files->setEnabled(false);
-		ui.actionDecrypt->setEnabled(false);
-		ui.actionRecompress->setEnabled(false);
 		ui.action_Close->setEnabled(false);
 		ui.action_Merge_GRF->setEnabled(false);
 		ui.actionMerge_Dir->setEnabled(false);
@@ -550,7 +546,20 @@ void MainWindow::on_listFilter_currentIndexChanged(QString text) {
 	ui.tab_sel->setCurrentIndex(2);
 }
 
+void MainWindow::setRepackType(int type) {
+	this->repack_type = type;
+	ui.actionMove_files->setChecked(type == GRF_REPACK_FAST);
+	ui.actionDecrypt->setChecked(type == GRF_REPACK_DECRYPT);
+	ui.actionRecompress->setChecked(type == GRF_REPACK_RECOMPRESS);
+}
+
+void MainWindow::on_actionMove_files_triggered() { this->setRepackType(GRF_REPACK_FAST); }
+void MainWindow::on_actionDecrypt_triggered() { this->setRepackType(GRF_REPACK_DECRYPT); }
+void MainWindow::on_actionRecompress_triggered() { this->setRepackType(GRF_REPACK_RECOMPRESS); }
+
 void MainWindow::setCompressionLevel(int lvl) {
+	this->compression_level = lvl;
+	if (this->grf != NULL) grf_set_compression_level(this->grf, this->compression_level);
 	ui.actionC0->setChecked(lvl==0);
 	ui.actionC1->setChecked(lvl==1);
 	ui.actionC2->setChecked(lvl==2);

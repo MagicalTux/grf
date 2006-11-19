@@ -466,30 +466,6 @@
     <string>Ctrl+A</string>
    </property>
   </action>
-  <action name="actionMove_files" >
-   <property name="enabled" >
-    <bool>false</bool>
-   </property>
-   <property name="text" >
-    <string>Move files</string>
-   </property>
-  </action>
-  <action name="actionDecrypt" >
-   <property name="enabled" >
-    <bool>false</bool>
-   </property>
-   <property name="text" >
-    <string>Decrypt</string>
-   </property>
-  </action>
-  <action name="actionRecompress" >
-   <property name="enabled" >
-    <bool>false</bool>
-   </property>
-   <property name="text" >
-    <string>Recompress</string>
-   </property>
-  </action>
   <action name="action_Close" >
    <property name="enabled" >
     <bool>false</bool>

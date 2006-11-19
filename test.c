@@ -119,10 +119,6 @@ void test_new_handler() {
 	if (handler == NULL) return;
 	printf(" - test_new_handler(): There are %d files in this GRF.\n", grf_filecount(handler));
 	printf(" - test_new_handler(): %d byte(s) wasted\n", grf_wasted_space(handler));
-	f = grf_get_file(handler, "data/test.txt");
-	if (f != NULL) {
-		printf("File extact = %s\n", grf_put_contents_to_file(f, "test2.txt")?"true":"false");
-	}
 
 	grf_free(handler);
 }
@@ -218,7 +214,7 @@ int main() {
 	puts(" * Running library tests...");
 	test_grf_version();
 	test_new_handler();
-//	test_load_file();
+	test_load_file();
 	return 0;
 }
 
