@@ -304,63 +304,13 @@
        </widget>
       </item>
       <item>
-       <widget class="QGroupBox" name="groupBox" >
-        <property name="minimumSize" >
-         <size>
-          <width>0</width>
-          <height>72</height>
-         </size>
+       <widget class="QPushButton" name="btn_repack" >
+        <property name="enabled" >
+         <bool>false</bool>
         </property>
-        <property name="title" >
+        <property name="text" >
          <string>Repack</string>
         </property>
-        <layout class="QGridLayout" >
-         <property name="margin" >
-          <number>0</number>
-         </property>
-         <property name="spacing" >
-          <number>0</number>
-         </property>
-         <item row="0" column="0" >
-          <layout class="QVBoxLayout" >
-           <property name="margin" >
-            <number>0</number>
-           </property>
-           <property name="spacing" >
-            <number>0</number>
-           </property>
-           <item>
-            <widget class="QComboBox" name="combo_repack_2" >
-             <item>
-              <property name="text" >
-               <string>Move files</string>
-              </property>
-             </item>
-             <item>
-              <property name="text" >
-               <string>Decrypt</string>
-              </property>
-             </item>
-             <item>
-              <property name="text" >
-               <string>Recompress</string>
-              </property>
-             </item>
-            </widget>
-           </item>
-           <item>
-            <widget class="QPushButton" name="btn_repack" >
-             <property name="enabled" >
-              <bool>false</bool>
-             </property>
-             <property name="text" >
-              <string>Repack</string>
-             </property>
-            </widget>
-           </item>
-          </layout>
-         </item>
-        </layout>
        </widget>
       </item>
       <item>
@@ -422,32 +372,24 @@
      <height>29</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menuFile" >
-    <property name="title" >
-     <string>&amp;File</string>
-    </property>
-    <widget class="QMenu" name="menu_Repack" >
-     <property name="title" >
-      <string>&amp;Repack</string>
-     </property>
-     <addaction name="actionMove_files" />
-     <addaction name="actionDecrypt" />
-     <addaction name="actionRecompress" />
-    </widget>
-    <addaction name="action_Open" />
-    <addaction name="action_Extract" />
-    <addaction name="action_Extract_All" />
-    <addaction name="menu_Repack" />
-    <addaction name="action_Close" />
-    <addaction name="action_Merge_GRF" />
-    <addaction name="actionMerge_Dir" />
-    <addaction name="action_Quit" />
-   </widget>
    <widget class="QMenu" name="menu" >
     <property name="title" >
      <string>&amp;?</string>
     </property>
     <addaction name="actionAbout" />
+   </widget>
+   <widget class="QMenu" name="menuFile" >
+    <property name="title" >
+     <string>&amp;File</string>
+    </property>
+    <addaction name="action_Open" />
+    <addaction name="action_Extract" />
+    <addaction name="action_Extract_All" />
+    <addaction name="actionRepack" />
+    <addaction name="action_Close" />
+    <addaction name="action_Merge_GRF" />
+    <addaction name="actionMerge_Dir" />
+    <addaction name="action_Quit" />
    </widget>
    <widget class="QMenu" name="menuOptions" >
     <property name="title" >
@@ -468,6 +410,14 @@
      <addaction name="actionC8" />
      <addaction name="actionC9" />
     </widget>
+    <widget class="QMenu" name="menuRepack_type" >
+     <property name="title" >
+      <string>Repack type</string>
+     </property>
+     <addaction name="actionMove_files" />
+     <addaction name="actionDecrypt" />
+     <addaction name="actionRecompress" />
+    </widget>
     <addaction name="actionImages_Transparency" />
     <addaction name="separator" />
     <addaction name="actionUnicode" />
@@ -479,6 +429,7 @@
     <addaction name="actionFr" />
     <addaction name="separator" />
     <addaction name="menuCompression_level" />
+    <addaction name="menuRepack_type" />
    </widget>
    <addaction name="menuFile" />
    <addaction name="menuOptions" />
@@ -719,6 +670,38 @@
   <action name="actionEs" >
    <property name="text" >
     <string>Español</string>
+   </property>
+  </action>
+  <action name="actionMove_files" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="text" >
+    <string>Move files</string>
+   </property>
+  </action>
+  <action name="actionDecrypt" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="text" >
+    <string>Decrypt</string>
+   </property>
+  </action>
+  <action name="actionRecompress" >
+   <property name="checkable" >
+    <bool>true</bool>
+   </property>
+   <property name="text" >
+    <string>Recompress</string>
+   </property>
+  </action>
+  <action name="actionRepack" >
+   <property name="enabled" >
+    <bool>false</bool>
+   </property>
+   <property name="text" >
+    <string>Repack</string>
    </property>
   </action>
  </widget>

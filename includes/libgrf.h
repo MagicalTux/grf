@@ -47,7 +47,7 @@ GRFEXPORT char *grf_versionstring(void); /* main.c */
 GRFEXPORT char *grf_versionstring_r(char *, size_t); /* main.c */
 GRFEXPORT void *grf_new(const char *, bool); /* grf.c */
 GRFEXPORT void *grf_new_by_fd(int, bool); /* grf.c */
-GRFEXPORT void grf_set_callback(void *, bool (*)(void *etc, void *grf, int cur, int max), void *etc); /* grf.c */
+GRFEXPORT void grf_set_callback(void *, bool (*)(void *etc, void *grf, int cur, int max, const char *filename), void *etc); /* grf.c */
 GRFEXPORT void *grf_load(const char *, bool); /* grf.c */
 GRFEXPORT void *grf_load_from_new(void *); /* grf.c */
 GRFEXPORT bool grf_save(void *); /* grf.c */
@@ -81,6 +81,7 @@ GRFEXPORT void *grf_get_file_first(void *); /* grf.c */
 GRFEXPORT void grf_set_compression_level(void *, int); /* grf.c */
 GRFEXPORT uint32_t grf_file_get_id(void *); /* grf.c */
 GRFEXPORT void *grf_get_file_by_id(void *, uint32_t); /* grf.c */
+GRFEXPORT bool grf_repack(void *, uint8_t);
 
 GRFEXPORT char *euc_kr_to_utf8(const char *); /* euc_kr.c */
 GRFEXPORT char *euc_kr_to_utf8_r(const char *orig, uint8_t *res); /* euc_kr.c */

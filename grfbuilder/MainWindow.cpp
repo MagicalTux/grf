@@ -43,7 +43,7 @@ bool MainWindow::progress_callback(void *grf, int pos, int max) {
 	return true;
 }
 
-static bool grf_callback_caller(void *MW_, void *grf, int pos, int max) {
+static bool grf_callback_caller(void *MW_, void *grf, int pos, int max, const char *filename) {
 	MainWindow *MW = (MainWindow *)MW_;
 	return MW->progress_callback(grf, pos, max);
 }
@@ -388,10 +388,8 @@ static QTreeWidgetItem *getFilestreeItemRecursive(const QModelIndex idx, const Q
 
 void MainWindow::on_view_filestree_doubleClicked(const QModelIndex idx) {
 	QTreeWidgetItem *item = getFilestreeItemRecursive(idx, ui.view_filestree);
-//	printf("p=%d\n", item->text(2).toInt());
 	if (item->text(2).toInt() == -1) return;
 	this->doOpenFileById(item->text(2).toInt());
-//	this->doOpenFileById(ui.view_filestree->topLevelItem(idx.row())->text(2).toInt(), ui.view_filestree->topLevelItem(idx.row())->text(0));
 }
 
 void MainWindow::on_view_allfiles_doubleClicked(const QModelIndex idx) {

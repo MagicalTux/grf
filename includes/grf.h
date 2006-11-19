@@ -29,7 +29,7 @@
 
 #define VERSION_MAJOR 0
 #define VERSION_MINOR 1
-#define VERSION_REVISION 21
+#define VERSION_REVISION 22
 
 #ifdef __WIN32
 #define VERSION_TYPE "Win32"
@@ -77,7 +77,7 @@ struct grf_handler {
 	struct grf_node *first_node;
 	hash_table *fast_table;
 	struct grf_treenode *root;
-	bool (* callback)(void *, void *, int, int);
+	bool (* callback)(void *, void *, int, int, const char *);
 	void *callback_etc;
 	struct grf_node **node_table;
 };

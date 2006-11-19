@@ -224,6 +224,7 @@ GRFEXPORT void *grf_new_by_fd(int fd, bool writemode) {
 	handler->need_save = writemode; // file should be new (flag will be unset by prv_grf_load)
 	handler->write_mode = writemode;
 	handler->compression_level = 5; /* default ZLIB compression level */
+	handler->version = GRF_FILE_OUTPUT_VERISON; /* default version */
 	return handler;
 }
 
@@ -238,20 +239,29 @@ GRFEXPORT void *grf_new(const char *filename, bool writemode) {
 	return grf_new_by_fd(fd, writemode);
 }
 
-GRFEXPORT void grf_set_callback(void *tmphandler, bool (*callback)(void *, void *, int, int), void *etc) {
+GRFEXPORT void grf_set_callback(void *tmphandler, bool (*callback)(void *, void *, int, int, const char *), void *etc) {
 	((struct grf_handler *)tmphandler)->callback = callback;
 	((struct grf_handler *)tmphandler)->callback_etc = etc;
 }
 
-GRFEXPORT bool grf_repack(void *tmphandler, uint8_t repack_type, bool (*callback)(void *handler, void *etc, uint32_t pos, uint32_t max, char *currentname), void *etc) {
+GRFEXPORT bool grf_repack(void *tmphandler, uint8_t repack_type) {
 	struct grf_handler *handler = tmphandler;
 	struct grf_node *node = handler->first_node;
 	uint32_t i=0;
+	uint32_t save_pos = 0;
 	if (!handler->write_mode) return false; /* opened in read-only mode -> repack fails */
+	if (node == NULL) return true; // nothing to do on an empty file
 	switch(repack_type) {
 		case GRF_REPACK_FAST: break; case GRF_REPACK_DECRYPT: break; // case GRF_REPACK_RECOMPRESS: break;
 		default: return false; /* bad parameter */
 	}
+	while(node->next != NULL) node = node->next;
+	if (handler->table_offset >= (node->pos+node->len_aligned)) {
+		save_pos = handler->table_offset + handler->table_size;
+	} else {
+		save_pos = node->pos+node->len_aligned;
+	}
+	node = handler->first_node;
 	// ok, let's go!
 	// Save header with version "0xCACA", but keep initial version. If we save again, it means it worked!
 	i = handler->version;
@@ -266,12 +276,13 @@ GRFEXPORT bool grf_repack(void *tmphandler, uint8_t repack_type, bool (*callback
 		if (next == NULL) break; /* can't remove void at end */
 		if (node->pos+node->len_aligned < next->pos) { // found a gap !
 			// save position of current file at end of GRF, in case of problem while repacking~
-			lseek(handler->fd, handler->table_offset + handler->table_size + GRF_HEADER_SIZE, SEEK_SET);
-			write(handler->fd, (void *)(&next->pos), 4);
-			callback(handler, handler->etc, i, handler->filecount, next->filename);
-			void *filemem = malloc(next->len_aligned);
+			void *filemem;
 			int p=0;
-			lseek(handler->fd, next->pos, SEEK_SET);
+			lseek(handler->fd, save_pos + GRF_HEADER_SIZE, SEEK_SET);
+			write(handler->fd, (void *)(&next->pos), 4);
+			if (handler->callback != NULL) handler->callback(handler, handler->callback_etc, i, handler->filecount, next->filename);
+			filemem = malloc(next->len_aligned);
+			lseek(handler->fd, next->pos + GRF_HEADER_SIZE, SEEK_SET);
 			while (p<next->len_aligned) p+=read(handler->fd, filemem+p, next->len_aligned - p);
 			// ok, we got the data :)
 			if (repack_type >= GRF_REPACK_DECRYPT) {
@@ -288,10 +299,36 @@ GRFEXPORT bool grf_repack(void *tmphandler, uint8_t repack_type, bool (*callback
 			}
 			// write the file to its new localtion !
 			p=0;
-			lseek(handler->fd, cur->pos + cur->len_aligned, SEEK_SET);
+			next->pos = node->pos+node->len_aligned;
+			lseek(handler->fd, next->pos + GRF_HEADER_SIZE, SEEK_SET);
 			while(p<next->len_aligned) p+=write(handler->fd, filemem+p, next->len_aligned - p);
-			// TODO: continue code
+		} else {
+			bool need_write = false;
+			void *filemem;
+			int p;
+			// no need to move file, but...
+			if (repack_type >= GRF_REPACK_DECRYPT) {
+				if (next->cycle >= 0) {
+					filemem = malloc(next->len_aligned);
+					p=0;
+					lseek(handler->fd, next->pos + GRF_HEADER_SIZE, SEEK_SET);
+					while (p<next->len_aligned) p+=read(handler->fd, filemem+p, next->len_aligned - p);
+					decode_des_etc((unsigned char *)filemem, next->len_aligned, (next->cycle)==0, next->cycle);
+					need_write = true;
+					next->cycle = 0;
+					next->flags = next->flags & ~(GRF_FLAG_MIXCRYPT & GRF_FLAG_DES);
+				}
+			}
+			if (need_write) {
+				p=0;
+				lseek(handler->fd, node->pos + node->len_aligned + GRF_HEADER_SIZE, SEEK_SET);
+				while(p<next->len_aligned) p+=write(handler->fd, filemem+p, next->len_aligned - p);
+			}
+		}
+		node = next;
 	}
+	grf_save(handler);
+	return true;
 }
 
 static inline size_t prv_grf_strnlen(const char *str, const size_t maxlen) {
@@ -373,12 +410,12 @@ GRFEXPORT void grf_create_tree(void *tmphandler) {
 		if (--j<=0) {
 			j=100;
 			if (handler->callback != NULL) {
-				handler->callback(handler->callback_etc, handler, i, handler->filecount);
+				handler->callback(handler->callback_etc, handler, i, handler->filecount, cur_node->filename);
 			}
 		}
 	}
 	if (handler->callback != NULL) {
-		handler->callback(handler->callback_etc, handler, handler->filecount, handler->filecount);
+		handler->callback(handler->callback_etc, handler, handler->filecount, handler->filecount, NULL);
 	}
 }
 
@@ -505,7 +542,8 @@ static bool prv_grf_load(struct grf_handler *handler) {
 
 	handler->table_offset = head.offset;
 	handler->filecount = head.filecount - head.seed - 7;
-	handler->version = GRF_FILE_OUTPUT_VERISON; /* do not store version as we'll save to this version anyway, unless we're repacking */
+	// version was set from grf_new()
+//	handler->version = GRF_FILE_OUTPUT_VERISON; /* do not store version as we'll save to this version anyway, unless we're repacking */
 	last = handler->first_node;
 	if (last != NULL) {
 		while(last->next != NULL) last = last->next; // seek to end of list
@@ -599,7 +637,7 @@ static bool prv_grf_load(struct grf_handler *handler) {
 				if (--hcall<=0) {
 					hcall = 100;
 					if (handler->callback != NULL) {
-						if (!handler->callback(handler->callback_etc, handler, handler->filecount - result, handler->filecount)) return false;
+						if (!handler->callback(handler->callback_etc, handler, handler->filecount - result, handler->filecount, entry->filename)) return false;
 					}
 				}
 			}
@@ -689,7 +727,7 @@ static bool prv_grf_load(struct grf_handler *handler) {
 				if (--hcall<=0) {
 					hcall = 100;
 					if (handler->callback != NULL) {
-						if (!handler->callback(handler->callback_etc, handler, handler->filecount - result, handler->filecount)) return false;
+						if (!handler->callback(handler->callback_etc, handler, handler->filecount - result, handler->filecount, entry->filename)) return false;
 					}
 				}
 			}
@@ -762,7 +800,7 @@ static bool prv_grf_load(struct grf_handler *handler) {
 				if (--hcall<=0) {
 					hcall = 100;
 					if (handler->callback != NULL) {
-						if (!handler->callback(handler->callback_etc, handler, handler->filecount - result, handler->filecount)) return false;
+						if (!handler->callback(handler->callback_etc, handler, handler->filecount - result, handler->filecount, entry->filename)) return false;
 					}
 				}
 			}
@@ -778,7 +816,7 @@ static bool prv_grf_load(struct grf_handler *handler) {
 	entry = handler->first_node;
 	if (entry == NULL) return true; // no files?
 	if (!prv_grf_quicksort(handler, handler->filecount)) return false;
-	// call the callback, if any~
+	// overlap check
 	struct grf_node *x = handler->first_node;
 	uint32_t prev=0;
 	while(x != NULL) {
@@ -801,8 +839,9 @@ static bool prv_grf_load(struct grf_handler *handler) {
 		prev=x->pos+x->len_aligned;
 		x=x->next;
 	}
+	// call the callback, if any~
 	if (handler->callback != NULL) {
-		handler->callback(handler->callback_etc, handler, handler->filecount, handler->filecount);
+		handler->callback(handler->callback_etc, handler, handler->filecount, handler->filecount, NULL);
 	}
 
 	return true;
@@ -1139,7 +1178,7 @@ GRFEXPORT void grf_set_compression_level(void *tmphandler, int level) {
 	handler->compression_level = level;
 }
 
-//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\
+//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//\\//
 
 static bool prv_grf_write_header(struct grf_handler *handler) {
 	struct grf_header file_header;
@@ -1165,15 +1204,13 @@ static bool prv_grf_write_table(struct grf_handler *handler) {
 	// We need to determine the final size of the table. It's :
 	// Len of Filename + 1 + sizeof(struct grf_table_entry_data)
 	uint32_t table_size=0;
-	list_element **files_list;
-	files_list = hash_foreach(handler->fast_table);
+	struct grf_node *node = handler->first_node;
 	void *table, *pos;
 	struct grf_node *prev;
 
-	if (files_list != NULL) {
-		for(int i=0;files_list[i]!=NULL;i++) {
-			table_size += strlen(((struct grf_node *)(files_list[i])->pointer)->filename) + 1 + sizeof(struct grf_table_entry_data);
-		}
+	while(node != NULL) {
+		table_size += strlen(node->filename)+1+sizeof(struct grf_table_entry_data);
+		node = node->next;
 	}
 
 	if (table_size == 0) {
@@ -1182,22 +1219,23 @@ static bool prv_grf_write_table(struct grf_handler *handler) {
 	} else {
 		table = (void *)malloc(table_size);
 		pos=table;
-		for(int i=0;files_list[i]!=NULL;i++) {
+		node = handler->first_node;
+		while(node != NULL) {
 			struct grf_table_entry_data te;
-			int j=strlen(((struct grf_node *)(files_list[i])->pointer)->filename);
-			memcpy(pos, ((struct grf_node *)(files_list[i])->pointer)->filename, j);
+			int j=strlen(node->filename);
+			memcpy(pos, node->filename, j);
 			pos+=j;
 			*(char *)(pos) = 0;
 			pos++;
-			te.len = ((struct grf_node *)(files_list[i])->pointer)->len;
-			te.len_aligned = ((struct grf_node *)(files_list[i])->pointer)->len_aligned;
-			te.size = ((struct grf_node *)(files_list[i])->pointer)->size;
-			te.pos = ((struct grf_node *)(files_list[i])->pointer)->pos;
-			te.flags = ((struct grf_node *)(files_list[i])->pointer)->flags;
+			te.len = node->len;
+			te.len_aligned = node->len_aligned;
+			te.size = node->size;
+			te.pos = node->pos;
+			te.flags = node->flags;
 			memcpy(pos, (void *)&te, sizeof(struct grf_table_entry_data));
 			pos+=sizeof(struct grf_table_entry_data);
+			node = node->next;
 		}
-		free(files_list);
 	}
 
 	pos = malloc(table_size + 100);
@@ -1219,7 +1257,7 @@ static bool prv_grf_write_table(struct grf_handler *handler) {
 	if (prev == NULL) { // no files
 		handler->table_offset = 0;
 	} else {
-		handler->table_offset = prev->pos + prev->len_aligned + GRF_HEADER_SIZE;
+		handler->table_offset = prev->pos + prev->len_aligned;
 	}
 	lseek(handler->fd, handler->table_offset + GRF_HEADER_SIZE, SEEK_SET);
 	if (write(handler->fd, (char *)pos, table_size) != table_size) { free(pos); return false; }
@@ -1229,15 +1267,14 @@ static bool prv_grf_write_table(struct grf_handler *handler) {
 	} else if (prev->next == NULL) { // file was EOF -> truncate at end of table 
 		ftruncate(handler->fd, handler->table_offset + GRF_HEADER_SIZE + table_size);
 	} else { // some files are after us, truncate at end of last file
-		struct grf_node *cur;
 		uint32_t pos = 0;
-		cur = handler->first_node;
-		while(cur != NULL) { // TODO: Optimize this (as we know that files are sorted, optimization is possible)
-			uint32_t p=cur->pos+cur->len_aligned; // position of EOF
+		node = handler->first_node;
+		while(node != NULL) { // TODO: Optimize this (as we know that files are sorted, optimization is possible)
+			uint32_t p=node->pos+node->len_aligned; // position of EOF
 			pos = MAX(pos, p);
-			cur = cur->next;
+			node = node->next;
 		}
-		ftruncate(handler->fd, pos);
+		ftruncate(handler->fd, pos+GRF_HEADER_SIZE);
 	}
 	return true;
 }
