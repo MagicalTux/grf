@@ -42,7 +42,6 @@ void test_grf_version() {
 void test_new_handler() {
 	void *handler, *handler2;
 	void *f;
-	void **list;
 
 	if (sizeof(struct grf_header) != GRF_HEADER_SIZE) {
 		printf("Your compiler didn't use the right size for the packed structure (%x!=%x) !", (uint32_t) sizeof(struct grf_header), GRF_HEADER_SIZE);
