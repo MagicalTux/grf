@@ -244,6 +244,19 @@ GRFEXPORT void grf_set_callback(void *tmphandler, bool (*callback)(void *, void 
 	((struct grf_handler *)tmphandler)->callback_etc = etc;
 }
 
+GRFEXPORT bool grf_merge(void *_dest, void *_src, uint8_t repack_type) {
+	struct grf_handler *dest=_dest, *src = _src;
+	// Rather simple :
+	// 1. For each node in src
+	// 2. Seek same file in dst, if found, remove it from list. If not found, allocate a new grf_node struct
+	// 3. Copy file in memory, from src
+	// 4. Apply required operations if needed, see repack_type. If RECOMPRESS is set, always recompress, even if file gets bigger
+	// 5. Seek new place in dest
+	// 6. Write file in dest, and update its values
+	// 7. Continue at 1
+	
+}
+
 GRFEXPORT bool grf_repack(void *tmphandler, uint8_t repack_type) {
 	struct grf_handler *handler = tmphandler;
 	struct grf_node *node = handler->first_node;

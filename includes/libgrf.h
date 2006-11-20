@@ -82,6 +82,7 @@ GRFEXPORT void grf_set_compression_level(void *, int); /* grf.c */
 GRFEXPORT uint32_t grf_file_get_id(void *); /* grf.c */
 GRFEXPORT void *grf_get_file_by_id(void *, uint32_t); /* grf.c */
 GRFEXPORT bool grf_repack(void *, uint8_t);
+GRFEXPORT bool grf_merge(void *, void *, uint8_t);
 
 GRFEXPORT char *euc_kr_to_utf8(const char *); /* euc_kr.c */
 GRFEXPORT char *euc_kr_to_utf8_r(const char *orig, uint8_t *res); /* euc_kr.c */

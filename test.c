@@ -40,7 +40,7 @@ void test_grf_version() {
 }
 
 void test_new_handler() {
-	void *handler;
+	void *handler, *handler2;
 	void *f;
 	void **list;
 
@@ -59,39 +59,24 @@ void test_new_handler() {
 		grf_free(handler);
 		exit(3);
 	}
-	printf(" - test_new_handler(): Adding some files\n");
+	printf(" - test_new_handler(): Adding some files: ");
 	// GRFEXPORT void *grf_file_add(void *tmphandler, char *filename, void *ptr, size_t size)
-	printf(" - test_new_handler(): adding grf_test_linux: %p\n", grf_file_add_path(handler, "data/grf_test_linux", "grf_test_linux"));
-	printf(" - test_new_handler(): adding libgrf64.so: %p\n", grf_file_add_path(handler, "data/libgrf64.so", "libgrf64.so"));
-	printf(" - test_new_handler(): adding problemfix.gpf: %p\n", grf_file_add_path(handler, "data/problemfix.gpf", "problemfix.gpf"));
-	printf(" - test_new_handler(): adding Alpha.grf: %p\n", grf_file_add_path(handler, "data/Alpha.grf", "Alpha.grf"));
-	printf(" - test_new_handler(): adding Beta.grf: %p\n", grf_file_add_path(handler, "data/Beta.grf", "Beta.grf"));
-	printf(" - test_new_handler(): adding test.txt: %p\n", grf_file_add_path(handler, "data/test.txt", "test.txt"));
+	printf("grf_test_linux[%p] ", grf_file_add_path(handler, "data/grf_test_linux", "grf_test_linux"));
+	printf("libgrf64.so[%p] ", grf_file_add_path(handler, "data/libgrf64.so", "libgrf64.so"));
+	printf("problemfix.gpf[%p] ", grf_file_add_path(handler, "data/problemfix.gpf", "problemfix.gpf"));
+	printf("Alpha.grf[%p] ", grf_file_add_path(handler, "data/Alpha.grf", "Alpha.grf"));
+	printf("Beta.grf[%p] ", grf_file_add_path(handler, "data/Beta.grf", "Beta.grf"));
+	printf("test.txt[%p]\n", grf_file_add_path(handler, "data/test.txt", "test.txt"));
 	grf_save(handler);
 	grf_free(handler);
-	printf(" - test_new_handler(): Re-opening file\n");
 	timer_start();
 	handler = grf_load("test.grf", true);
-	printf(" - test_new_handler(): Loaded file at %p.\n", handler);
+	printf(" - test_new_handler(): Re-loaded file at %p.\n", handler);
 	timer_end(" - test_new_handler(): File loading took %fms\n");
 	if (handler == NULL) return;
-	printf(" - test_new_handler(): There are %d files in this GRF.\n", grf_filecount(handler));
-	printf(" - test_new_handler(): %d byte(s) wasted.\n", grf_wasted_space(handler));
-	printf(" - test_new_handler(): Getting files list\n");
-	timer_start();
-	list = grf_get_file_list(handler);
-	timer_end(" - test_new_handler(): Got files list in %fms.\n");
-	if (list == NULL) {
-		printf(" - test_new_handler(): No files found\n");
-	} else {
-		for(int i=0;list[i]!=NULL;i++) {
-			printf(" - test_new_handler(): %s\n", grf_file_get_filename(list[i]));
-		}
-		free(list);
-	}
-	printf(" - test_new_handler(): Seeking file data/Alpha.grf\n");
+	printf(" - test_new_handler(): There are %d files in this GRF - %d byte(s) wasted.\n", grf_filecount(handler), grf_wasted_space(handler));
 	f = grf_get_file(handler, "data/Alpha.grf");
-	printf(" - test_new_handler(): file found at %p - deleting...\n", f);
+	printf(" - test_new_handler(): file `%s' found at %p - deleting...\n", grf_file_get_filename(f), f);
 	if (!grf_file_delete(f)) {
 		printf(" - test_new_handler(): delete failed\n");
 	} else {
@@ -100,25 +85,31 @@ void test_new_handler() {
 	printf(" - test_new_handler(): %d byte(s) wasted.\n", grf_wasted_space(handler));
 	grf_save(handler);
 	grf_free(handler);
-	printf(" - test_new_handler(): Re-opening file\n");
 	timer_start();
 	handler = grf_load("test.grf", true);
-	printf(" - test_new_handler(): Loaded file at %p.\n", handler);
+	printf(" - test_new_handler(): Re-loaded file at %p.\n", handler);
 	timer_end(" - test_new_handler(): File loading took %fms\n");
 	if (handler == NULL) return;
 	printf(" - test_new_handler(): There are %d files in this GRF.\n", grf_filecount(handler));
-	printf(" - test_new_handler(): %d byte(s) wasted (should be slightly lower than before, as table was placed in an optimized place)\n", grf_wasted_space(handler));
+	printf(" - test_new_handler(): %d byte(s) wasted (should be slightly lower than before, as table was moved to an optimized place)\n", grf_wasted_space(handler));
 	printf(" - test_new_handler(): attempting to repack file...\n");
-//	if (grf_repack(handler, GRF_REPACK_FAST)) {
-//		printf(" - test_new_handler(): repack returned TRUE\n");
-//	}
+	if (grf_repack(handler, GRF_REPACK_FAST)) {
+		printf(" - test_new_handler(): repack returned TRUE\n");
+	} else {
+		printf(" - test_new_handler(): repack FAILED\n");
+	}
 	grf_save(handler);
 	grf_free(handler);
 	handler = grf_load("test.grf", true);
 	printf(" - test_new_handler(): Re-loaded file at %p.\n", handler);
 	if (handler == NULL) return;
-	printf(" - test_new_handler(): There are %d files in this GRF.\n", grf_filecount(handler));
-	printf(" - test_new_handler(): %d byte(s) wasted\n", grf_wasted_space(handler));
+	printf(" - test_new_handler(): There are %d files in this GRF, and %d byte(s) wasted\n", grf_filecount(handler), grf_wasted_space(handler));
+
+	printf(" - test_new_handler(): Creating second handler...\n");
+	handler2 = grf_new("test2.grf", true);
+	printf(" - test_new_handler(): Merging files from test.grf to test2.grf\n");
+	grf_merge(handler2, handler, GRF_REPACK_FAST);
+	grf_free(handler2);
 
 	grf_free(handler);
 }
