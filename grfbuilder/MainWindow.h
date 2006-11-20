@@ -3,7 +3,7 @@
 
 #define GRFBUILDER_VERSION_MAJOR 0
 #define GRFBUILDER_VERSION_MINOR 1
-#define GRFBUILDER_VERSION_REVISION 21
+#define GRFBUILDER_VERSION_REVISION 22
 
 #include <QFile>
 #include <QMainWindow>
@@ -19,8 +19,6 @@ public:
 	bool progress_callback(void *, int pos, int max);
 	QTranslator translator;
 	void RetranslateStrings();
-	int repack_type;
-	int compression_level;
 
 protected:
 	void closeEvent(QCloseEvent *);
@@ -29,6 +27,7 @@ private slots:
 	void on_btn_open_clicked();
 	void on_btn_close_clicked();
 	void on_btn_extractall_clicked();
+	void on_btn_repack_clicked();
 	void on_listFilter_currentIndexChanged(QString);
 
 	void on_view_allfiles_customContextMenuRequested(const QPoint);
@@ -75,6 +74,8 @@ private:
 	QFile grf_file;
 	QDialog *image_viewer;
 	QString last_search;
+	int repack_type;
+	int compression_level;
 	unsigned int fillFilesTree(void *, QTreeWidget *);
 	unsigned int fillFilesTree(void *, QTreeWidgetItem *);
 	void *grf;

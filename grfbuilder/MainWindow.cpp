@@ -135,6 +135,14 @@ void MainWindow::on_action_Open_triggered() {
 	this->on_btn_open_clicked();
 }
 
+void MainWindow::on_btn_repack_clicked() {
+	double gained_space;
+	if (this->grf == NULL) return;
+	gained_space = (grf_wasted_space(this->grf) * 100 / this->grf_file.size());
+	if (QMessageBox::question(this, tr("GrfBuilder"), tr("Repacking this file will reduce it by %1%. Do you want to continue?").arg(gained_space, 0, 'f', 2), QMessageBox::Ok | QMessageBox::Cancel, QMessageBox::Ok) == QMessageBox::Cancel) return;
+	grf_repack(this->grf, this->repack_type);
+}
+
 void MainWindow::on_btn_open_clicked() {
 	QString str = QFileDialog::getOpenFileName(this, tr("Open File"),
 			NULL, tr("GRF Files (*.grf *.gpf)"));
@@ -175,7 +183,7 @@ void MainWindow::on_btn_open_clicked() {
 	// enable buttons
 	ui.btn_extract->setEnabled(false);
 	ui.btn_extractall->setEnabled(true);
-	ui.btn_repack->setEnabled(false);
+	ui.btn_repack->setEnabled(true);
 	ui.btn_close->setEnabled(true);
 	ui.btn_mergegrf->setEnabled(false);
 	ui.btn_mergedir->setEnabled(false);
