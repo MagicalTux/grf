@@ -9,7 +9,7 @@
 > 16 string \0\0\0\0\0\0\0\0\0\0\0\0\0\0 without encryption
 > 16 string !\0\0\0\0\0\0\0\0\0\0\0\0\0\0
 >> 16 string !\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0a\x0b\x0c\x0d\x0e (corrupted)
-> 42 leshort >0 (version 0x%x)
+> 42 leshort x (version 0x%x)
 > 34 lelong 0
 >> 38 lelong-7 x containing %u files
 > 34 lelong >0

@@ -8,6 +8,7 @@
 #include <QFile>
 #include <QMainWindow>
 #include <QTranslator>
+#include <QProgressDialog>
 
 #include "ui_MainWindow.h"
 
@@ -17,6 +18,7 @@ class MainWindow : public QMainWindow {
 public:
 	MainWindow(QWidget *parent = 0);
 	bool progress_callback(void *, int pos, int max);
+	bool repack_progress_callback(void *grf, int pos, int max, const char *filename, QProgressDialog *prog);
 	QTranslator translator;
 	void RetranslateStrings();
 

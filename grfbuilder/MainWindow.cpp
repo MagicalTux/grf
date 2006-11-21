@@ -135,12 +135,29 @@ void MainWindow::on_action_Open_triggered() {
 	this->on_btn_open_clicked();
 }
 
+bool MainWindow::repack_progress_callback(void *grf, int pos, int max, const char *filename, QProgressDialog *prog) {
+	prog->setValue(pos);
+	QCoreApplication::processEvents();
+	if (prog->wasCanceled()) return false;
+	return true;
+}
+
+static bool grf_repack_callback_caller(void *PROG_, void *grf, int pos, int max, const char *filename) {
+	QProgressDialog *prog = (QProgressDialog *)PROG_;
+	MainWindow *MW = (MainWindow *)prog->parent();
+	return MW->repack_progress_callback(grf, pos, max, filename, prog);
+}
+
 void MainWindow::on_btn_repack_clicked() {
 	double gained_space;
 	if (this->grf == NULL) return;
 	gained_space = (grf_wasted_space(this->grf) * 100 / this->grf_file.size());
 	if (QMessageBox::question(this, tr("GrfBuilder"), tr("Repacking this file will reduce it by %1%. Do you want to continue?").arg(gained_space, 0, 'f', 2), QMessageBox::Ok | QMessageBox::Cancel, QMessageBox::Ok) == QMessageBox::Cancel) return;
+	QProgressDialog prog(tr("Repack in progress..."), tr("Cancel"), 0, grf_filecount(this->grf), this);
+	prog.setWindowModality(Qt::WindowModal);
+	grf_set_callback(this->grf, grf_repack_callback_caller, (void *)&prog);
 	grf_repack(this->grf, this->repack_type);
+	grf_set_callback(this->grf, grf_callback_caller, (void *)this);
 }
 
 void MainWindow::on_btn_open_clicked() {

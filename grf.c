@@ -294,7 +294,7 @@ GRFEXPORT bool grf_repack(void *tmphandler, uint8_t repack_type) {
 			int p=0;
 			lseek(handler->fd, save_pos + GRF_HEADER_SIZE, SEEK_SET);
 			write(handler->fd, (void *)(&next->pos), 4);
-			if (handler->callback != NULL) handler->callback(handler, handler->callback_etc, i, handler->filecount, next->filename);
+			if (handler->callback != NULL) if (!handler->callback(handler->callback_etc, handler, i, handler->filecount, next->filename)) break;
 			filemem = malloc(next->len_aligned);
 			lseek(handler->fd, next->pos + GRF_HEADER_SIZE, SEEK_SET);
 			while (p<next->len_aligned) p+=read(handler->fd, filemem+p, next->len_aligned - p);
@@ -323,7 +323,7 @@ GRFEXPORT bool grf_repack(void *tmphandler, uint8_t repack_type) {
 			// no need to move file, but...
 			if (repack_type >= GRF_REPACK_DECRYPT) {
 				if (next->cycle >= 0) {
-					if (handler->callback != NULL) handler->callback(handler, handler->callback_etc, i, handler->filecount, next->filename);
+					if (handler->callback != NULL) handler->callback(handler->callback_etc, handler, i, handler->filecount, next->filename);
 					filemem = malloc(next->len_aligned);
 					p=0;
 					lseek(handler->fd, next->pos + GRF_HEADER_SIZE, SEEK_SET);

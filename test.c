@@ -91,12 +91,12 @@ void test_new_handler() {
 	if (handler == NULL) return;
 	printf(" - test_new_handler(): There are %d files in this GRF.\n", grf_filecount(handler));
 	printf(" - test_new_handler(): %d byte(s) wasted (should be slightly lower than before, as table was moved to an optimized place)\n", grf_wasted_space(handler));
-	printf(" - test_new_handler(): attempting to repack file...\n");
-	if (grf_repack(handler, GRF_REPACK_FAST)) {
-		printf(" - test_new_handler(): repack returned TRUE\n");
-	} else {
-		printf(" - test_new_handler(): repack FAILED\n");
-	}
+//	printf(" - test_new_handler(): attempting to repack file...\n");
+//	if (grf_repack(handler, GRF_REPACK_FAST)) {
+//		printf(" - test_new_handler(): repack returned TRUE\n");
+//	} else {
+//		printf(" - test_new_handler(): repack FAILED\n");
+//	}
 	grf_save(handler);
 	grf_free(handler);
 	handler = grf_load("test.grf", true);

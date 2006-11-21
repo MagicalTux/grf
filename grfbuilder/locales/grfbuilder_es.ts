@@ -3,12 +3,12 @@
 <context>
     <name>Dialog</name>
     <message>
-        <location filename="../MainWindow.cpp" line="480"/>
+        <location filename="../MainWindow.cpp" line="497"/>
         <source>Image Preview</source>
         <translation>Previo de la Imagen</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="481"/>
+        <location filename="../MainWindow.cpp" line="498"/>
         <source>Close</source>
         <translation>Cierre</translation>
     </message>
@@ -21,52 +21,52 @@
         <translation>GrfBuilder v%1.%2.%3 (libgrf v%4.%5.%6) por MagicalTux</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="147"/>
+        <location filename="../MainWindow.cpp" line="164"/>
         <source>Open File</source>
         <translation>Abrirse de fichero</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="148"/>
+        <location filename="../MainWindow.cpp" line="165"/>
         <source>GRF Files (*.grf *.gpf)</source>
         <translation>Archivos de GRF (*.grf *.gpf)</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="345"/>
+        <location filename="../MainWindow.cpp" line="362"/>
         <source>GrfBuilder</source>
         <translation>GrfBuilder</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="157"/>
+        <location filename="../MainWindow.cpp" line="174"/>
         <source>Could not load this file in read/write mode.</source>
         <translation>No poda cargar este archivo en modo de lectura/grabacin.</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="166"/>
+        <location filename="../MainWindow.cpp" line="183"/>
         <source>The selected file doesn&apos;t look like a valid GRF file.</source>
         <translation>El archivo seleccionado no parece un archivo vlido de GRF.</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="255"/>
+        <location filename="../MainWindow.cpp" line="272"/>
         <source>&lt;p align=&quot;center&quot;&gt;&lt;b&gt;GrfBuilder v%1.%2.%3 by MagicalTux&lt;/b&gt;&lt;/p&gt;&lt;p align=&quot;left&quot;&gt;Linked against libgrf v%4.%5.%6 (also by MagicalTux)&lt;br /&gt;This tool is designed to allow easy read and write access to GRF files.&lt;br /&gt;This was developped for the sole purpose of demonstrating that Gravity need better developpers.&lt;/p&gt;&lt;p align=&quot;left&quot;&gt;You can contact MagicalTux on &lt;a href=&quot;http://ookoo.org/cgi-bin/cgi-irc/irc.cgi&quot;&gt;irc://irc.ookoo.org/ooKoo&lt;/a&gt;&lt;/p&gt;</source>
         <translation>&lt;p align=&quot;center&quot;&gt;&lt;b&gt;GrfBuilder v%1.%2.%3 por MagicalTux&lt;/b&gt;&lt;/p&gt;&lt;p align=&quot;left&quot;&gt;Ligado contra libgrf v%4.%5.%6 (tambi� por MagicalTux )&lt;br /&gt;Esta herramienta se disea para permitir haber ledo fcil y para escribir el acceso a los archivos de GRF.&lt;br /&gt;Esto era developped para el propsito nico de demostrar que la necesidad de Gravity mejora los reveladores.&lt;/p&gt;&lt;p align=&quot;left&quot;&gt;Traducci� por Sephy&lt;/p&gt;&lt;p align=&quot;left&quot;&gt;Puedes entrar en contacto con MagicalTux encendido &lt;a href=&quot;http://ookoo.org/cgi-bin/cgi-irc/irc.cgi&quot;&gt;irc://irc.ookoo.org/ooKoo&lt;/a&gt;&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="290"/>
+        <location filename="../MainWindow.cpp" line="307"/>
         <source>Extraction in progress...</source>
         <translation>Extraccin en marcha...</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="290"/>
+        <location filename="../MainWindow.cpp" line="307"/>
         <source>Cancel</source>
         <translation>Cancelacin</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="302"/>
+        <location filename="../MainWindow.cpp" line="319"/>
         <source>Extracting file %1...</source>
         <translation>Extraer de fichero %1...</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="342"/>
+        <location filename="../MainWindow.cpp" line="359"/>
         <source>Your computer has no audio support. Please make sure you have an audio device available and retry.</source>
         <translation>Su ordenador no tiene ningn apoyo sonoro. Quiere asegurarles de tener un dispositivo audio disponible y vuelven a intentar.</translation>
     </message>
@@ -371,7 +371,7 @@
         <translation>%1 kiB</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="345"/>
+        <location filename="../MainWindow.cpp" line="362"/>
         <source>Currently playing file `%1&apos;. Press &quot;Ok&quot; to stop.</source>
         <translation>Actualmente jugar de fichero &apos;%1&apos;. Unterstützen Presionar &quot;OK&quot; para parar.</translation>
     </message>
@@ -401,8 +401,13 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="142"/>
+        <location filename="../MainWindow.cpp" line="155"/>
         <source>Repacking this file will reduce it by %1%. Do you want to continue?</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../MainWindow.cpp" line="156"/>
+        <source>Repack in progress...</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
