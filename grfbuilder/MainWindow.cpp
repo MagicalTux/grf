@@ -138,6 +138,7 @@ void MainWindow::on_action_Open_triggered() {
 bool MainWindow::repack_progress_callback(void *grf, int pos, int max, const char *filename, QProgressDialog *prog) {
 	prog->setValue(pos);
 	QCoreApplication::processEvents();
+	prog->setLabelText(tr("Moving file %1...").arg(QString::fromUtf8(euc_kr_to_utf8(filename))));
 	if (prog->wasCanceled()) return false;
 	return true;
 }
@@ -158,6 +159,8 @@ void MainWindow::on_btn_repack_clicked() {
 	grf_set_callback(this->grf, grf_repack_callback_caller, (void *)&prog);
 	grf_repack(this->grf, this->repack_type);
 	grf_set_callback(this->grf, grf_callback_caller, (void *)this);
+	prog.reset();
+	prog.close();
 }
 
 void MainWindow::on_btn_open_clicked() {

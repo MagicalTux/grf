@@ -254,12 +254,13 @@ GRFEXPORT bool grf_merge(void *_dest, void *_src, uint8_t repack_type) {
 	// 5. Seek new place in dest
 	// 6. Write file in dest, and update its values
 	// 7. Continue at 1
-	
+	return false;
 }
 
 GRFEXPORT bool grf_repack(void *tmphandler, uint8_t repack_type) {
 	struct grf_handler *handler = tmphandler;
 	struct grf_node *node = handler->first_node;
+	struct grf_node *prenode;
 	uint32_t i=0;
 	uint32_t save_pos = 0;
 	if (!handler->write_mode) return false; /* opened in read-only mode -> repack fails */
@@ -284,6 +285,10 @@ GRFEXPORT bool grf_repack(void *tmphandler, uint8_t repack_type) {
 	handler->version = i;
 	// First operation: enumerate files, and find a gap
 	i=0;
+	// first node will never get moved, so create a "pre-first" node that'll be the one who won't get to be moved
+	prenode = calloc(1, sizeof(struct grf_node));
+	prenode->next = node;
+	node = prenode;
 	while(node != NULL) {
 		struct grf_node *next = node->next;
 		i++;
@@ -342,6 +347,7 @@ GRFEXPORT bool grf_repack(void *tmphandler, uint8_t repack_type) {
 		}
 		node = next;
 	}
+	free(prenode);
 	grf_save(handler);
 	return true;
 }
@@ -884,9 +890,12 @@ GRFEXPORT bool grf_file_delete(void *tmphandler) {
 	struct grf_node *handler = (struct grf_node *)tmphandler;
 	struct grf_handler *parent = handler->parent;
 	uint32_t len_aligned = handler->len_aligned;
+	struct grf_node *next = handler->next;
 	parent->need_save = true;
 	if (hash_del_element(handler->parent->fast_table, handler->filename)!=0) return false;
+	if (parent->first_node==handler) parent->first_node = next;
 	parent->wasted_space += len_aligned; /* wasted_space accounting */
+	parent->filecount--;
 	return true;
 }
 

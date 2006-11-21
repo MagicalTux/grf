@@ -122,7 +122,7 @@ void test_load_file() {
 //	char *fn = "/storage/win_d/Program Files/Gravity/20060224_krodata.gpf";
 //	char *fn = "problemfix.gpf";
 	char *fn = "data.grf";
-	char *fn2 = "DATA/texTURE\\유저인터페이스/LOADING01.JPG";
+	char *fn2 = "data/airplane.gnd";
 	int x;
 	unsigned int y;
 
@@ -135,7 +135,7 @@ grf_free(handler);
 #endif
 	printf(" - test_load_file(): Opening `%s` in read only mode...\n", fn);
 	timer_start();
-	handler = grf_load(fn, false);
+	handler = grf_load(fn, true);
 	printf(" - test_load_file(): Loaded file at %p.\n", handler);
 	timer_end(" - test_load_file(): File loading took %fms\n");
 	if (handler == NULL) return;
@@ -155,6 +155,7 @@ grf_free(handler);
 		printf(" - test_load_file(): File size is %d bytes.\n", grf_file_get_size(fhandler));
 		filec = malloc(grf_file_get_size(fhandler));
 		printf(" - test_load_file(): Extracted %d bytes for this file.\n", grf_file_get_contents(fhandler, filec));
+		grf_file_delete(fhandler);
 #if 0
 		FILE *f=fopen("loading45.jpg", "w");
 		if (f == NULL) {
