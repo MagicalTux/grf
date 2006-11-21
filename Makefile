@@ -172,7 +172,9 @@ endif
 
 $(GB_TARGET): $(patsubst %.o,linux/gb_%.o,$(GB_OBJECTS32))
 	@echo -e "  LD\t$@              "
-	@$(CXX) -nostdlib $(CXXFLAGS) $(LINFLAGS) $(QT_LIN32_INCLUDE) -o $@ $^ -L/var/chroot/ia32/lib -L/var/chroot/ia32/usr/lib -L/var/chroot/ia32/usr/lib/qt4 `echo "$(QT_LIN_LIBS)" | sed -e 's#-lpthread#/var/chroot/ia32/lib/libpthread.so.0#g'` -L. -lgrf `gcc32 -print-libgcc-file-name` /var/chroot/ia32/lib/libc.so.6
+#	@$(CXX) -nostdlib $(CXXFLAGS) $(LINFLAGS) $(QT_LIN32_INCLUDE) -o $@ $^ -L/var/chroot/ia32/lib -L/var/chroot/ia32/usr/lib -L/var/chroot/ia32/usr/lib/qt4 `echo "$(QT_LIN_LIBS)" | sed -e 's#-lpthread#/var/chroot/ia32/lib/libpthread.so.0#g'` -L. -lgrf /var/chroot/ia32/usr/lib/gcc/i686-pc-linux-gnu/4.1.1/libgcc.a /usr/lib/gcc/x86_64-pc-linux-gnu/4.1.1/32/libgcc.a /var/chroot/ia32/lib/libc.so.6
+#	@$(CXX) -v $(CXXFLAGS) $(LINFLAGS) $(QT_LIN32_INCLUDE) -o $@ $^ -L/var/chroot/ia32/lib -L/var/chroot/ia32/usr/lib -L/var/chroot/ia32/usr/lib/qt4 `echo "$(QT_LIN_LIBS)" | sed -e 's#-lpthread#/var/chroot/ia32/lib/libpthread.so.0#g'` -L. -lgrf /var/chroot/ia32/usr/lib/gcc/i686-pc-linux-gnu/4.1.1/libgcc.a /usr/lib/gcc/x86_64-pc-linux-gnu/4.1.1/32/libgcc.a /var/chroot/ia32/lib/libc.so.6
+	@$(CXX) -nostdlib $(CXXFLAGS) $(LINFLAGS) $(QT_LIN32_INCLUDE) -o $@ /usr/lib/gcc/x86_64-pc-linux-gnu/4.1.1/../../../../lib32/crt1.o /usr/lib/gcc/x86_64-pc-linux-gnu/4.1.1/../../../../lib32/crti.o /usr/lib/gcc/x86_64-pc-linux-gnu/4.1.1/32/crtbegin.o $^ -L/var/chroot/ia32/lib -L/var/chroot/ia32/usr/lib -L/var/chroot/ia32/usr/lib/qt4 `echo "$(QT_LIN_LIBS)" | sed -e 's#-lpthread#/var/chroot/ia32/lib/libpthread.so.0#g'` -L. -lgrf /var/chroot/ia32/usr/lib/gcc/i686-pc-linux-gnu/4.1.1/libgcc.a /usr/lib/gcc/x86_64-pc-linux-gnu/4.1.1/32/libgcc.a /usr/lib32/libc.a -L/usr/lib/gcc/x86_64-pc-linux-gnu/4.1.1/32 -lstdc++ -lm -lgcc_s -lgcc -lgcc_s /usr/lib32/libc.a -lgcc /usr/lib/gcc/x86_64-pc-linux-gnu/4.1.1/32/crtend.o /usr/lib/gcc/x86_64-pc-linux-gnu/4.1.1/../../../../lib32/crtn.o
 ifeq ($(DEBUG),no)
 	@echo -e " STRIP\t$@"
 	@$(STRIP) $@
