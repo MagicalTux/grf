@@ -463,27 +463,27 @@
     <message>
         <location filename="../ui_MainWindow.h" line="458"/>
         <source>Ctrl+R</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+R</translation>
     </message>
     <message>
         <location filename="../MainWindow.cpp" line="309"/>
         <source>Extract file as...</source>
-        <translation type="unfinished"></translation>
+        <translation>Extraire le fichier sous...</translation>
     </message>
     <message>
         <location filename="../MainWindow.cpp" line="309"/>
         <source>%1 files (*.%1)</source>
-        <translation type="unfinished"></translation>
+        <translation>Fichiers %1 (*.%1)</translation>
     </message>
     <message>
         <location filename="../MainWindow.cpp" line="313"/>
         <source>Could not open %1 for writing a file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible d&apos;écrire %1 pour l&apos;écriture d&apos;un fichier.</translation>
     </message>
     <message>
         <location filename="../MainWindow.cpp" line="318"/>
         <source>Could not write data to %1 while extracting a file.</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible d&apos;écrire dans le fichier %1.</translation>
     </message>
 </context>
 <context>
