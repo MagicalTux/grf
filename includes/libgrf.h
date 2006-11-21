@@ -59,6 +59,7 @@ GRFEXPORT bool grf_file_delete(void *); /* grf.c */
 GRFEXPORT void *grf_file_add(void *, char *, void *, size_t); /* grf.c */
 GRFEXPORT void *grf_file_add_path(void *, char *, char *); /* grf.c */
 GRFEXPORT const char *grf_file_get_filename(void *); /* grf.c */
+GRFEXPORT const char *grf_file_get_basename(void *); /* grf.c */
 GRFEXPORT uint32_t grf_file_get_size(void *); /* grf.c */
 GRFEXPORT uint32_t grf_file_get_storage_pos(void *); /* grf.c */
 GRFEXPORT uint32_t grf_file_get_storage_size(void *); /* grf.c */

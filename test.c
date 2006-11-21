@@ -135,7 +135,7 @@ grf_free(handler);
 #endif
 	printf(" - test_load_file(): Opening `%s` in read only mode...\n", fn);
 	timer_start();
-	handler = grf_load(fn, true);
+	handler = grf_load(fn, false);
 	printf(" - test_load_file(): Loaded file at %p.\n", handler);
 	timer_end(" - test_load_file(): File loading took %fms\n");
 	if (handler == NULL) return;
@@ -155,7 +155,6 @@ grf_free(handler);
 		printf(" - test_load_file(): File size is %d bytes.\n", grf_file_get_size(fhandler));
 		filec = malloc(grf_file_get_size(fhandler));
 		printf(" - test_load_file(): Extracted %d bytes for this file.\n", grf_file_get_contents(fhandler, filec));
-		grf_file_delete(fhandler);
 #if 0
 		FILE *f=fopen("loading45.jpg", "w");
 		if (f == NULL) {

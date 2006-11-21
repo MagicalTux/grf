@@ -891,6 +891,7 @@ GRFEXPORT bool grf_file_delete(void *tmphandler) {
 	struct grf_handler *parent = handler->parent;
 	uint32_t len_aligned = handler->len_aligned;
 	struct grf_node *next = handler->next;
+	if (!parent->write_mode) return false;
 	parent->need_save = true;
 	if (hash_del_element(handler->parent->fast_table, handler->filename)!=0) return false;
 	if (parent->first_node==handler) parent->first_node = next;
@@ -921,6 +922,14 @@ GRFEXPORT const char *grf_file_get_filename(void *tmphandler) {
 	struct grf_node *handler;
 	handler = (struct grf_node *)tmphandler;
 	return handler->filename;
+}
+
+GRFEXPORT const char *grf_file_get_basename(void *tmphandler) {
+	struct grf_node *handler = (struct grf_node *)tmphandler;
+	char *name = handler->filename;
+	char *name2 = name + strlen(name);
+	for(;(*(name2-1)!='/') && (*(name2-1)!='\\') && (name2>name);name2--);
+	return name2;
 }
 
 GRFEXPORT uint32_t grf_file_get_size(void *tmphandler) {

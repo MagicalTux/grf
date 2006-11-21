@@ -3,7 +3,7 @@
 
 #define GRFBUILDER_VERSION_MAJOR 0
 #define GRFBUILDER_VERSION_MINOR 1
-#define GRFBUILDER_VERSION_REVISION 22
+#define GRFBUILDER_VERSION_REVISION 23
 
 #include <QFile>
 #include <QMainWindow>
@@ -28,6 +28,7 @@ protected:
 private slots:
 	void on_btn_open_clicked();
 	void on_btn_close_clicked();
+	void on_btn_extract_clicked();
 	void on_btn_extractall_clicked();
 	void on_btn_repack_clicked();
 	void on_listFilter_currentIndexChanged(QString);
@@ -43,7 +44,9 @@ private slots:
 
 	// menu
 	void on_action_Open_triggered();
+	void on_action_Extract_triggered();
 	void on_action_Extract_All_triggered();
+	void on_actionRepack_triggered();
 	void on_action_Close_triggered();
 	void on_action_Quit_triggered();
 	void on_actionAbout_triggered();

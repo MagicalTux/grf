@@ -378,19 +378,6 @@
     </property>
     <addaction name="actionAbout" />
    </widget>
-   <widget class="QMenu" name="menuFile" >
-    <property name="title" >
-     <string>&amp;File</string>
-    </property>
-    <addaction name="action_Open" />
-    <addaction name="action_Extract" />
-    <addaction name="action_Extract_All" />
-    <addaction name="actionRepack" />
-    <addaction name="action_Close" />
-    <addaction name="action_Merge_GRF" />
-    <addaction name="actionMerge_Dir" />
-    <addaction name="action_Quit" />
-   </widget>
    <widget class="QMenu" name="menuOptions" >
     <property name="title" >
      <string>&amp;Options</string>
@@ -430,6 +417,19 @@
     <addaction name="separator" />
     <addaction name="menuCompression_level" />
     <addaction name="menuRepack_type" />
+   </widget>
+   <widget class="QMenu" name="menuFile" >
+    <property name="title" >
+     <string>&amp;File</string>
+    </property>
+    <addaction name="action_Open" />
+    <addaction name="action_Extract" />
+    <addaction name="action_Extract_All" />
+    <addaction name="actionRepack" />
+    <addaction name="action_Close" />
+    <addaction name="action_Merge_GRF" />
+    <addaction name="actionMerge_Dir" />
+    <addaction name="action_Quit" />
    </widget>
    <addaction name="menuFile" />
    <addaction name="menuOptions" />
@@ -678,6 +678,9 @@
    </property>
    <property name="text" >
     <string>Repack</string>
+   </property>
+   <property name="shortcut" >
+    <string>Ctrl+R</string>
    </property>
   </action>
  </widget>

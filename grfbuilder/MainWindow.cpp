@@ -2,6 +2,7 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QFile>
+#include <QFileInfo>
 #include <QProgressDialog>
 #include <QDir>
 #include <QImage>
@@ -59,7 +60,7 @@ QString MainWindow::showSizeAsString(unsigned int s) {
 	if (s > (1024*1.4)) {
 		return tr("%1 kiB").arg((double)(s / (1024)), 0, 'f', 1);
 	}
-	return QString("%1").arg(s);
+	return tr("%1 B").arg(s);
 }
 
 unsigned int MainWindow::fillFilesTree(void *dir, QTreeWidgetItem *parent) {
@@ -153,7 +154,7 @@ void MainWindow::on_btn_repack_clicked() {
 	double gained_space;
 	if (this->grf == NULL) return;
 	gained_space = (grf_wasted_space(this->grf) * 100 / this->grf_file.size());
-	if (QMessageBox::question(this, tr("GrfBuilder"), tr("Repacking this file will reduce it by %1%. Do you want to continue?").arg(gained_space, 0, 'f', 2), QMessageBox::Ok | QMessageBox::Cancel, QMessageBox::Ok) == QMessageBox::Cancel) return;
+	if (QMessageBox::question(this, tr("GrfBuilder"), tr("Repacking this file will reduce it by %1% (%2). Do you want to continue?").arg(gained_space, 0, 'f', 1).arg(this->showSizeAsString(grf_wasted_space(this->grf))), QMessageBox::Ok | QMessageBox::Cancel, QMessageBox::Ok) == QMessageBox::Cancel) return;
 	QProgressDialog prog(tr("Repack in progress..."), tr("Cancel"), 0, grf_filecount(this->grf), this);
 	prog.setWindowModality(Qt::WindowModal);
 	grf_set_callback(this->grf, grf_repack_callback_caller, (void *)&prog);
@@ -161,6 +162,10 @@ void MainWindow::on_btn_repack_clicked() {
 	grf_set_callback(this->grf, grf_callback_caller, (void *)this);
 	prog.reset();
 	prog.close();
+}
+
+void MainWindow::on_actionRepack_triggered() {
+	this->on_btn_repack_clicked();
 }
 
 void MainWindow::on_btn_open_clicked() {
@@ -201,15 +206,16 @@ void MainWindow::on_btn_open_clicked() {
 	}
 	ui.view_allfiles->sortItems(4, Qt::AscendingOrder);
 	// enable buttons
-	ui.btn_extract->setEnabled(false);
+	ui.btn_extract->setEnabled(true);
 	ui.btn_extractall->setEnabled(true);
 	ui.btn_repack->setEnabled(true);
 	ui.btn_close->setEnabled(true);
 	ui.btn_mergegrf->setEnabled(false);
 	ui.btn_mergedir->setEnabled(false);
 	// menuitems
-	ui.action_Extract->setEnabled(false);
+	ui.action_Extract->setEnabled(true);
 	ui.action_Extract_All->setEnabled(true);
+	ui.actionRepack->setEnabled(true);
 	ui.action_Close->setEnabled(true);
 	ui.action_Merge_GRF->setEnabled(false);
 	ui.actionMerge_Dir->setEnabled(false);
@@ -241,6 +247,7 @@ void MainWindow::on_btn_close_clicked() {
 		// menuitems
 		ui.action_Extract->setEnabled(false);
 		ui.action_Extract_All->setEnabled(false);
+		ui.actionRepack->setEnabled(false);
 		ui.action_Close->setEnabled(false);
 		ui.action_Merge_GRF->setEnabled(false);
 		ui.actionMerge_Dir->setEnabled(false);
@@ -276,15 +283,106 @@ void MainWindow::on_actionAbout_triggered() {
 	);
 }
 
+void MainWindow::on_btn_extract_clicked() {
+	this->on_action_Extract_triggered();
+}
+
+void MainWindow::on_action_Extract_triggered() {
+	if (this->grf == NULL) return;
+	QList<QTreeWidgetItem *> list;
+	switch(ui.tab_sel->currentIndex()) {
+		case 0: case 2:
+			if (ui.tab_sel->currentIndex() == 0) {
+				list = ui.view_allfiles->selectedItems();
+			} else {
+				list = ui.viewSearch->selectedItems();
+			}
+			if (list.size()==1) {
+				// YAY easy to do :o
+				void *gfile = grf_get_file_by_id(this->grf, list[0]->text(0).toUInt());
+				QFileInfo file;
+				if (ui.actionUnicode->isChecked()) {
+					file.setFile(QString::fromUtf8(euc_kr_to_utf8(grf_file_get_basename(gfile))));
+				} else {
+					file.setFile(QString::fromLatin1(grf_file_get_basename(gfile)));
+				}
+				QString filename = QFileDialog::getSaveFileName(this, tr("Extract file as..."), file.fileName(), tr("%1 files (*.%1)").arg(file.suffix()));
+				if (filename.isNull()) return; /* nothing to do */
+				QFile out(filename);
+				if (!out.open(QIODevice::WriteOnly)) {
+					QMessageBox::warning(this, tr("GrfBuilder"), tr("Could not open %1 for writing a file.").arg(filename), QMessageBox::Cancel, QMessageBox::Cancel);
+					return;
+				}
+				if (!grf_file_put_contents_to_fd(gfile, out.handle())) {
+					out.remove();
+					QMessageBox::warning(this, tr("GrfBuilder"), tr("Could not write data to %1 while extracting a file.").arg(filename), QMessageBox::Cancel, QMessageBox::Cancel);
+					return;
+				}
+				out.close();
+				break;
+			}
+			unsigned int size = list.size();
+			QProgressDialog *prog = new QProgressDialog(tr("Extraction in progress..."), tr("Cancel"), 0, size, this);
+			prog->setWindowModality(Qt::WindowModal);
+			for(unsigned int i=0;i<size;i++) {
+				prog->setValue(i);
+				QCoreApplication::processEvents();
+				if (prog->wasCanceled()) break;
+				QTreeWidgetItem *cur = list.at(i);
+				void *cur_file = grf_get_file_by_id(this->grf, cur->text(0).toUInt());
+				QString name(QString::fromUtf8(euc_kr_to_utf8(grf_file_get_filename(cur_file))));
+				prog->setLabelText(tr("Extracting file %1...").arg(name));
+				if (ui.actionUnicode->isChecked()) {
+					size_t size;
+					size = grf_file_get_size(cur_file);
+#ifdef __WIN32
+					name.replace("/", "\\");
+					QString dirname(name);
+					dirname.resize(name.lastIndexOf("\\"));
+#else
+					name.replace("\\", "/");
+					QString dirname(name);
+					dirname.resize(name.lastIndexOf("/"));
+#endif
+					QDir foo(dirname);
+					foo.mkpath(".");
+					QFile output(name);
+					if (!output.open(QIODevice::WriteOnly)) {
+						cur_file = grf_get_file_next(cur_file);
+					continue;
+					}
+					if (grf_file_put_contents_to_fd(cur_file, output.handle()) != size) {
+						output.close();
+						cur_file = grf_get_file_next(cur_file);
+						continue;
+					}
+				} else {
+					grf_put_contents_to_file(cur_file, grf_file_get_filename(cur_file));
+				}
+			}
+			prog->reset();
+			prog->close();
+			delete prog;
+			break;
+		case 1:
+			QMessageBox::warning(this, tr("GrfBuilder"), QString("Sorry, this is not working yet."), QMessageBox::Cancel, QMessageBox::Cancel);
+			break;
+	}
+}
+
 void MainWindow::on_viewSearch_customContextMenuRequested(const QPoint point) {
 	QMenu menu(this);
+	menu.addAction(ui.action_Extract);
 	menu.addAction(ui.action_Extract_All);
+	menu.addAction(ui.actionRepack);
 	menu.exec(ui.view_allfiles->viewport()->mapToGlobal(point));
 }
 
 void MainWindow::on_view_allfiles_customContextMenuRequested(const QPoint point) {
 	QMenu menu(this);
+	menu.addAction(ui.action_Extract);
 	menu.addAction(ui.action_Extract_All);
+	menu.addAction(ui.actionRepack);
 	menu.exec(ui.view_allfiles->viewport()->mapToGlobal(point));
 }
 
@@ -553,7 +651,9 @@ void MainWindow::DoUpdateFilter(QString text) {
 	unsigned int i=0, max=grf_filecount(this->grf);
 	ui.viewSearch->clear();
 	while (*it) {
-		match = r.exactMatch((*it)->text(4));
+		void *cur_file = grf_get_file_by_id(this->grf, (*it)->text(0).toUInt());
+		match = r.exactMatch(QString::fromUtf8(euc_kr_to_utf8(grf_file_get_filename(cur_file))));
+		if (!match) match = r.exactMatch(QString::fromUtf8(euc_kr_to_utf8(grf_file_get_basename(cur_file))));
 		if (match) {
 			QTreeWidgetItem *__item = new QTreeWidgetItem(ui.viewSearch);
 			__item->setText(0, (*it)->text(0));
