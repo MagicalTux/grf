@@ -443,12 +443,12 @@
     <message>
         <location filename="../MainWindow.cpp" line="157"/>
         <source>Repack in progress...</source>
-        <translation type="unfinished"></translation>
+        <translation>Repack en cours...</translation>
     </message>
     <message>
         <location filename="../MainWindow.cpp" line="141"/>
         <source>Moving file %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>Déplacement du fichier %1...</translation>
     </message>
 </context>
 <context>
