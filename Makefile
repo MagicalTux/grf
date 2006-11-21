@@ -89,6 +89,7 @@ QT_LIN_LIBS=$(shell pkg-config --libs QtGui QtCore)
 QT_LIN_LIBS+=-lpthread
 QT_LIN_INCLUDE=-I/usr/share/qt4/mkspecs/linux-g++ $(shell pkg-config --cflags QtGui QtCore)
 QT_LIN_INCLUDE+=-D_REENTRANT  -DQT_NO_DEBUG -DQT_GUI_LIB -DQT_CORE_LIB
+QT_LIN32_INCLUDE=$(patsubst -I%,-I/var/chroot/ia32%,$(QT_LIN_INCLUDE))
 GCC_VERSION=$(shell $(CC) -dumpversion | awk -F. '{ print $$1 }')
 ifeq ($(GCC_VERSION),4)
 CFLAGS+=-Wno-attributes
@@ -128,7 +129,7 @@ win32/gb_%_32.o: grfbuilder/%.cpp
 
 linux/gb_%_32.o: grfbuilder/%.cpp
 	@echo -en " CXX\t$<           \015"
-	@$(CXX) $(CXXFLAGS) -Igrfbuilder $(LINFLAGS) $(QT_LIN_INCLUDE) $(INCLUDES) -c -o $@ $<
+	@$(CXX) $(CXXFLAGS) -Igrfbuilder $(LINFLAGS) $(QT_LIN32_INCLUDE) $(INCLUDES) -c -o $@ $<
 
 linux/gb_%_64.o: grfbuilder/%.cpp
 	@echo -en " CXX64\t$<           \015"
@@ -139,7 +140,7 @@ linux/gb_%_64.o: grfbuilder/%.cpp
 ifeq ($(BUILD),unknown)
 all: ;@echo "Unknown system $(UNAME) !"
 else
-all: make_dirs $(TARGET) $(TARGET) $(GB_TARGET64) grf_test_linux $(TARGET_WIN) grf_test_win.exe $(GB_TARGET_WIN)
+all: make_dirs $(TARGET) $(TARGET) $(GB_TARGET) $(TARGET64) $(GB_TARGET64) grf_test_linux $(TARGET_WIN) grf_test_win.exe $(GB_TARGET_WIN)
 endif
 
 make_dirs:
@@ -171,7 +172,7 @@ endif
 
 $(GB_TARGET): $(patsubst %.o,linux/gb_%.o,$(GB_OBJECTS32))
 	@echo -e "  LD\t$@              "
-	@$(CXX) -nostdlib $(CXXFLAGS) $(LINFLAGS) $(QT_LIN_INCLUDE) -o $@ $^ -L/var/chroot/ia32/lib -L/var/chroot/ia32/usr/lib -L/var/chroot/ia32/usr/lib/qt4 `echo "$(QT_LIN_LIBS)" | sed -e 's#-lpthread#/var/chroot/ia32/lib/libpthread.so.0#g'` -L. -lgrf `gcc32 -print-libgcc-file-name` /var/chroot/ia32/lib/libc.so.6
+	@$(CXX) -nostdlib $(CXXFLAGS) $(LINFLAGS) $(QT_LIN32_INCLUDE) -o $@ $^ -L/var/chroot/ia32/lib -L/var/chroot/ia32/usr/lib -L/var/chroot/ia32/usr/lib/qt4 `echo "$(QT_LIN_LIBS)" | sed -e 's#-lpthread#/var/chroot/ia32/lib/libpthread.so.0#g'` -L. -lgrf `gcc32 -print-libgcc-file-name` /var/chroot/ia32/lib/libc.so.6
 ifeq ($(DEBUG),no)
 	@echo -e " STRIP\t$@"
 	@$(STRIP) $@

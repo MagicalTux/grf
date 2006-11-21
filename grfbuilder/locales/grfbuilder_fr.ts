@@ -8,12 +8,12 @@
         <translation type="obsolete">Dialog</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="599"/>
+        <location filename="../MainWindow.cpp" line="603"/>
         <source>Close</source>
         <translation>Fermer</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="598"/>
+        <location filename="../MainWindow.cpp" line="602"/>
         <source>Image Preview</source>
         <translation>Prévisualisation d&apos;image</translation>
     </message>
@@ -31,7 +31,7 @@
         <translation>Fichiers GRF (*.grf *.gpf)</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="463"/>
+        <location filename="../MainWindow.cpp" line="467"/>
         <source>GrfBuilder</source>
         <translation>GrfBuilder</translation>
     </message>
@@ -321,17 +321,17 @@
         <translation type="obsolete">Type d&apos;e&amp;xtraction</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="408"/>
+        <location filename="../MainWindow.cpp" line="412"/>
         <source>Extraction in progress...</source>
         <translation>Extraction en cours...</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="408"/>
+        <location filename="../MainWindow.cpp" line="412"/>
         <source>Cancel</source>
         <translation>Annuler</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="420"/>
+        <location filename="../MainWindow.cpp" line="424"/>
         <source>Extracting file %1...</source>
         <translation>Extraction de %1...</translation>
     </message>
@@ -371,7 +371,7 @@
         <translation>&lt;p align=&quot;center&quot;&gt;&lt;b&gt;GrfBuilder v%1.%2.%3 par MagicalTux&lt;/b&gt;&lt;/p&gt;&lt;p align=&quot;left&quot;&gt;Lié à la libgrf v%4.%5.%6 (aussi par MagicalTux)&lt;br /&gt;Cet outil a été conçu pour permettre un accès simple en lecture et en écriture aux fichiers GRF.&lt;br /&gt;Il a été développé dans le seul but de démontrer que Gravity a besoin de meilleurs développeurs.&lt;/p&gt;&lt;p align=&quot;left&quot;&gt;Version française par MagicalTux&lt;/p&gt;&lt;p align=&quot;left&quot;&gt;Vous pouvez contacter MagicalTux sur &lt;a href=&quot;http://ookoo.org/cgi-bin/cgi-irc/irc.cgi&quot;&gt;irc://irc.ookoo.org/ooKoo&lt;/a&gt;&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="460"/>
+        <location filename="../MainWindow.cpp" line="464"/>
         <source>Your computer has no audio support. Please make sure you have an audio device available and retry.</source>
         <translation>Votre ordinateur n&apos;a pas de support audio. Veuillez vous assurer que vous disposez d&apos;un périphérique audio disponible et réessayez.</translation>
     </message>
@@ -391,7 +391,7 @@
         <translation>Français</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="463"/>
+        <location filename="../MainWindow.cpp" line="467"/>
         <source>Currently playing file `%1&apos;. Press &quot;Ok&quot; to stop.</source>
         <translation>Lecture de «%1» en cours. Appuyez sur «OK» pour arrêter.</translation>
     </message>
@@ -466,22 +466,22 @@
         <translation>Ctrl+R</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="309"/>
+        <location filename="../MainWindow.cpp" line="314"/>
         <source>Extract file as...</source>
         <translation>Extraire le fichier sous...</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="309"/>
+        <location filename="../MainWindow.cpp" line="314"/>
         <source>%1 files (*.%1)</source>
         <translation>Fichiers %1 (*.%1)</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="313"/>
+        <location filename="../MainWindow.cpp" line="318"/>
         <source>Could not open %1 for writing a file.</source>
         <translation>Impossible d&apos;écrire %1 pour l&apos;écriture d&apos;un fichier.</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="318"/>
+        <location filename="../MainWindow.cpp" line="323"/>
         <source>Could not write data to %1 while extracting a file.</source>
         <translation>Impossible d&apos;écrire dans le fichier %1.</translation>
     </message>

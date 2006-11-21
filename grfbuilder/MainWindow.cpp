@@ -288,18 +288,23 @@ void MainWindow::on_btn_extract_clicked() {
 }
 
 void MainWindow::on_action_Extract_triggered() {
+	QList<QTreeWidgetItem *> objlist; // <-- BUG ON THIS LINE
+	int lsize,i;
+	QProgressDialog prog(tr("Extraction in progress..."), tr("Cancel"), 0, 1, this);
 	if (this->grf == NULL) return;
-	QList<QTreeWidgetItem *> list;
+
 	switch(ui.tab_sel->currentIndex()) {
-		case 0: case 2:
+		case 0:
+		case 2:
 			if (ui.tab_sel->currentIndex() == 0) {
-				list = ui.view_allfiles->selectedItems();
+				objlist = ui.view_allfiles->selectedItems();
 			} else {
-				list = ui.viewSearch->selectedItems();
+				objlist = ui.viewSearch->selectedItems();
 			}
-			if (list.size()==1) {
+			if (objlist.size()==0) break;
+			if (objlist.size()==1) {
 				// YAY easy to do :o
-				void *gfile = grf_get_file_by_id(this->grf, list[0]->text(0).toUInt());
+				void *gfile = grf_get_file_by_id(this->grf, objlist[0]->text(0).toUInt());
 				QFileInfo file;
 				if (ui.actionUnicode->isChecked()) {
 					file.setFile(QString::fromUtf8(euc_kr_to_utf8(grf_file_get_basename(gfile))));
@@ -321,17 +326,17 @@ void MainWindow::on_action_Extract_triggered() {
 				out.close();
 				break;
 			}
-			unsigned int size = list.size();
-			QProgressDialog *prog = new QProgressDialog(tr("Extraction in progress..."), tr("Cancel"), 0, size, this);
-			prog->setWindowModality(Qt::WindowModal);
-			for(unsigned int i=0;i<size;i++) {
-				prog->setValue(i);
-				QCoreApplication::processEvents();
-				if (prog->wasCanceled()) break;
-				QTreeWidgetItem *cur = list.at(i);
+			lsize = objlist.size();
+			prog.setWindowModality(Qt::WindowModal);
+			prog.setRange(0, lsize);
+			for(i=0;i<lsize;i++) {
+				QTreeWidgetItem *cur = objlist[i];
 				void *cur_file = grf_get_file_by_id(this->grf, cur->text(0).toUInt());
 				QString name(QString::fromUtf8(euc_kr_to_utf8(grf_file_get_filename(cur_file))));
-				prog->setLabelText(tr("Extracting file %1...").arg(name));
+				QCoreApplication::processEvents();
+				if (prog.wasCanceled()) break;
+				prog.setLabelText(tr("Extracting file %1...").arg(name));
+				prog.setValue(i);
 				if (ui.actionUnicode->isChecked()) {
 					size_t size;
 					size = grf_file_get_size(cur_file);
@@ -349,7 +354,7 @@ void MainWindow::on_action_Extract_triggered() {
 					QFile output(name);
 					if (!output.open(QIODevice::WriteOnly)) {
 						cur_file = grf_get_file_next(cur_file);
-					continue;
+						continue;
 					}
 					if (grf_file_put_contents_to_fd(cur_file, output.handle()) != size) {
 						output.close();
@@ -360,9 +365,8 @@ void MainWindow::on_action_Extract_triggered() {
 					grf_put_contents_to_file(cur_file, grf_file_get_filename(cur_file));
 				}
 			}
-			prog->reset();
-			prog->close();
-			delete prog;
+			prog.reset();
+			prog.close();
 			break;
 		case 1:
 			QMessageBox::warning(this, tr("GrfBuilder"), QString("Sorry, this is not working yet."), QMessageBox::Cancel, QMessageBox::Cancel);
@@ -648,7 +652,7 @@ void MainWindow::DoUpdateFilter(QString text) {
 	QTreeWidgetItemIterator it(ui.view_allfiles, QTreeWidgetItemIterator::NoChildren);
 	QRegExp r(text, Qt::CaseInsensitive, QRegExp::Wildcard);
 	bool match;
-	unsigned int i=0, max=grf_filecount(this->grf);
+	int i=0, max=grf_filecount(this->grf);
 	ui.viewSearch->clear();
 	while (*it) {
 		void *cur_file = grf_get_file_by_id(this->grf, (*it)->text(0).toUInt());

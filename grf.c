@@ -300,7 +300,7 @@ GRFEXPORT bool grf_repack(void *tmphandler, uint8_t repack_type) {
 			lseek(handler->fd, save_pos + GRF_HEADER_SIZE, SEEK_SET);
 			write(handler->fd, (void *)(&next->pos), 4);
 			if (handler->callback != NULL) if (!handler->callback(handler->callback_etc, handler, i, handler->filecount, next->filename)) break;
-			filemem = malloc(next->len_aligned);
+			filemem = calloc(1, next->len_aligned + 1024); // 1024 is needed in case of decryption
 			lseek(handler->fd, next->pos + GRF_HEADER_SIZE, SEEK_SET);
 			while (p<next->len_aligned) p+=read(handler->fd, filemem+p, next->len_aligned - p);
 			// ok, we got the data :)
@@ -329,7 +329,7 @@ GRFEXPORT bool grf_repack(void *tmphandler, uint8_t repack_type) {
 			if (repack_type >= GRF_REPACK_DECRYPT) {
 				if (next->cycle >= 0) {
 					if (handler->callback != NULL) handler->callback(handler->callback_etc, handler, i, handler->filecount, next->filename);
-					filemem = malloc(next->len_aligned);
+					filemem = calloc(1, next->len_aligned + 1024); // 1024 is needed for decryption
 					p=0;
 					lseek(handler->fd, next->pos + GRF_HEADER_SIZE, SEEK_SET);
 					while (p<next->len_aligned) p+=read(handler->fd, filemem+p, next->len_aligned - p);
@@ -962,7 +962,7 @@ GRFEXPORT uint32_t grf_file_get_contents(void *tmphandler, void *target) {
 	fhandler = (struct grf_node *)tmphandler;
 	handler = fhandler->parent;
 	if ((fhandler->flags & GRF_FLAG_FILE) == 0) return 0; // not a file
-	comp = malloc(fhandler->len_aligned);
+	comp = calloc(1, fhandler->len_aligned + 1024); // seems that we need to allocate 1024 more bytes to decrypt file safely
 	lseek(handler->fd, fhandler->pos + GRF_HEADER_SIZE, SEEK_SET);
 	count = read(handler->fd, (char *)comp, fhandler->len_aligned);
 	if (count != fhandler->len_aligned) { free(comp); return 0; }
