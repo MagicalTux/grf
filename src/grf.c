@@ -1187,7 +1187,7 @@ GRFEXPORT bool grf_put_contents_to_file(void *file, const char *fn) {
 }
 
 
-GRFEXPORT void *grf_file_add(void *tmphandler, char *filename, void *ptr, size_t size) {
+GRFEXPORT void *grf_file_add(void *tmphandler, const char *filename, void *ptr, size_t size) {
 	// returns pointer to the newly created file structure
 	struct grf_handler *handler;
  	handler = (struct grf_handler *)tmphandler;
@@ -1257,7 +1257,7 @@ GRFEXPORT void *grf_file_add(void *tmphandler, char *filename, void *ptr, size_t
 	return ptr_file;
 }
 
-GRFEXPORT void *grf_file_add_path(void *tmphandler, char *filename, char *real_filename) {
+GRFEXPORT void *grf_file_add_path(void *tmphandler, const char *filename, const char *real_filename) {
 	int fp;
 	struct stat s;
 	void *ptr, *res;

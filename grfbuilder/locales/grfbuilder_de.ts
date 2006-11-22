@@ -3,12 +3,12 @@
 <context>
     <name>Dialog</name>
     <message>
-        <location filename="../MainWindow.cpp" line="650"/>
+        <location filename="../MainWindow.cpp" line="658"/>
         <source>Image Preview</source>
         <translation>Bild-Vorbetrachtung</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="651"/>
+        <location filename="../MainWindow.cpp" line="659"/>
         <source>Close</source>
         <translation>Schliessen</translation>
     </message>

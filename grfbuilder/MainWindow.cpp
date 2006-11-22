@@ -596,13 +596,20 @@ void MainWindow::doOpenFileById(int id) {
 		int sx = *(int*)(data+6);
 		int sy = *(int*)(data+10);
 		im = QImage(sx, sy, QImage::Format_Indexed8);
-		im.setNumColors(2);
-		im.setColor(0, qRgb(0,0,0));
-		im.setColor(1, qRgb(255,255,255));
+		im.setNumColors(256);
+		for(int i=0;i<255;i++) im.setColor(i, qRgb(i,i,i));
+		im.setColor(255, qRgb(255,0,0));
 		for(int y=0;y<sy;y++) {
 			for(int x=0;x<sx;x++) {
-				int type = *(int*)(data + ((y*sx + x) * 20+14+16));
-				im.setPixel(x,sy-y-1, type?0:1);
+//				int type = *(int*)(data + (((y*sx + x) * 20)+14+16));
+//				unsigned char height = (int)(*(float*)(data + (((y*sx + x) * 20)+14+12)) + 128);
+				float height = 0;
+				for(int i=0;i<16;i+=4) height += *(float*)(data + (((y*sx + x) * 20)+14+i));
+				height=255-((height/4)+127);
+				if (height<0) height = 0;
+				if (height>=255) height = 254;
+//				im.setPixel(x,sy-y-1, type?0:255);
+				im.setPixel(x,sy-y-1, height);
 			}
 		}
 	} else {

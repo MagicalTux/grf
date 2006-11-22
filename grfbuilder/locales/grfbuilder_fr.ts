@@ -8,12 +8,12 @@
         <translation type="obsolete">Dialog</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="651"/>
+        <location filename="../MainWindow.cpp" line="659"/>
         <source>Close</source>
         <translation>Fermer</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="650"/>
+        <location filename="../MainWindow.cpp" line="658"/>
         <source>Image Preview</source>
         <translation>Prévisualisation d&apos;image</translation>
     </message>
