@@ -199,7 +199,7 @@ endif
 version.sh: includes/grf.h
 	cat $< | grep "define VERSION" | grep -E "MAJOR|MINOR|REVISION" | sed -e 's/^#define //;s/ /=/' >$@
 
-libgrf-%.zip: $(TARGET) $(TARGET64) $(TARGET_WIN) includes/libgrf.h $(wildcard examples/*) README QtCore4.dll QtGui4.dll mingwm10.dll $(GB_TARGET) $(GB_TARGET64) $(GB_TARGET_WIN) $(GB_LOCALES)
+libgrf-%.zip: $(TARGET) $(TARGET64) $(TARGET_WIN) includes/libgrf.h $(wildcard examples/*) doc/README doc/grf_magic QtCore4.dll QtGui4.dll mingwm10.dll $(GB_TARGET) $(GB_TARGET64) $(GB_TARGET_WIN) $(GB_LOCALES)
 	$(RM) $@
 	zip -9r $@ $^ -x .svn '*.o'
 
