@@ -99,15 +99,15 @@ ifeq ($(GCC_WIN_VERSION),4)
 WINFLAGS+=-Wno-attributes
 endif
 
-win32/%_32.o: %.c
+win32/%_32.o: src/%.c
 	@echo -en "  CC\t$<           \015"
 	@$(CC_WIN) $(CFLAGS) $(WINFLAGS) $(INCLUDES) -c -o $@ $<
 
-linux/%_32.o: %.c
+linux/%_32.o: src/%.c
 	@echo -en "  CC\t$<           \015"
 	@$(CC) $(CFLAGS) $(LINFLAGS) $(INCLUDES) -c -o $@ $<
 
-linux/%_64.o: %.c
+linux/%_64.o: src/%.c
 	@echo -en "  CC64\t$<           \015"
 	@$(CC64) $(CFLAGS) $(LINFLAGS) $(INCLUDES) -c -o $@ $<
 
