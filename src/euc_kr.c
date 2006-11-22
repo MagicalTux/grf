@@ -160,7 +160,6 @@ GRFEXPORT char *utf8_to_euc_kr_r(const char *orig, uint8_t *res) {
 		uint8_t x = *t;
 		uint8_t l = 0, p;
 		t++;
-		printf("res=%s\n", (char *)res);
 		if (x<0x80) {
 			// easy one, that's the same char in UTF-8
 			*r = x; r++;
@@ -177,7 +176,6 @@ GRFEXPORT char *utf8_to_euc_kr_r(const char *orig, uint8_t *res) {
 		} else if ((x & 0xfe) == 0xfc) { // 6chars utf8 (illegal)
 			l=5; p=0x1;
 		}
-		printf("l=%d\n", l);
 		if (l==0) return NULL; /* ILLEGAL */
 		c = x & p;
 		for(int i=0;i<l;i++) c = (c << 6) | (*(t++) & 0x3f);
