@@ -125,8 +125,8 @@ void test_load_file() {
 //	char *fn = "/storage/win_d/Program Files/Gravity/fRO_II/data.grf";
 //	char *fn = "/storage/win_d/Program Files/Gravity/RO/data.grf";
 //	char *fn = "/storage/win_d/Program Files/Gravity/20060224_krodata.gpf";
-//	char *fn = "problemfix.gpf";
-	char *fn = "grf/data.grf";
+	char *fn = "grf/problemfix.gpf";
+//	char *fn = "grf/data.grf";
 	char *fn2 = "data/airplane.gnd";
 	int x;
 	unsigned int y;

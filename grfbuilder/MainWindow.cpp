@@ -168,12 +168,60 @@ void MainWindow::on_actionRepack_triggered() {
 	this->on_btn_repack_clicked();
 }
 
+void MainWindow::on_action_Merge_GRF_triggered() {
+	this->on_btn_mergegrf_clicked();
+}
+
+bool MainWindow::merge_progress_callback(void *grf, int pos, int max, const char *filename, QProgressDialog *prog) {
+	prog->setValue(pos);
+	QCoreApplication::processEvents();
+	prog->setLabelText(tr("Merging file %1...").arg(QString::fromUtf8(euc_kr_to_utf8(filename))));
+	if (prog->wasCanceled()) return false;
+	return true;
+}
+
+static bool merge_grf_callback_caller(void *PROG_, void *grf, int pos, int max, const char *filename) {
+	if (filename == NULL) return true;
+	QProgressDialog *prog = (QProgressDialog *)PROG_;
+	MainWindow *MW = (MainWindow *)prog->parent();
+	return MW->merge_progress_callback(grf, pos, max, filename, prog);
+}
+
+void MainWindow::on_btn_mergegrf_clicked() {
+	if (this->grf == NULL) return;
+	QString str = QFileDialog::getOpenFileName(this, tr("Open File"),
+		NULL, tr("GRF Files (*.grf *.gpf)"));
+	void *grf;
+	if (str.isNull()) return;
+	QFile mgrf_file(str);
+	if (!mgrf_file.open(QIODevice::ReadOnly)) {
+		QMessageBox::warning(this, tr("GrfBuilder"), tr("Could not open file %1 in read-only mode.").arg(str), QMessageBox::Cancel, QMessageBox::Cancel);
+		return;
+	}
+	grf = grf_new_by_fd(mgrf_file.handle(), false);
+	grf_set_callback(grf, grf_callback_caller, (void *)this);
+	grf = grf_load_from_new(grf);
+	if (grf == NULL) {
+		QMessageBox::warning(this, tr("GrfBuilder"), tr("The selected file doesn't look like a valid GRF file."), QMessageBox::Cancel, QMessageBox::Cancel);
+		return;
+	}
+	QProgressDialog prog(tr("Merge in progress..."), tr("Cancel"), 0, grf_filecount(grf), this);
+	grf_set_callback(this->grf, merge_grf_callback_caller, (void *)&prog);
+	grf_merge(this->grf, grf, this->repack_type);
+	// XXX
+	grf_set_callback(this->grf, grf_callback_caller, (void *)this);
+	grf_save(this->grf);
+	prog.reset();
+	prog.close();
+	grf_free(grf);
+}
+
 void MainWindow::on_btn_open_clicked() {
 	QString str = QFileDialog::getOpenFileName(this, tr("Open File"),
 			NULL, tr("GRF Files (*.grf *.gpf)"));
 	void *f;
 
-	if (str.size() == 0) return;
+	if (str.isNull()) return;
 
 	this->on_btn_close_clicked();
 
@@ -210,14 +258,14 @@ void MainWindow::on_btn_open_clicked() {
 	ui.btn_extractall->setEnabled(true);
 	ui.btn_repack->setEnabled(true);
 	ui.btn_close->setEnabled(true);
-	ui.btn_mergegrf->setEnabled(false);
+	ui.btn_mergegrf->setEnabled(true);
 	ui.btn_mergedir->setEnabled(false);
 	// menuitems
 	ui.action_Extract->setEnabled(true);
 	ui.action_Extract_All->setEnabled(true);
 	ui.actionRepack->setEnabled(true);
 	ui.action_Close->setEnabled(true);
-	ui.action_Merge_GRF->setEnabled(false);
+	ui.action_Merge_GRF->setEnabled(true);
 	ui.actionMerge_Dir->setEnabled(false);
 }
 

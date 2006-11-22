@@ -4,12 +4,10 @@
 #include <string.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <fcntl.h>
 #include <stdio.h>
 #include <grf.h>
 #ifndef __WIN32
 #include <libgen.h>
-#include <sys/sendfile.h>
 #endif
 
 /* BEGIN: INCLUDE FROM GRFIO.C */
@@ -327,18 +325,23 @@ GRFEXPORT bool grf_merge(void *_dest, void *_src, uint8_t repack_type) {
 	struct grf_handler *dest=_dest, *src = _src;
 	struct grf_node *cur, *rep, *prev;
 	void *ptr;
+	uint32_t i=0;
 	if (!dest->write_mode) return false;
 	// Rather simple :
 	// 1. For each node in src
 	cur = src->first_node;
 	while(cur != NULL) {
+		i++;
+		if (dest->callback != NULL) if (!dest->callback(dest->callback_etc, dest, i, src->filecount, cur->filename)) break;
 		dest->need_save = true;
 		// 2. Seek same file in dst, if found, remove it from list. If not found, allocate a new grf_node struct
 		rep = hash_lookup(dest->fast_table, cur->filename);
 		prev = prv_grf_find_free_space(dest, cur->len_aligned, rep);
 		if (rep != NULL) {
-		// YAY! Everything made easy, but count file as replaced
+		// YAY! Everything made (almost) easy, but count file as replaced
 			free(rep->filename);
+			if (rep->next != NULL) rep->next->prev = rep->prev;
+			if (rep->prev != NULL) rep->prev->next = rep->next;
 			dest->wasted_space += rep->len_aligned;
 			rep->filename = strdup(cur->filename);
 		} else {
@@ -359,9 +362,9 @@ GRFEXPORT bool grf_merge(void *_dest, void *_src, uint8_t repack_type) {
 			// insert entry in the chained list
 			rep->pos = prev->pos + prev->len_aligned;
 			rep->next = prev->next;
+			prev->next = rep;
 			rep->prev = prev;
 			if (rep->next != NULL) rep->next->prev = rep;
-			prev->next = rep;
 		}
 		rep->size = cur->size;
 		rep->len = cur->len;
@@ -369,16 +372,18 @@ GRFEXPORT bool grf_merge(void *_dest, void *_src, uint8_t repack_type) {
 		rep->flags = cur->flags;
 		// 5. Copy memory to file, and free() it
 		lseek(dest->fd, rep->pos + GRF_HEADER_SIZE, SEEK_SET);
-#ifndef __WIN32
+		lseek(src->fd, cur->pos + GRF_HEADER_SIZE, SEEK_SET);
+#if 0
 		if (repack_type == GRF_REPACK_FAST) {
-			off_t offset = cur->pos;
-			if (sendfile(dest->fd, src->fd, &offset, cur->len_aligned)!=cur->len_aligned) {
+//			off_t offset = cur->pos + GRF_HEADER_SIZE;
+//			if (sendfile(dest->fd, src->fd, &offset, cur->len_aligned)!=cur->len_aligned) {
+			if (splice(src->fd, NULL, dest->fd, NULL, cur->len_aligned, 0)) {
+				perror("splice");
 				hash_del_element(dest->fast_table, rep->filename);
 				return false;
 			}
 		} else {
 #endif
-			lseek(src->fd, cur->pos + GRF_HEADER_SIZE, SEEK_SET);
 			ptr = malloc(cur->len_aligned + 1024); // in case of decrypt
 			if (read(src->fd, ptr, cur->len_aligned) != cur->len_aligned) {
 				free(ptr);
@@ -390,7 +395,8 @@ GRFEXPORT bool grf_merge(void *_dest, void *_src, uint8_t repack_type) {
 				hash_del_element(dest->fast_table, rep->filename);
 				return false;
 			}
-#ifndef __WIN32
+			free(ptr);
+#if 0
 		}
 #endif
 		// 6. If we didn't use end of archive, but some wasted space, substract used space to handler->wasted_space
@@ -399,7 +405,8 @@ GRFEXPORT bool grf_merge(void *_dest, void *_src, uint8_t repack_type) {
 		}
 		cur = cur->next;
 	}
-	return false;
+	if (dest->callback != NULL) dest->callback(dest->callback_etc, dest, src->filecount, src->filecount, NULL);
+	return true;
 }
 
 static void prv_grf_recount_wasted_space(struct grf_handler *handler) {
@@ -1202,9 +1209,11 @@ GRFEXPORT void *grf_file_add(void *tmphandler, char *filename, void *ptr, size_t
 	prev = prv_grf_find_free_space(handler, comp_size_aligned, ptr_file);
 	// 4. Rebuild index, replace file if needed, etc...
 	if (ptr_file != NULL) {
-		// YAY! Everything made easy, but count file as replaced
+		// YAY! Everything made (almost) easy, but count file as replaced
 		free(ptr_file->filename);
 		handler->wasted_space += ptr_file->len_aligned;
+		if (ptr_file->next != NULL) ptr_file->next->prev = ptr_file->prev;
+		if (ptr_file->prev != NULL) ptr_file->prev->next = ptr_file->next;
 		ptr_file->filename = strdup(filename);
 	} else {
 		// Regular add file~ (argh)
@@ -1413,6 +1422,7 @@ GRFEXPORT void grf_free(void *tmphandler) {
 	}*/
 	hash_free_table(handler->fast_table);
 	if (handler->root != NULL) prv_grf_tree_table_free_node(handler->root);
+	if (handler->node_table != NULL) free(handler->node_table);
 	free(handler);
 }
 

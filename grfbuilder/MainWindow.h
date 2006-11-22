@@ -19,6 +19,7 @@ public:
 	MainWindow(QWidget *parent = 0);
 	bool progress_callback(void *, int pos, int max);
 	bool repack_progress_callback(void *grf, int pos, int max, const char *filename, QProgressDialog *prog);
+	bool merge_progress_callback(void *grf, int pos, int max, const char *filename, QProgressDialog *prog);
 	QTranslator translator;
 	void RetranslateStrings();
 
@@ -31,6 +32,7 @@ private slots:
 	void on_btn_extract_clicked();
 	void on_btn_extractall_clicked();
 	void on_btn_repack_clicked();
+	void on_btn_mergegrf_clicked();
 	void on_listFilter_currentIndexChanged(QString);
 
 	void on_view_allfiles_customContextMenuRequested(const QPoint);
@@ -47,6 +49,7 @@ private slots:
 	void on_action_Extract_triggered();
 	void on_action_Extract_All_triggered();
 	void on_actionRepack_triggered();
+	void on_action_Merge_GRF_triggered();
 	void on_action_Close_triggered();
 	void on_action_Quit_triggered();
 	void on_actionAbout_triggered();
