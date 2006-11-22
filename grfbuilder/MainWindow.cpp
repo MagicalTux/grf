@@ -400,6 +400,7 @@ void MainWindow::on_btn_extract_clicked() {
 
 void MainWindow::on_action_Extract_triggered() {
 	QList<QTreeWidgetItem *> objlist; // <-- BUG ON THIS LINE
+	QString xpath, ppath;
 	int lsize,i;
 	QProgressDialog prog(tr("Extraction in progress..."), tr("Cancel"), 0, 1, this);
 	if (this->grf == NULL) return;
@@ -437,6 +438,10 @@ void MainWindow::on_action_Extract_triggered() {
 				out.close();
 				break;
 			}
+			xpath = QFileDialog::getExistingDirectory(this, tr("Extract to..."));
+			if (xpath.isNull()) return;
+			ppath = QDir::currentPath();
+			QDir::setCurrent(xpath);
 			lsize = objlist.size();
 			prog.setWindowModality(Qt::WindowModal);
 			prog.setRange(0, lsize);
@@ -478,6 +483,7 @@ void MainWindow::on_action_Extract_triggered() {
 			}
 			prog.reset();
 			prog.close();
+			QDir::setCurrent(ppath);
 			break;
 		case 1:
 			QMessageBox::warning(this, tr("GrfBuilder"), QString("Sorry, this is not working yet."), QMessageBox::Cancel, QMessageBox::Cancel);
@@ -522,6 +528,10 @@ void MainWindow::on_btn_extractall_clicked() {
 	int c=0;
 	int n = 1;
 	if (this->grf == NULL) return;
+	QString xpath = QFileDialog::getExistingDirectory(this, tr("Extract to..."));
+	if (xpath.isNull()) return;
+	QString ppath = QDir::currentPath();
+	QDir::setCurrent(xpath);
 	QProgressDialog prog(tr("Extraction in progress..."), tr("Cancel"), 0, grf_filecount(this->grf), this);
 	prog.setWindowModality(Qt::WindowModal);
 	/* get files list */
@@ -568,6 +578,7 @@ void MainWindow::on_btn_extractall_clicked() {
 	}
 	prog.reset();
 	prog.close();
+	QDir::setCurrent(ppath);
 }
 
 void MainWindow::do_display_wav(void *f) {
