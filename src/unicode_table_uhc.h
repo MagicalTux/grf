@@ -29,7 +29,6 @@
  * Unicode table
  */
 
-/*
 static const unsigned short uhc1_ucs_table[] = {
 0xac02,0xac03,0xac05,0xac06,0xac0b,0xac0c,0xac0d,0xac0e,
 0xac0f,0xac18,0xac1e,0xac1f,0xac21,0xac22,0xac23,0xac25,
@@ -794,8 +793,6 @@ static const unsigned short uhc1_ucs_table[] = {
 };
 
 static const int uhc1_ucs_table_size = (sizeof(uhc1_ucs_table)/sizeof(unsigned short));
-
-*/
 
 static const unsigned short uhc2_ucs_table[] = {
 0xc8a5,0xc8a6,0xc8a7,0xc8a9,0xc8aa,0xc8ab,0xc8ac,0xc8ad,
@@ -2356,7 +2353,6 @@ static const unsigned short uhc3_ucs_table[] = {
 static const int uhc3_ucs_table_size = (sizeof(uhc3_ucs_table)/sizeof(unsigned short));
 
 /* UCS -> UHC */
-/*
 static const unsigned short ucs_a1_uhc_table[] = { 
 0x0000,0x0001,0x0002,0x0003,0x0004,0x0005,0x0006,0x0007,
 0x0008,0x0009,0x000a,0x000b,0x000c,0x000d,0x000e,0x000f,
@@ -7185,6 +7181,5 @@ static const int ucs_r2_uhc_table_min = 0xff00;
 static const int ucs_r2_uhc_table_max = 0xff00 + (sizeof (ucs_r2_uhc_table) / sizeof (unsigned short));
 
 
-*/
 
 #endif /* UNICODE_TABLE_UHC_H */

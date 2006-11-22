@@ -50,6 +50,7 @@ typedef int bool;
 #ifndef __LIBGRF_HAS_TYPEDEF
 typedef void * grf_handle;
 typedef void * grf_node;
+typedef void * grf_treenode;
 #endif
 
 /* Some defines used by grf_merge() and grf_repack() : 
@@ -175,59 +176,214 @@ GRFEXPORT void *grf_file_add_path(void *, const char *, const char *); /* grf.c 
  */
 GRFEXPORT void *grf_get_file(void *, const char *); /* grf.c */
 
-GRFEXPORT const char *grf_file_get_filename(void *); /* grf.c */
-GRFEXPORT const char *grf_file_get_basename(void *); /* grf.c */
-GRFEXPORT uint32_t grf_file_get_size(void *); /* grf.c */
-GRFEXPORT uint32_t grf_file_get_storage_pos(void *); /* grf.c */
-GRFEXPORT uint32_t grf_file_get_storage_size(void *); /* grf.c */
-GRFEXPORT uint32_t grf_file_get_contents(void *, void *); /* grf.c */
-GRFEXPORT uint32_t grf_file_put_contents_to_fd(void *, int); /* grf.c */
-GRFEXPORT bool grf_put_contents_to_file(void *, const char *); /* grf.c */
-GRFEXPORT bool grf_file_delete(void *); /* grf.c */
+/* (const char *) grf_file_get_filename(grf_node)
+ * Returns the full filename of a file.
+ */
+GRFEXPORT const char *grf_file_get_filename(grf_node); /* grf.c */
+
+/* (const char *) grf_file_get_basename(grf_node)
+ * Returns only the filename (no path info)
+ */
+GRFEXPORT const char *grf_file_get_basename(grf_node); /* grf.c */
+
+/* (unsigned int) grf_file_get_size(grf_node)
+ * Returns the (real) size of the file.
+ */
+GRFEXPORT uint32_t grf_file_get_size(grf_node); /* grf.c */
+
+/* (unsigned int) grf_file_get_storage_pos(grf_node)
+ * Returns the position of the file in the archive.
+ */
+GRFEXPORT uint32_t grf_file_get_storage_pos(grf_node); /* grf.c */
+
+/* (unsigned int) grf_file_get_storage_size(grf_node)
+ * Returns the real (compressed) size of the file.
+ */
+GRFEXPORT uint32_t grf_file_get_storage_size(grf_node); /* grf.c */
+
+/* (unsigned int) grf_file_get_contents(grf_node, void *ptr)
+ * Extracts the file to the provided pointer and returns the number of bytes
+ * successfully extracted. The system assumes that you pre-allocated enough
+ * memory in ptr by calling grf_file_get_size().
+ */
+GRFEXPORT uint32_t grf_file_get_contents(grf_node, void *); /* grf.c */
+
+/* (unsigned int) grf_file_put_contents_to_fd(grf_node, int)
+ * Extracts a file to the specified file descriptor. This can be a socket or
+ * a regular file, no seeks are used.
+ */
+GRFEXPORT uint32_t grf_file_put_contents_to_fd(grf_node, int); /* grf.c */
+
+/* grf_put_contents_to_file(grf_node, const char *filename)
+ * Write the contents of the compressed file to the filesystem.
+ */
+GRFEXPORT bool grf_put_contents_to_file(grf_node, const char *); /* grf.c */
+
+/* grf_file_delete(grf_node)
+ * Removes a file from the GRF.
+ * NB: This will not immediatly reduce the size of the resulting GRF file,
+ * you will have to repack the GRF to see a reduction in its size. However if
+ * you add a file which is exactly the same size as the deleted file, no repack
+ * will be needed.
+ */
+GRFEXPORT bool grf_file_delete(grf_node); /* grf.c */
 
 /*****************************************************************************
  ******************************* TREE FUNCTIONS ******************************
- ****************************************************************************/
+ *****************************************************************************
+ * Trees are a good way to display the content of a GRF file in a hierarchized
+ * way. Basically, GRF files just contain a list of file, and each file has
+ * its full path information attached to it. Using grf_create_tree(), you can
+ * ask libgrf to build a global directories/files-based tree for the GRF,
+ * allowing things such as listing the content of a directory directly,
+ * without having to parse the whole files list yourself.
+ */
 
-GRFEXPORT void grf_create_tree(void *); /* grf.c */
-GRFEXPORT void *grf_tree_get_root(void *); /* grf.c */
-GRFEXPORT void **grf_tree_list_node(void *); /* grf.c */
-GRFEXPORT bool grf_tree_is_dir(void *); /* grf.c */
-GRFEXPORT const char *grf_tree_get_name(void *); /* grf.c */
-GRFEXPORT void *grf_tree_get_file(void *); /* grf.c */
-GRFEXPORT void *grf_tree_get_parent(void *); /* grf.c */
-GRFEXPORT void *grf_file_get_tree(void *); /* grf.c */
-GRFEXPORT bool grf_tree_dir_count_files(void *); /* grf.c */
+/* grf_create_tree(grf_handle)
+ * Create a tree for the specified GRF file.
+ */
+GRFEXPORT void grf_create_tree(grf_handle); /* grf.c */
+
+/* (grf_treenode) grf_tree_get_root(grf_handle)
+ * Returns the root node of the tree.
+ */
+GRFEXPORT grf_treenode grf_tree_get_root(grf_handle); /* grf.c */
+
+/* (grf_treenode *)grf_tree_list_node(grf_treenode)
+ * Returns the list of files/directories found in a specific node.
+ * NB: You will have to free() this result after use.
+ */
+GRFEXPORT grf_treenode *grf_tree_list_node(grf_treenode); /* grf.c */
+
+/* (bool) grf_tree_is_dir(grf_treenode)
+ * Return true if this node is a tree. Return false if it's a regular file.
+ * There's no other possible type for a node.
+ */
+GRFEXPORT bool grf_tree_is_dir(grf_treenode); /* grf.c */
+
+/* (const char *) grf_tree_get_name(grf_treenode)
+ * Returns the name of a node (no path info will be added)
+ */
+GRFEXPORT const char *grf_tree_get_name(grf_treenode); /* grf.c */
+
+/* (grf_node) grf_tree_get_file(grf_treenode)
+ * Return the node of the file attached to the current treenode. Will return
+ * NULL for directories. (but do not rely on that, you have a function named
+ * grf_tree_is_dir() to determine if a node is a dir, or not)
+ */
+GRFEXPORT grf_node grf_tree_get_file(grf_treenode); /* grf.c */
+
+/* (grf_treenode) grf_tree_get_parent(grf_treenode)
+ * Returns the parent node, or NULL if you call that on the root node.
+ */
+GRFEXPORT grf_treenode grf_tree_get_parent(grf_treenode); /* grf.c */
+
+/* (grf_treenode) grf_file_get_tree(grf_node)
+ * Returns the grf_treenode entry corresponding to a file. Will return NULL
+ * if the treenode wasn't created previously.
+ */
+GRFEXPORT grf_treenode grf_file_get_tree(grf_node); /* grf.c */
+
+/* (unsigned int) grf_tree_dir_count_files(grf_treenode)
+ * Returns the number of files contained in a treenode dir.
+ */
+GRFEXPORT uint32_t grf_tree_dir_count_files(void *); /* grf.c */
 
 /*****************************************************************************
  ************************** FILE LISTING FUNCTIONS ***************************
  ****************************************************************************/
 
-GRFEXPORT void **grf_get_file_list(void *); /* grf.c */
-GRFEXPORT void *grf_get_file_first(void *); /* grf.c */
-GRFEXPORT void *grf_get_file_next(void *); /* grf.c */
-GRFEXPORT void *grf_get_file_prev(void *); /* grf.c */
+/* (grf_node*) grf_get_file_list(grf_handle)
+ * Returns all the nodes contained in the GRF files. The order is totally
+ * random and files may be inserted anyway in this list, so don't rely too
+ * much on that, 'kay?
+ * NB: Remember to free() it after use too, m'kay?
+ */
+GRFEXPORT grf_node *grf_get_file_list(grf_handle); /* grf.c */
+
+/* (grf_node) grf_get_file_first(grf_handle)
+ * Returns the first file's node pointer in the GRF, or NULL if no file were
+ * found.
+ */
+GRFEXPORT grf_node grf_get_file_first(grf_handle); /* grf.c */
+
+/* (grf_node) grf_get_file_next(grf_node)
+ * Returns next file, or NULL if file was last file.
+ */
+GRFEXPORT grf_node grf_get_file_next(grf_node); /* grf.c */
+
+/* (grf_node) grf_get_file_prev(grf_node)
+ * Returns previous file, or NULL if file is already the first one.
+ */
+GRFEXPORT grf_node grf_get_file_prev(grf_node); /* grf.c */
 
 /*****************************************************************************
  ***************************** FILE ID FUNCTIONS *****************************
  ****************************************************************************/
 
+/* (grf_node*) grf_get_file_id_list(grf_handle)
+ * Returns the global list of files. Its order may vary each time GRF file is
+ * modified.
+ */
+GRFEXPORT grf_node *grf_get_file_id_list(grf_handle);
+
+/* (unsigned int) grf_file_get_id(grf_node)
+ * Returns ID (index position in the list) of a file.
+ */
 GRFEXPORT uint32_t grf_file_get_id(void *); /* grf.c */
-GRFEXPORT void *grf_get_file_by_id(void *, uint32_t); /* grf.c */
+
+/* (grf_node) grf_get_file_by_id(grf_handle, unsigned int id)
+ * Returns the file corresponding to the given ID.
+ */
+GRFEXPORT grf_node grf_get_file_by_id(grf_handle, uint32_t); /* grf.c */
 
 /*****************************************************************************
  *************************** GRF MASS OPERATIONS *****************************
  ****************************************************************************/
 
-GRFEXPORT bool grf_repack(void *, uint8_t);
-GRFEXPORT bool grf_merge(void *, void *, uint8_t);
+#define GRF_REPACK_FAST 1
+#define GRF_REPACK_DECRYPT 2
+#define GRF_REPACK_RECOMPRESS 3
+
+/* (bool) grf_repack(grf_handle, char options)
+ * Repack given GRF file, to save wasted_bytes and maybe more (if using the
+ * recompress option).
+ * Valid options :
+ * - GRF_REPACK_FAST (just move files)
+ * - GRF_REPACK_DECRYPT (move files, and decrypt files if any was found
+ *   encrypted)
+ * - GRF_REPACK_RECOMPRESS (recompress all files, and replace if newly
+ *   compressed file is smaller than the one previously stored)
+ */
+GRFEXPORT bool grf_repack(grf_handle, uint8_t);
+
+/* (bool) grf_merge(grf_handle dest, grf_handle src, char options)
+ * Copy files from "src" grf_handle (can be opened read-only) to "dest"
+ * grf_handle (must be opened read/write). Takes the same options as
+ * grf_repack with one exception : GRF_REPACK_RECOMPRESS will recompress all
+ * files, even if the new one is larger than the not-recompressed one.
+ */
+GRFEXPORT bool grf_merge(grf_handle, grf_handle, uint8_t);
 
 /*****************************************************************************
  **************************** CHARSET FUNCTIONS ******************************
  ****************************************************************************/
 
+/* (char *) euc_kr_to_utf8(const char *text)
+ * (char *) euc_kr_to_utf8_r(const char *text, unsigned char *ptr)
+ * "Translates" EUC-KR text as encoded in GRF files to UTF-8. Available also
+ * in reentrant version.
+ */
 GRFEXPORT char *euc_kr_to_utf8(const char *); /* euc_kr.c */
-GRFEXPORT char *euc_kr_to_utf8_r(const char *orig, uint8_t *res); /* euc_kr.c */
+GRFEXPORT char *euc_kr_to_utf8_r(const char *, uint8_t *); /* euc_kr.c */
+
+/* (char *) utf8_to_euc_kr(const char *text)
+ * (char *) utf8_to_euc_kr_r(const char *text, unsigned char *ptr)
+ * "Translates" UTF-8 text to EUC-KR as used to encode filenames in GRF files
+ * Of course you need to input KOREAN/ASCII text or it'll return NULL.
+ */
+GRFEXPORT char *utf8_to_euc_kr(const char *); /* euc_kr.c */
+GRFEXPORT char *utf8_to_euc_kr_r(const char *, uint8_t *); /* euc_kr.c */
 
 #ifdef GRFEXPORT_TMP_DEF
 #undef GRFEXPORT_TMP_DEF

@@ -294,6 +294,16 @@
        </widget>
       </item>
       <item>
+       <widget class="QPushButton" name="btn_delete" >
+        <property name="enabled" >
+         <bool>false</bool>
+        </property>
+        <property name="text" >
+         <string>Delete</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QPushButton" name="btn_extractall" >
         <property name="enabled" >
          <bool>false</bool>
@@ -424,6 +434,7 @@
     </property>
     <addaction name="action_Open" />
     <addaction name="action_Extract" />
+    <addaction name="actionDelete" />
     <addaction name="action_Extract_All" />
     <addaction name="actionRepack" />
     <addaction name="action_Close" />
@@ -681,6 +692,14 @@
    </property>
    <property name="shortcut" >
     <string>Ctrl+R</string>
+   </property>
+  </action>
+  <action name="actionDelete" >
+   <property name="enabled" >
+    <bool>false</bool>
+   </property>
+   <property name="text" >
+    <string>Delete selected</string>
    </property>
   </action>
  </widget>

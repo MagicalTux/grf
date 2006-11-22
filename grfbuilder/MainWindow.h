@@ -3,7 +3,7 @@
 
 #define GRFBUILDER_VERSION_MAJOR 0
 #define GRFBUILDER_VERSION_MINOR 1
-#define GRFBUILDER_VERSION_REVISION 24
+#define GRFBUILDER_VERSION_REVISION 25
 
 #include <QFile>
 #include <QMainWindow>
@@ -30,6 +30,7 @@ private slots:
 	void on_btn_open_clicked();
 	void on_btn_close_clicked();
 	void on_btn_extract_clicked();
+	void on_btn_delete_clicked();
 	void on_btn_extractall_clicked();
 	void on_btn_repack_clicked();
 	void on_btn_mergegrf_clicked();
@@ -47,6 +48,7 @@ private slots:
 	// menu
 	void on_action_Open_triggered();
 	void on_action_Extract_triggered();
+	void on_actionDelete_triggered();
 	void on_action_Extract_All_triggered();
 	void on_actionRepack_triggered();
 	void on_action_Merge_GRF_triggered();

@@ -569,7 +569,7 @@ GRFEXPORT bool grf_tree_is_dir(void *node) {
 	return ((struct grf_treenode *)node)->is_dir;
 }
 
-GRFEXPORT bool grf_tree_dir_count_files(void *node) {
+GRFEXPORT uint32_t grf_tree_dir_count_files(void *node) {
 	return ((struct grf_treenode *)node)->subdir->count;
 }
 
@@ -1067,6 +1067,10 @@ GRFEXPORT uint32_t grf_file_get_id(void *node) {
 
 GRFEXPORT void *grf_get_file_by_id(void *handler, uint32_t id) {
 	return ((struct grf_handler *)handler)->node_table[id];
+}
+
+GRFEXPORT void **grf_get_file_id_list(void *handler) {
+	return (void **)((struct grf_handler *)handler)->node_table;
 }
 
 GRFEXPORT uint32_t grf_file_get_contents(void *tmphandler, void *target) {

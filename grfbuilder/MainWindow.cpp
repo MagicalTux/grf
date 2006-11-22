@@ -255,6 +255,7 @@ void MainWindow::on_btn_open_clicked() {
 	ui.view_allfiles->sortItems(4, Qt::AscendingOrder);
 	// enable buttons
 	ui.btn_extract->setEnabled(true);
+	ui.btn_delete->setEnabled(true);
 	ui.btn_extractall->setEnabled(true);
 	ui.btn_repack->setEnabled(true);
 	ui.btn_close->setEnabled(true);
@@ -262,6 +263,7 @@ void MainWindow::on_btn_open_clicked() {
 	ui.btn_mergedir->setEnabled(false);
 	// menuitems
 	ui.action_Extract->setEnabled(true);
+	ui.actionDelete->setEnabled(true);
 	ui.action_Extract_All->setEnabled(true);
 	ui.actionRepack->setEnabled(true);
 	ui.action_Close->setEnabled(true);
@@ -279,14 +281,15 @@ void MainWindow::on_btn_close_clicked() {
 		this->grf_file.close();
 		this->grf = NULL;
 		this->grf_has_tree = false;
+		ui.view_filestree->clear();
 		ui.progbar->setValue(0);
 		ui.tab_sel->setCurrentIndex(0);
 		ui.view_allfiles->clear();
-		ui.view_filestree->clear();
 		ui.viewSearch->clear();
 		this->last_search.fromAscii("");
 		// disable buttons
 		ui.btn_extract->setEnabled(false);
+		ui.btn_delete->setEnabled(false);
 		ui.btn_extractall->setEnabled(false);
 		ui.btn_repack->setEnabled(false);
 		ui.btn_close->setEnabled(false);
@@ -294,6 +297,7 @@ void MainWindow::on_btn_close_clicked() {
 		ui.btn_mergedir->setEnabled(false);
 		// menuitems
 		ui.action_Extract->setEnabled(false);
+		ui.actionDelete->setEnabled(false);
 		ui.action_Extract_All->setEnabled(false);
 		ui.actionRepack->setEnabled(false);
 		ui.action_Close->setEnabled(false);
@@ -330,6 +334,65 @@ void MainWindow::on_actionAbout_triggered() {
 		).arg(GRFBUILDER_VERSION_MAJOR).arg(GRFBUILDER_VERSION_MINOR).arg(GRFBUILDER_VERSION_REVISION).arg(major).arg(minor).arg(revision)
 	);
 }
+
+void MainWindow::on_btn_delete_clicked() {
+	this->on_actionDelete_triggered();
+}
+
+void MainWindow::on_actionDelete_triggered() {
+	QList<QTreeWidgetItem *> objlist;
+	int lsize, i;
+	void *f;
+	if (this->grf == NULL) return;
+
+	switch(ui.tab_sel->currentIndex()) {
+		case 0: case 2:
+			if (ui.tab_sel->currentIndex() == 0) {
+				objlist = ui.view_allfiles->selectedItems();
+			} else {
+				objlist = ui.viewSearch->selectedItems();
+			}
+			if (objlist.size()==0) break;
+			if (objlist.size()==1) {
+				// YAY easy to do :o
+				void *gfile = grf_get_file_by_id(this->grf, objlist[0]->text(0).toUInt());
+				QString name(QString::fromUtf8(euc_kr_to_utf8(grf_file_get_basename(gfile))));
+				if (QMessageBox::question(this, tr("GrfBuilder"), tr("Are you sure you want to delete the file `%1'?").arg(name), QMessageBox::Ok | QMessageBox::Cancel, QMessageBox::Ok) == QMessageBox::Cancel) return;
+				grf_file_delete(gfile);
+				break;
+			}
+			lsize = objlist.size();
+			if (QMessageBox::question(this, tr("GrfBuilder"), tr("Are you sure you want to delete the %1 selected files?").arg(lsize), QMessageBox::Ok | QMessageBox::Cancel, QMessageBox::Ok) == QMessageBox::Cancel) return;
+			for(i=0;i<lsize;i++) {
+				QTreeWidgetItem *cur = objlist[i];
+				void *cur_file = grf_get_file_by_id(this->grf, cur->text(0).toUInt());
+				grf_file_delete(cur_file);
+			}
+			break;
+		case 1:
+			QMessageBox::warning(this, tr("GrfBuilder"), QString("Sorry, this is not working yet."), QMessageBox::Cancel, QMessageBox::Cancel);
+			break;
+	}
+	grf_save(this->grf);
+	ui.tab_sel->setCurrentIndex(0);
+	f = grf_get_file_first(this->grf);
+	ui.view_allfiles->clear();
+	while(f != NULL) {
+		QTreeWidgetItem *__item = new QTreeWidgetItem(ui.view_allfiles);
+		__item->setText(0, QString("%1").arg(grf_file_get_id(f)));
+		__item->setText(1, this->showSizeAsString(grf_file_get_storage_size(f))); // compsize
+		__item->setText(2, this->showSizeAsString(grf_file_get_size(f))); // realsize
+		__item->setText(3, QString("%1").arg(grf_file_get_storage_pos(f))); // pos
+		if (euc_kr_to_utf8(grf_file_get_filename(f)) == NULL) printf("ARGH %s\n", grf_file_get_filename(f));
+		__item->setText(4, QString::fromUtf8(euc_kr_to_utf8(grf_file_get_filename(f)))); // name
+//		__item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsUserCheckable | Qt::ItemIsEnabled | Qt::ItemIsDragEnabled | Qt::ItemIsEditable);
+		f = grf_get_file_next(f);
+	}
+	ui.view_allfiles->sortItems(4, Qt::AscendingOrder);
+	this->grf_has_tree = false;
+	ui.view_filestree->clear();
+}
+
 
 void MainWindow::on_btn_extract_clicked() {
 	this->on_action_Extract_triggered();
@@ -425,6 +488,7 @@ void MainWindow::on_action_Extract_triggered() {
 void MainWindow::on_viewSearch_customContextMenuRequested(const QPoint point) {
 	QMenu menu(this);
 	menu.addAction(ui.action_Extract);
+	menu.addAction(ui.actionDelete);
 	menu.addAction(ui.action_Extract_All);
 	menu.addAction(ui.actionRepack);
 	menu.exec(ui.view_allfiles->viewport()->mapToGlobal(point));
@@ -433,6 +497,7 @@ void MainWindow::on_viewSearch_customContextMenuRequested(const QPoint point) {
 void MainWindow::on_view_allfiles_customContextMenuRequested(const QPoint point) {
 	QMenu menu(this);
 	menu.addAction(ui.action_Extract);
+	menu.addAction(ui.actionDelete);
 	menu.addAction(ui.action_Extract_All);
 	menu.addAction(ui.actionRepack);
 	menu.exec(ui.view_allfiles->viewport()->mapToGlobal(point));
@@ -609,7 +674,7 @@ void MainWindow::doOpenFileById(int id) {
 				if (height<0) height = 0;
 				if (height>=255) height = 254;
 //				im.setPixel(x,sy-y-1, type?0:255);
-				im.setPixel(x,sy-y-1, height);
+				im.setPixel(x,sy-y-1, (int)height);
 			}
 		}
 	} else {

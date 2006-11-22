@@ -11,7 +11,7 @@
 #include "unicode_table_uhc.h"
 #include <grf.h>
 
-static uint32_t euc_kr_utf8_strlen(const uint8_t *euckr) {
+static uint32_t euc_kr_strlen(const uint8_t *euckr) {
 	uint32_t c=0;
 	const uint8_t *t=euckr;
 	while(*t) {
@@ -25,7 +25,36 @@ static uint32_t euc_kr_utf8_strlen(const uint8_t *euckr) {
 			continue;
 		}
 		c+=5; // max length, as we don't know what will happen
-//		return 0; /* should not happen -> throw fatal */
+		// This case wasn't supposed to happen as we were expecting to get a 100% EUC-KR
+		// file, however we got it anyway. Life is unpredictable.
+		//return 0; /* should not happen -> throw fatal */
+	}
+	return c;
+}
+
+static uint32_t utf8_strlen(const uint8_t *utf8) {
+	uint32_t c=0;
+	const uint8_t *t = utf8;
+	while(*t) {
+		uint8_t x=*t; t++; c++;
+		uint8_t l=0;
+		if ((x & 0x80) == 0) continue; // ASCII range
+		if ((x & 0xe0) == 0xc0) { // 2chars utf8
+			l=1;
+		} else if ((x & 0xf0) == 0xe0) { // 3chars utf8
+			l=2;
+		} else if ((x & 0xf8) == 0xf0) { // 4chars utf8
+			l=3;
+		} else if ((x & 0xfc) == 0xf8) { // 5chars utf8 (illegal)
+			l=4;
+		} else if ((x & 0xfe) == 0xfc) { // 6chars utf8 (illegal)
+			l=5;
+		}
+		if (l==0) return 0; /* ILLEGAL */
+		for (int i=0;i<l;i++) {
+			x=*t; t++; c++;
+			if ((x & 0x80) != 0x80) return 0; /* ILLEGAL */
+		}
 	}
 	return c;
 }
@@ -75,9 +104,90 @@ static void utf8_append_from_wchar(uint8_t **r, int c) {
 	**r = (c & 0x3f) | 0x80; (*r)++;
 }
 
+static bool euc_kr_append_from_wchar(uint8_t **r, int c) {
+	int s=0, c1, c2;
+	if (c >= ucs_a1_uhc_table_min && c < ucs_a1_uhc_table_max) {
+		s = ucs_a1_uhc_table[c - ucs_a1_uhc_table_min];
+	} else if (c >= ucs_a2_uhc_table_min && c < ucs_a2_uhc_table_max) {
+		s = ucs_a2_uhc_table[c - ucs_a2_uhc_table_min];
+	} else if (c >= ucs_a3_uhc_table_min && c < ucs_a3_uhc_table_max) {
+		s = ucs_a3_uhc_table[c - ucs_a3_uhc_table_min];
+	} else if (c >= ucs_i_uhc_table_min && c < ucs_i_uhc_table_max) {
+		s = ucs_i_uhc_table[c - ucs_i_uhc_table_min];
+	} else if (c >= ucs_s_uhc_table_min && c < ucs_s_uhc_table_max) {
+		s = ucs_s_uhc_table[c - ucs_s_uhc_table_min];
+	} else if (c >= ucs_r1_uhc_table_min && c < ucs_r1_uhc_table_max) {
+		s = ucs_r1_uhc_table[c - ucs_r1_uhc_table_min];
+	} else if (c >= ucs_r2_uhc_table_min && c < ucs_r2_uhc_table_max) {
+		s = ucs_r2_uhc_table[c - ucs_r2_uhc_table_min];
+	}
+
+	c1 = (s >> 8) & 0xff;
+	c2 = s & 0xff;
+	/* exclude UHC extension area */
+	if (c1 < 0xa1 || c2 < 0xa1){  
+		s = c;
+	}
+
+	if (s <= 0) {
+		c1 = c & ~0xffff; /* MBFL_WCSPLANE_MASK */
+		if (c1 == 0x70f10000) { /* MBFL_WCSPLANE_KSC5601 */
+			s = c & 0xffff; /* MBFL_WCSPLANE_MASK */
+		}
+		if (c == 0) {
+			s = 0;
+		} else if (s <= 0) {
+			return false; /* error */
+		}
+	}
+	if (s < 0) return false;
+	if (s < 0x80) { /* latin */
+		**r = s; (*r)++;
+		return true;
+	}
+	**r = ((s>>8)&0xff); (*r)++;
+	**r = (s&0xff); (*r)++;
+	return true;
+}
+
+GRFEXPORT char *utf8_to_euc_kr_r(const char *orig, uint8_t *res) {
+	int c;
+	uint32_t flen = utf8_strlen((const uint8_t *)orig);
+	uint8_t *t = (uint8_t *)orig;
+	uint8_t *r = res;
+	if (flen == 0) return NULL;
+	while (*t) {
+		uint8_t x = *t;
+		uint8_t l = 0, p;
+		if (x<0x80) {
+			// easy one, that's the same char in UTF-8
+			*r = *t;
+			r++; t++;
+			continue;
+		}
+		if ((x & 0xe0) == 0xc0) { // 2chars utf8
+			l=1; p=0x1f;
+		} else if ((x & 0xf0) == 0xe0) { // 3chars utf8
+			l=2; p=0xf;
+		} else if ((x & 0xf8) == 0xf0) { // 4chars utf8
+			l=3; p=0x7;
+		} else if ((x & 0xfc) == 0xf8) { // 5chars utf8 (illegal)
+			l=4; p=0x3;
+		} else if ((x & 0xfe) == 0xfc) { // 6chars utf8 (illegal)
+			l=5; p=0x1;
+		}
+		if (l==0) return 0; /* ILLEGAL */
+		c = x & p;
+		for(int i=0;i<l;i++) c = (c << 6) | (*(t++) & 0x3f);
+		if (!euc_kr_append_from_wchar(&r, c)) return NULL;
+	}
+	*r = 0;
+	return (char *)res;
+}
+
 GRFEXPORT char *euc_kr_to_utf8_r(const char *orig, uint8_t *res) {
 	int c;
-	uint32_t flen = euc_kr_utf8_strlen((const uint8_t *)orig); /* final len */
+	uint32_t flen = euc_kr_strlen((const uint8_t *)orig); /* final len */
 	uint8_t *t = (uint8_t *)orig;
 	uint8_t *r = res;
 	if (flen == 0) return NULL;
@@ -141,5 +251,10 @@ GRFEXPORT char *euc_kr_to_utf8_r(const char *orig, uint8_t *res) {
 GRFEXPORT char *euc_kr_to_utf8(const char *orig) {
 	static uint8_t *res[4096]; // should be enough
 	return euc_kr_to_utf8_r(orig, (uint8_t *)&res);
+}
+
+GRFEXPORT char *utf8_to_euc_kr(const char *orig) {
+	static uint8_t *res[4096]; // should be enough
+	return utf8_to_euc_kr_r(orig, (uint8_t *)&res);
 }
 
