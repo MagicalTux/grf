@@ -9,6 +9,7 @@
 #include <grf.h>
 #ifndef __WIN32
 #include <libgen.h>
+#include <sys/sendfile.h>
 #endif
 
 /* BEGIN: INCLUDE FROM GRFIO.C */
@@ -211,6 +212,59 @@ static void prv_grf_free_node(struct grf_node *node) {
 	free(node);
 }
 
+static void prv_grf_tree_table_free_node(struct grf_treenode *node) {
+	if (node->is_dir) {
+		hash_free_table(node->subdir);
+	}
+	if (node->name != NULL) free(node->name); // does not apply to root
+	free(node);
+}
+
+static void prv_grf_reg_tree_node(struct grf_treenode *root, struct grf_node *cur_node) {
+	char *fn = cur_node->filename;
+	char dirname[4096];
+	struct grf_treenode *parent = root;
+	struct grf_treenode *new;
+	while(1) {
+		size_t pos;
+		// locate either / or \ in filename...
+		for(pos=0;(*(fn+pos)!=0) && (*(fn+pos)!='/') && (*(fn+pos)!='\\');pos++);
+		memcpy(&dirname, fn, pos+1);
+		if (*(fn+pos)==0) break; // record file~
+		// this is a directory, check if already existing...
+		dirname[pos] = 0;
+		fn+=pos+1;
+		new = hash_lookup(parent->subdir, dirname);
+		if (new != NULL) { // found it !
+			if (!new->is_dir) {
+				// bogus grf file: directory with same name as a file... convert to directory !
+				new->is_dir = true;
+				new->subdir = hash_create_table(GRF_TREE_HASH_SIZE, prv_grf_tree_table_free_node);
+			}
+			parent = new;
+			continue;
+		}
+		// not found -> create a new node
+		new = (struct grf_treenode *)calloc(1, sizeof(struct grf_treenode));
+		memset(new, 0, sizeof(struct grf_treenode));
+		new->is_dir = true;
+		new->subdir = hash_create_table(GRF_TREE_HASH_SIZE, prv_grf_tree_table_free_node);
+		new->parent = parent;
+		new->name = strdup((char *)&dirname);
+		hash_add_element(parent->subdir, (char *)&dirname, new);
+		parent = new;
+	}
+	// record file
+	new = (struct grf_treenode *)calloc(1, sizeof(struct grf_treenode));
+	memset(new, 0, sizeof(struct grf_treenode));
+	new->is_dir = false;
+	new->ptr = cur_node;
+	new->parent = parent;
+	cur_node->tree_parent = new;
+	new->name = strdup((char *)&dirname);
+	hash_add_element(parent->subdir, (char *)&dirname, new);
+}
+
 GRFEXPORT void *grf_new_by_fd(int fd, bool writemode) {
 	struct grf_handler *handler;
 
@@ -226,6 +280,31 @@ GRFEXPORT void *grf_new_by_fd(int fd, bool writemode) {
 	handler->compression_level = 5; /* default ZLIB compression level */
 	handler->version = GRF_FILE_OUTPUT_VERISON; /* default version */
 	return handler;
+}
+
+inline struct grf_node *prv_grf_find_free_space(struct grf_handler *handler, size_t size, struct grf_node *inode) {
+	// find a "leak" between two files, to put our own file
+	// our files are sorted, that's a good thing:)
+	// We just have to return the node where the space is available, the other func will
+	// insert his new node just after this one, so everything stays cool
+	struct grf_node *cur = handler->first_node;
+	// case: inode is the first node (and is not null)
+	if ((cur == inode) && (cur != NULL)) cur = cur->next;
+	// case: there's no (other) file
+	if (cur == NULL) return NULL; /* special case : nothing in the grf */
+	while(cur->next != NULL) {
+		struct grf_node *next = cur->next;
+		uint32_t avail;
+		if (next == inode) { /* skip the file refered by "inode" */
+			next = next->next;
+			if (next == NULL) break; /* ignore file is EOF */
+		}
+		// check available space between files
+		avail = next->pos - (cur->pos + cur->len_aligned);
+		if (avail >= size) break; /* yatta! */
+		cur = next;
+	}
+	return cur;
 }
 
 GRFEXPORT void *grf_new(const char *filename, bool writemode) {
@@ -246,15 +325,96 @@ GRFEXPORT void grf_set_callback(void *tmphandler, bool (*callback)(void *, void 
 
 GRFEXPORT bool grf_merge(void *_dest, void *_src, uint8_t repack_type) {
 	struct grf_handler *dest=_dest, *src = _src;
+	struct grf_node *cur, *rep, *prev;
+	void *ptr;
+	if (!dest->write_mode) return false;
 	// Rather simple :
 	// 1. For each node in src
-	// 2. Seek same file in dst, if found, remove it from list. If not found, allocate a new grf_node struct
-	// 3. Copy file in memory, from src
-	// 4. Apply required operations if needed, see repack_type. If RECOMPRESS is set, always recompress, even if file gets bigger
-	// 5. Seek new place in dest
-	// 6. Write file in dest, and update its values
-	// 7. Continue at 1
+	cur = src->first_node;
+	while(cur != NULL) {
+		dest->need_save = true;
+		// 2. Seek same file in dst, if found, remove it from list. If not found, allocate a new grf_node struct
+		rep = hash_lookup(dest->fast_table, cur->filename);
+		prev = prv_grf_find_free_space(dest, cur->len_aligned, rep);
+		if (rep != NULL) {
+		// YAY! Everything made easy, but count file as replaced
+			free(rep->filename);
+			dest->wasted_space += rep->len_aligned;
+			rep->filename = strdup(cur->filename);
+		} else {
+			// Regular add file~ (argh)
+			rep = calloc(1, sizeof(struct grf_node));
+			rep->filename = strdup(cur->filename);
+			hash_add_element(dest->fast_table, rep->filename, rep);
+			if (dest->root != NULL) prv_grf_reg_tree_node(dest->root, rep);
+		}
+		// filename: replace '/' with '\\' (if any)
+		for(int i=0;*(rep->filename+i)!=0;i++) if (*(rep->filename+i)=='/') *(rep->filename+i)='\\';
+		if (prev == NULL) {
+			rep->pos = 0;
+			rep->next = dest->first_node; // just in case, supposed to be null
+			rep->prev = NULL;
+			dest->first_node = rep;
+		} else {
+			// insert entry in the chained list
+			rep->pos = prev->pos + prev->len_aligned;
+			rep->next = prev->next;
+			rep->prev = prev;
+			if (rep->next != NULL) rep->next->prev = rep;
+			prev->next = rep;
+		}
+		rep->size = cur->size;
+		rep->len = cur->len;
+		rep->len_aligned = cur->len_aligned;
+		rep->flags = cur->flags;
+		// 5. Copy memory to file, and free() it
+		lseek(dest->fd, rep->pos + GRF_HEADER_SIZE, SEEK_SET);
+#ifndef __WIN32
+		if (repack_type == GRF_REPACK_FAST) {
+			off_t offset = cur->pos;
+			if (sendfile(dest->fd, src->fd, &offset, cur->len_aligned)!=cur->len_aligned) {
+				hash_del_element(dest->fast_table, rep->filename);
+				return false;
+			}
+		} else {
+#endif
+			lseek(src->fd, cur->pos + GRF_HEADER_SIZE, SEEK_SET);
+			ptr = malloc(cur->len_aligned + 1024); // in case of decrypt
+			if (read(src->fd, ptr, cur->len_aligned) != cur->len_aligned) {
+				free(ptr);
+				hash_del_element(dest->fast_table, rep->filename);
+				return false;
+			}
+			if (write(dest->fd, ptr, rep->len_aligned)!=rep->len_aligned) {
+				free(ptr);
+				hash_del_element(dest->fast_table, rep->filename);
+				return false;
+			}
+#ifndef __WIN32
+		}
+#endif
+		// 6. If we didn't use end of archive, but some wasted space, substract used space to handler->wasted_space
+		if (rep->next != NULL) {
+			dest->wasted_space -= rep->len_aligned;
+		}
+		cur = cur->next;
+	}
 	return false;
+}
+
+static void prv_grf_recount_wasted_space(struct grf_handler *handler) {
+	struct stat s;
+	uint32_t w;
+	struct grf_node *node;
+
+	if (fstat(handler->fd, &s)!=0) return;
+	w = s.st_size - GRF_HEADER_SIZE - handler->table_size;
+	node = handler->first_node;
+	while(node != NULL) {
+		w-=node->len_aligned;
+		node=node->next;
+	}
+	handler->wasted_space = w;
 }
 
 GRFEXPORT bool grf_repack(void *tmphandler, uint8_t repack_type) {
@@ -349,65 +509,13 @@ GRFEXPORT bool grf_repack(void *tmphandler, uint8_t repack_type) {
 	}
 	free(prenode);
 	grf_save(handler);
+	prv_grf_recount_wasted_space(handler);
 	return true;
 }
 
 static inline size_t prv_grf_strnlen(const char *str, const size_t maxlen) {
 	for(size_t i=0;i<maxlen;i++) if (*(str+i)==0) return i;
 	return maxlen;
-}
-
-static void prv_grf_tree_table_free_node(struct grf_treenode *node) {
-	if (node->is_dir) {
-		hash_free_table(node->subdir);
-	}
-	if (node->name != NULL) free(node->name); // does not apply to root
-	free(node);
-}
-
-static void prv_grf_reg_tree_node(struct grf_treenode *root, struct grf_node *cur_node) {
-	char *fn = cur_node->filename;
-	char dirname[4096];
-	struct grf_treenode *parent = root;
-	struct grf_treenode *new;
-	while(1) {
-		size_t pos;
-		// locate either / or \ in filename...
-		for(pos=0;(*(fn+pos)!=0) && (*(fn+pos)!='/') && (*(fn+pos)!='\\');pos++);
-		memcpy(&dirname, fn, pos+1);
-		if (*(fn+pos)==0) break; // record file~
-		// this is a directory, check if already existing...
-		dirname[pos] = 0;
-		fn+=pos+1;
-		new = hash_lookup(parent->subdir, dirname);
-		if (new != NULL) { // found it !
-			if (!new->is_dir) {
-				// bogus grf file: directory with same name as a file... convert to directory !
-				new->is_dir = true;
-				new->subdir = hash_create_table(GRF_TREE_HASH_SIZE, prv_grf_tree_table_free_node);
-			}
-			parent = new;
-			continue;
-		}
-		// not found -> create a new node
-		new = (struct grf_treenode *)calloc(1, sizeof(struct grf_treenode));
-		memset(new, 0, sizeof(struct grf_treenode));
-		new->is_dir = true;
-		new->subdir = hash_create_table(GRF_TREE_HASH_SIZE, prv_grf_tree_table_free_node);
-		new->parent = parent;
-		new->name = strdup((char *)&dirname);
-		hash_add_element(parent->subdir, (char *)&dirname, new);
-		parent = new;
-	}
-	// record file
-	new = (struct grf_treenode *)calloc(1, sizeof(struct grf_treenode));
-	memset(new, 0, sizeof(struct grf_treenode));
-	new->is_dir = false;
-	new->ptr = cur_node;
-	new->parent = parent;
-	cur_node->tree_parent = new;
-	new->name = strdup((char *)&dirname);
-	hash_add_element(parent->subdir, (char *)&dirname, new);
 }
 
 GRFEXPORT void grf_create_tree(void *tmphandler) {
@@ -541,7 +649,7 @@ static bool prv_grf_load(struct grf_handler *handler) {
 	struct grf_header head;
 	struct stat grfstat;
 	uint32_t posinfo[2];
-	int32_t wasted_space=0;
+	uint32_t wasted_space=0;
 	uint32_t brokenpos;
 	int dlen, result;
 	void *table, *table_comp, *pos, *pos_max;
@@ -1071,31 +1179,6 @@ GRFEXPORT bool grf_put_contents_to_file(void *file, const char *fn) {
 	return true;
 }
 
-
-inline struct grf_node *prv_grf_find_free_space(struct grf_handler *handler, size_t size, struct grf_node *inode) {
-	// find a "leak" between two files, to put our own file
-	// our files are sorted, that's a good thing:)
-	// We just have to return the node where the space is available, the other func will
-	// insert his new node just after this one, so everything stays cool
-	struct grf_node *cur = handler->first_node;
-	// case: inode is the first node (and is not null)
-	if ((cur == inode) && (cur != NULL)) cur = cur->next;
-	// case: there's no (other) file
-	if (cur == NULL) return NULL; /* special case : nothing in the grf */
-	while(cur->next != NULL) {
-		struct grf_node *next = cur->next;
-		uint32_t avail;
-		if (next == inode) { /* skip the file refered by "inode" */
-			next = next->next;
-			if (next == NULL) break; /* ignore file is EOF */
-		}
-		// check available space between files
-		avail = next->pos - (cur->pos + cur->len_aligned);
-		if (avail >= size) break; /* yatta! */
-		cur = next;
-	}
-	return cur;
-}
 
 GRFEXPORT void *grf_file_add(void *tmphandler, char *filename, void *ptr, size_t size) {
 	// returns pointer to the newly created file structure

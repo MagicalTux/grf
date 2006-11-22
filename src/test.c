@@ -61,11 +61,16 @@ void test_new_handler() {
 	printf(" - test_new_handler(): Adding some files: ");
 	// GRFEXPORT void *grf_file_add(void *tmphandler, char *filename, void *ptr, size_t size)
 	printf("grf_test_linux[%p] ", grf_file_add_path(handler, "data/grf_test_linux", "grf_test_linux"));
+	fflush(stdout);
 	printf("libgrf64.so[%p] ", grf_file_add_path(handler, "data/libgrf64.so", "libgrf64.so"));
-	printf("problemfix.gpf[%p] ", grf_file_add_path(handler, "data/problemfix.gpf", "problemfix.gpf"));
-	printf("Alpha.grf[%p] ", grf_file_add_path(handler, "data/Alpha.grf", "Alpha.grf"));
-	printf("Beta.grf[%p] ", grf_file_add_path(handler, "data/Beta.grf", "Beta.grf"));
-	printf("test.txt[%p]\n", grf_file_add_path(handler, "data/test.txt", "test.txt"));
+	fflush(stdout);
+	printf("problemfix.gpf[%p] ", grf_file_add_path(handler, "data/problemfix.gpf", "grf/problemfix.gpf"));
+	fflush(stdout);
+	printf("Alpha.grf[%p] ", grf_file_add_path(handler, "data/Alpha.grf", "grf/Alpha.grf"));
+	fflush(stdout);
+	printf("Beta.grf[%p] ", grf_file_add_path(handler, "data/Beta.grf", "grf/Beta.grf"));
+	fflush(stdout);
+	printf("test.txt[%p]\n", grf_file_add_path(handler, "data/test.txt", "doc/README"));
 	grf_save(handler);
 	grf_free(handler);
 	timer_start();
@@ -121,7 +126,7 @@ void test_load_file() {
 //	char *fn = "/storage/win_d/Program Files/Gravity/RO/data.grf";
 //	char *fn = "/storage/win_d/Program Files/Gravity/20060224_krodata.gpf";
 //	char *fn = "problemfix.gpf";
-	char *fn = "data.grf";
+	char *fn = "grf/data.grf";
 	char *fn2 = "data/airplane.gnd";
 	int x;
 	unsigned int y;
