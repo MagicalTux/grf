@@ -3,12 +3,12 @@
 <context>
     <name>Dialog</name>
     <message>
-        <location filename="../MainWindow.cpp" line="720"/>
+        <location filename="../MainWindow.cpp" line="722"/>
         <source>Image Preview</source>
         <translation>Previo de la Imagen</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="721"/>
+        <location filename="../MainWindow.cpp" line="723"/>
         <source>Close</source>
         <translation>Cierre</translation>
     </message>
@@ -31,7 +31,7 @@
         <translation>Archivos de GRF (*.grf *.gpf)</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="578"/>
+        <location filename="../MainWindow.cpp" line="580"/>
         <source>GrfBuilder</source>
         <translation>GrfBuilder</translation>
     </message>
@@ -51,22 +51,22 @@
         <translation>&lt;p align=&quot;center&quot;&gt;&lt;b&gt;GrfBuilder v%1.%2.%3 por MagicalTux&lt;/b&gt;&lt;/p&gt;&lt;p align=&quot;left&quot;&gt;Ligado contra libgrf v%4.%5.%6 (tambi� por MagicalTux )&lt;br /&gt;Esta herramienta se disea para permitir haber ledo fcil y para escribir el acceso a los archivos de GRF.&lt;br /&gt;Esto era developped para el propsito nico de demostrar que la necesidad de Gravity mejora los reveladores.&lt;/p&gt;&lt;p align=&quot;left&quot;&gt;Traducci� por Sephy&lt;/p&gt;&lt;p align=&quot;left&quot;&gt;Puedes entrar en contacto con MagicalTux encendido &lt;a href=&quot;http://ookoo.org/cgi-bin/cgi-irc/irc.cgi&quot;&gt;irc://irc.ookoo.org/ooKoo&lt;/a&gt;&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="523"/>
+        <location filename="../MainWindow.cpp" line="525"/>
         <source>Extraction in progress...</source>
         <translation>Extraccin en marcha...</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="523"/>
+        <location filename="../MainWindow.cpp" line="525"/>
         <source>Cancel</source>
         <translation>Cancelacin</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="535"/>
+        <location filename="../MainWindow.cpp" line="537"/>
         <source>Extracting file %1...</source>
         <translation>Extraer de fichero %1...</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="575"/>
+        <location filename="../MainWindow.cpp" line="577"/>
         <source>Your computer has no audio support. Please make sure you have an audio device available and retry.</source>
         <translation>Su ordenador no tiene ningn apoyo sonoro. Quiere asegurarles de tener un dispositivo audio disponible y vuelven a intentar.</translation>
     </message>
@@ -371,7 +371,7 @@
         <translation>%1 kiB</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="578"/>
+        <location filename="../MainWindow.cpp" line="580"/>
         <source>Currently playing file `%1&apos;. Press &quot;Ok&quot; to stop.</source>
         <translation>Actualmente jugar de fichero &apos;%1&apos;. Unterstützen Presionar &quot;OK&quot; para parar.</translation>
     </message>

@@ -8,12 +8,12 @@
         <translation type="obsolete">Dialog</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="721"/>
+        <location filename="../MainWindow.cpp" line="723"/>
         <source>Close</source>
         <translation>Fermer</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="720"/>
+        <location filename="../MainWindow.cpp" line="722"/>
         <source>Image Preview</source>
         <translation>Prévisualisation d&apos;image</translation>
     </message>
@@ -31,7 +31,7 @@
         <translation>Fichiers GRF (*.grf *.gpf)</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="578"/>
+        <location filename="../MainWindow.cpp" line="580"/>
         <source>GrfBuilder</source>
         <translation>GrfBuilder</translation>
     </message>
@@ -321,17 +321,17 @@
         <translation type="obsolete">Type d&apos;e&amp;xtraction</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="523"/>
+        <location filename="../MainWindow.cpp" line="525"/>
         <source>Extraction in progress...</source>
         <translation>Extraction en cours...</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="523"/>
+        <location filename="../MainWindow.cpp" line="525"/>
         <source>Cancel</source>
         <translation>Annuler</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="535"/>
+        <location filename="../MainWindow.cpp" line="537"/>
         <source>Extracting file %1...</source>
         <translation>Extraction de %1...</translation>
     </message>
@@ -371,7 +371,7 @@
         <translation>&lt;p align=&quot;center&quot;&gt;&lt;b&gt;GrfBuilder v%1.%2.%3 par MagicalTux&lt;/b&gt;&lt;/p&gt;&lt;p align=&quot;left&quot;&gt;Lié à la libgrf v%4.%5.%6 (aussi par MagicalTux)&lt;br /&gt;Cet outil a été conçu pour permettre un accès simple en lecture et en écriture aux fichiers GRF.&lt;br /&gt;Il a été développé dans le seul but de démontrer que Gravity a besoin de meilleurs développeurs.&lt;/p&gt;&lt;p align=&quot;left&quot;&gt;Version française par MagicalTux&lt;/p&gt;&lt;p align=&quot;left&quot;&gt;Vous pouvez contacter MagicalTux sur &lt;a href=&quot;http://ookoo.org/cgi-bin/cgi-irc/irc.cgi&quot;&gt;irc://irc.ookoo.org/ooKoo&lt;/a&gt;&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="575"/>
+        <location filename="../MainWindow.cpp" line="577"/>
         <source>Your computer has no audio support. Please make sure you have an audio device available and retry.</source>
         <translation>Votre ordinateur n&apos;a pas de support audio. Veuillez vous assurer que vous disposez d&apos;un périphérique audio disponible et réessayez.</translation>
     </message>
@@ -391,7 +391,7 @@
         <translation>Français</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="578"/>
+        <location filename="../MainWindow.cpp" line="580"/>
         <source>Currently playing file `%1&apos;. Press &quot;Ok&quot; to stop.</source>
         <translation>Lecture de «%1» en cours. Appuyez sur «OK» pour arrêter.</translation>
     </message>
