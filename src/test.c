@@ -208,9 +208,8 @@ int main() {
 	puts(grf_versionstring());
 	puts(" * Running library tests...");
 	test_grf_version();
-//	test_new_handler();
-//	test_load_file();
-	printf("UTF8 test = %s\n", utf8_to_euc_kr("data\\test\\\xed\x9c\x98\xea\xb2\x94\\"));
+	test_new_handler();
+	test_load_file();
 	return 0;
 }
 
