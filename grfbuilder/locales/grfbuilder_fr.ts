@@ -488,17 +488,17 @@
     <message>
         <location filename="../MainWindow.cpp" line="178"/>
         <source>Merging file %1...</source>
-        <translation type="unfinished"></translation>
+        <translation>Fusion du fichier %1...</translation>
     </message>
     <message>
         <location filename="../MainWindow.cpp" line="198"/>
         <source>Could not open file %1 in read-only mode.</source>
-        <translation type="unfinished"></translation>
+        <translation>Impossible d&apos;ouvrir le fichier %1 en lecture seule.</translation>
     </message>
     <message>
         <location filename="../MainWindow.cpp" line="208"/>
         <source>Merge in progress...</source>
-        <translation type="unfinished"></translation>
+        <translation>Fusion en cours...</translation>
     </message>
 </context>
 <context>
