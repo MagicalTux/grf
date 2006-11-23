@@ -88,7 +88,7 @@
     <message>
         <location filename="../ui_MainWindow.h" line="433"/>
         <source>&amp;Open</source>
-        <translation>&amp;Öffnen</translation>
+        <translation>Öffne&amp;n</translation>
     </message>
     <message>
         <location filename="../ui_MainWindow.h" line="434"/>
@@ -138,7 +138,7 @@
     <message>
         <location filename="../ui_MainWindow.h" line="440"/>
         <source>Ctrl+W</source>
-        <translation>Ctrl+S</translation>
+        <translation>Ctrl+W</translation>
     </message>
     <message>
         <location filename="../ui_MainWindow.h" line="441"/>
@@ -148,7 +148,7 @@
     <message>
         <location filename="../ui_MainWindow.h" line="442"/>
         <source>Ctrl+M</source>
-        <translation>Ctrl+F</translation>
+        <translation>Ctrl+M</translation>
     </message>
     <message>
         <location filename="../ui_MainWindow.h" line="443"/>
@@ -158,7 +158,7 @@
     <message>
         <location filename="../ui_MainWindow.h" line="444"/>
         <source>Ctrl+D</source>
-        <translation>Ctrl+R</translation>
+        <translation>Ctrl+D</translation>
     </message>
     <message>
         <location filename="../ui_MainWindow.h" line="445"/>
@@ -168,7 +168,7 @@
     <message>
         <location filename="../ui_MainWindow.h" line="446"/>
         <source>Ctrl+Q</source>
-        <translation>Ctrl+V</translation>
+        <translation>Ctrl+Q</translation>
     </message>
     <message>
         <location filename="../ui_MainWindow.h" line="447"/>
@@ -398,92 +398,92 @@
     <message>
         <location filename="../ui_MainWindow.h" line="500"/>
         <source>Repack type</source>
-        <translation type="unfinished"></translation>
+        <translation> Packen Sie Art ein</translation>
     </message>
     <message>
         <location filename="../MainWindow.cpp" line="158"/>
         <source>Repack in progress...</source>
-        <translation type="unfinished"></translation>
+        <translation> Packen Sie in Bewegung...</translation>
     </message>
     <message>
         <location filename="../MainWindow.cpp" line="142"/>
         <source>Moving file %1...</source>
-        <translation type="unfinished"></translation>
+        <translation> Bewegliche Akte %1...</translation>
     </message>
     <message>
         <location filename="../MainWindow.cpp" line="63"/>
         <source>%1 B</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 B</translation>
     </message>
     <message>
         <location filename="../MainWindow.cpp" line="157"/>
         <source>Repacking this file will reduce it by %1% (%2). Do you want to continue?</source>
-        <translation type="unfinished"></translation>
+        <translation> Die Wiederverpackung dieser Akte verringert sie vorbei %1% (%2).  Möchten Sie fortfahren?</translation>
     </message>
     <message>
         <location filename="../ui_MainWindow.h" line="470"/>
         <source>Ctrl+R</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+R</translation>
     </message>
     <message>
         <location filename="../MainWindow.cpp" line="426"/>
         <source>Extract file as...</source>
-        <translation type="unfinished"></translation>
+        <translation> Extraktakte wie...</translation>
     </message>
     <message>
         <location filename="../MainWindow.cpp" line="426"/>
         <source>%1 files (*.%1)</source>
-        <translation type="unfinished"></translation>
+        <translation>%1 Kartei (*.%1)</translation>
     </message>
     <message>
         <location filename="../MainWindow.cpp" line="430"/>
         <source>Could not open %1 for writing a file.</source>
-        <translation type="unfinished"></translation>
+        <translation> Konnte nicht %1 für das Schreiben einer Akte öffnen.</translation>
     </message>
     <message>
         <location filename="../MainWindow.cpp" line="435"/>
         <source>Could not write data to %1 while extracting a file.</source>
-        <translation type="unfinished"></translation>
+        <translation> Konnte nicht Daten bis %1 beim Extrahieren einer Akte schreiben.</translation>
     </message>
     <message>
         <location filename="../MainWindow.cpp" line="178"/>
         <source>Merging file %1...</source>
-        <translation type="unfinished"></translation>
+        <translation> Mischenakte %1...</translation>
     </message>
     <message>
         <location filename="../MainWindow.cpp" line="198"/>
         <source>Could not open file %1 in read-only mode.</source>
-        <translation type="unfinished"></translation>
+        <translation> unmöglich die Kartei %1 in nur Lektüre zu öffnen.</translation>
     </message>
     <message>
         <location filename="../MainWindow.cpp" line="208"/>
         <source>Merge in progress...</source>
-        <translation type="unfinished"></translation>
+        <translation> Mischen in Bewegung...</translation>
     </message>
     <message>
         <location filename="../ui_MainWindow.h" line="491"/>
         <source>Delete</source>
-        <translation type="unfinished"></translation>
+        <translation>Löschung</translation>
     </message>
     <message>
         <location filename="../MainWindow.cpp" line="360"/>
         <source>Are you sure you want to delete the file `%1&apos;?</source>
-        <translation type="unfinished"></translation>
+        <translation> Sind Sie Sie möchten die Akte `%1 löschen &apos; sicher?</translation>
     </message>
     <message>
         <location filename="../MainWindow.cpp" line="365"/>
         <source>Are you sure you want to delete the %1 selected files?</source>
-        <translation type="unfinished"></translation>
+        <translation>Sind Sie Sie möchten die %1 vorgewählten Akten löschen sicher?</translation>
     </message>
     <message>
         <location filename="../ui_MainWindow.h" line="471"/>
         <source>Delete selected</source>
-        <translation type="unfinished"></translation>
+        <translation>Löschung vorgewählt</translation>
     </message>
     <message>
         <location filename="../MainWindow.cpp" line="531"/>
         <source>Extract to...</source>
-        <translation type="unfinished"></translation>
+        <translation>Extrakt zu...</translation>
     </message>
 </context>
 </TS>
