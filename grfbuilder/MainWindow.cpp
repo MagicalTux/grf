@@ -201,13 +201,56 @@ void MainWindow::on_actionMerge_Dir_triggered() {
 struct files_list {
 	QFile f;
 	QString p; // path inside grf (no euc-kr)
+};
+
+bool MainWindow::do_recurse_dirscan(QList <struct files_list> *l, QString path, QString vpath) {
+	QDir cdir(path);
+	QStringList c(cdir.entryList());
+	for(int i=c.size()-1;i>=0;i--) {
+		QString e(c[i]);
+		QString s;
+		struct files_list *n;
+		// Detect if e is either :
+		// - Korean Unicode
+		// - EUC-KR ANSI
+		// - Invalid string (issue a warning)
+		if (euc_kr_to_utf8(e.toLocal8Bit().constData()) != NULL) {
+			// looks like we're going to do something from that :)
+			s = QString::fromUtf8(euc_kr_to_utf8(e.toLocal8Bit().constData()));
+		} else if (utf8_to_euc_kr(e.toUtf8().constData()) != NULL) {
+			// looks like korean encoded as UNICODE
+			s = e;
+		} else {
+			QMessageBox::warning(this, tr("GrfBuilder"), tr("Bad encoding for file `%1'. Aborting process!").arg(path+e), QMessageBox::Cancel, QMessageBox::Cancel);
+			return false;
+		}
+		n = new struct files_list;
+		n->f.setFileName(path+e);
+		n->p = s;
+		QFileInfo fi(path+e);
+		if (fi.isDir()) {
+			// do a recursive call XXX
+#ifdef __WIN32
+			QString PS("\\");
+#else
+			QString PS("/");
+#endif
+			this->do_recurse_dirscan(l, path+e+PS, vpath+s+"\\");
+		}
+	}
+	return true;
 }
 
 void MainWindow::on_btn_mergedir_clicked() {
 	QString xpath = QFileDialog::getExistingDirectory(this, tr("Import directory..."));
 	if (xpath.isNull()) return;
 	// ok, we got a directory, scan it for all files and directories...
-	QList
+	QList <struct files_list> l;
+	QProgressDialog prog(tr("Merge in progress..."), tr("Cancel"), 0, grf_filecount(grf), this);
+	prog.setWindowModality(Qt::WindowModal);
+	prog.setLabelText(tr("Preparing to merge directory..."));
+	// We need to *recursively* scan the selected directory~
+	this->do_recurse_dirscan(&l, xpath, QString("data\\"));
 }
 
 void MainWindow::on_action_Merge_GRF_triggered() {
@@ -249,6 +292,7 @@ void MainWindow::on_btn_mergegrf_clicked() {
 		return;
 	}
 	QProgressDialog prog(tr("Merge in progress..."), tr("Cancel"), 0, grf_filecount(grf), this);
+	prog.setWindowModality(Qt::WindowModal);
 	grf_set_callback(this->grf, merge_grf_callback_caller, (void *)&prog);
 	grf_merge(this->grf, grf, this->repack_type);
 	grf_free(grf);
@@ -265,7 +309,7 @@ void MainWindow::on_btn_mergegrf_clicked() {
 		__item->setText(1, this->showSizeAsString(grf_file_get_storage_size(f))); // compsize
 		__item->setText(2, this->showSizeAsString(grf_file_get_size(f))); // realsize
 		__item->setText(3, QString("%1").arg(grf_file_get_storage_pos(f))); // pos
-		if (euc_kr_to_utf8(grf_file_get_filename(f)) == NULL) printf("ARGH %s\n", grf_file_get_filename(f));
+//		if (euc_kr_to_utf8(grf_file_get_filename(f)) == NULL) printf("ARGH %s\n", grf_file_get_filename(f));
 		__item->setText(4, QString::fromUtf8(euc_kr_to_utf8(grf_file_get_filename(f)))); // name
 //		__item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsUserCheckable | Qt::ItemIsEnabled | Qt::ItemIsDragEnabled | Qt::ItemIsEditable);
 		f = grf_get_file_next(f);
@@ -275,29 +319,8 @@ void MainWindow::on_btn_mergegrf_clicked() {
 	ui.view_filestree->clear();
 }
 
-void MainWindow::on_btn_open_clicked() {
-	QString str = QFileDialog::getOpenFileName(this, tr("Open File"),
-			NULL, tr("GRF Files (*.grf *.gpf)"));
+void MainWindow::RefreshAfterLoad() {
 	void *f;
-
-	if (str.isNull()) return;
-
-	this->on_btn_close_clicked();
-
-	this->grf_file.setFileName(str);
-	if (!this->grf_file.open(QIODevice::ReadWrite)) {
-		QMessageBox::warning(this, tr("GrfBuilder"), tr("Could not load this file in read/write mode."), QMessageBox::Cancel, QMessageBox::Cancel);
-		return;
-	}
-	this->grf = grf_new_by_fd(this->grf_file.handle(), true);
-	this->grf_has_tree = false;
-	grf_set_callback(this->grf, grf_callback_caller, (void *)this);
-	grf_set_compression_level(this->grf, this->compression_level);
-	this->grf = grf_load_from_new(this->grf);
-	if (this->grf == NULL) {
-		QMessageBox::warning(this, tr("GrfBuilder"), tr("The selected file doesn't look like a valid GRF file."), QMessageBox::Cancel, QMessageBox::Cancel);
-		return;
-	}
 	ui.tab_sel->setCurrentIndex(0);
 	f = grf_get_file_first(this->grf);
 	while(f != NULL) {
@@ -306,7 +329,7 @@ void MainWindow::on_btn_open_clicked() {
 		__item->setText(1, this->showSizeAsString(grf_file_get_storage_size(f))); // compsize
 		__item->setText(2, this->showSizeAsString(grf_file_get_size(f))); // realsize
 		__item->setText(3, QString("%1").arg(grf_file_get_storage_pos(f))); // pos
-		if (euc_kr_to_utf8(grf_file_get_filename(f)) == NULL) printf("ARGH %s\n", grf_file_get_filename(f));
+//		if (euc_kr_to_utf8(grf_file_get_filename(f)) == NULL) printf("ARGH %s\n", grf_file_get_filename(f));
 		__item->setText(4, QString::fromUtf8(euc_kr_to_utf8(grf_file_get_filename(f)))); // name
 //		__item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsUserCheckable | Qt::ItemIsEnabled | Qt::ItemIsDragEnabled | Qt::ItemIsEditable);
 		f = grf_get_file_next(f);
@@ -328,6 +351,53 @@ void MainWindow::on_btn_open_clicked() {
 	ui.action_Close->setEnabled(true);
 	ui.action_Merge_GRF->setEnabled(true);
 	ui.actionMerge_Dir->setEnabled(true);
+}
+
+void MainWindow::on_action_New_triggered() {
+	this->on_btn_new_clicked(); // final
+}
+
+void MainWindow::on_btn_new_clicked() {
+	QString str = QFileDialog::getSaveFileName(this, tr("Create new GRF as..."), NULL, tr("GRF Files (*.grf *.gpf)"));
+	if (str.isNull()) return;
+
+	this->on_btn_close_clicked();
+
+	this->grf_file.setFileName(str);
+	if (!this->grf_file.open(QIODevice::ReadWrite)) {
+		QMessageBox::warning(this, tr("GrfBuilder"), tr("Could not load this file in read/write mode."), QMessageBox::Cancel, QMessageBox::Cancel);
+		return;
+	}
+	this->grf = grf_new_by_fd(this->grf_file.handle(), true);
+	this->grf_has_tree = false;
+	grf_set_callback(this->grf, grf_callback_caller, (void *)this);
+	grf_set_compression_level(this->grf, this->compression_level);
+	this->RefreshAfterLoad();
+}
+
+void MainWindow::on_btn_open_clicked() {
+	QString str = QFileDialog::getOpenFileName(this, tr("Open File"),
+			NULL, tr("GRF Files (*.grf *.gpf)"));
+
+	if (str.isNull()) return;
+
+	this->on_btn_close_clicked();
+
+	this->grf_file.setFileName(str);
+	if (!this->grf_file.open(QIODevice::ReadWrite)) {
+		QMessageBox::warning(this, tr("GrfBuilder"), tr("Could not load this file in read/write mode."), QMessageBox::Cancel, QMessageBox::Cancel);
+		return;
+	}
+	this->grf = grf_new_by_fd(this->grf_file.handle(), true);
+	this->grf_has_tree = false;
+	grf_set_callback(this->grf, grf_callback_caller, (void *)this);
+	grf_set_compression_level(this->grf, this->compression_level);
+	this->grf = grf_load_from_new(this->grf);
+	if (this->grf == NULL) {
+		QMessageBox::warning(this, tr("GrfBuilder"), tr("The selected file doesn't look like a valid GRF file."), QMessageBox::Cancel, QMessageBox::Cancel);
+		return;
+	}
+	this->RefreshAfterLoad();
 }
 
 void MainWindow::on_action_Close_triggered() {
@@ -442,7 +512,7 @@ void MainWindow::on_actionDelete_triggered() {
 		__item->setText(1, this->showSizeAsString(grf_file_get_storage_size(f))); // compsize
 		__item->setText(2, this->showSizeAsString(grf_file_get_size(f))); // realsize
 		__item->setText(3, QString("%1").arg(grf_file_get_storage_pos(f))); // pos
-		if (euc_kr_to_utf8(grf_file_get_filename(f)) == NULL) printf("ARGH %s\n", grf_file_get_filename(f));
+//		if (euc_kr_to_utf8(grf_file_get_filename(f)) == NULL) printf("ARGH %s\n", grf_file_get_filename(f));
 		__item->setText(4, QString::fromUtf8(euc_kr_to_utf8(grf_file_get_filename(f)))); // name
 //		__item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsUserCheckable | Qt::ItemIsEnabled | Qt::ItemIsDragEnabled | Qt::ItemIsEditable);
 		f = grf_get_file_next(f);
@@ -724,7 +794,10 @@ void MainWindow::doOpenFileById(int id) {
 		&&	(!name.endsWith(".gat"))
 		) return;
 	QByteArray im_data(grf_file_get_size(f), 0);
-	if (grf_file_get_contents(f, im_data.data()) != grf_file_get_size(f)) return;
+	if (grf_file_get_contents(f, im_data.data()) != grf_file_get_size(f)) {
+		QMessageBox::warning(this, tr("GrfBuilder"), tr("Failed to read file `%1' from GRF.").arg(name), QMessageBox::Cancel, QMessageBox::Cancel);
+		return;
+	}
 	QImage im;
 	if (name.endsWith(".gat")) {
 		const char *data = im_data.constData();

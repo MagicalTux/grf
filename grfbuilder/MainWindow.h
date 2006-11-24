@@ -38,6 +38,7 @@ protected:
 	void closeEvent(QCloseEvent *);
 
 private slots:
+	void on_btn_new_clicked();
 	void on_btn_open_clicked();
 	void on_btn_close_clicked();
 	void on_btn_extract_clicked();
@@ -60,6 +61,7 @@ private slots:
 	// locales
 	void myLocaleChange();
 	// menu
+	void on_action_New_triggered();
 	void on_action_Open_triggered();
 	void on_action_Extract_triggered();
 	void on_actionDelete_triggered();
@@ -107,6 +109,8 @@ private:
 	QString showSizeAsString(unsigned int);
 	void setCompressionLevel(int);
 	void setRepackType(int);
+	void RefreshAfterLoad();
+	bool do_recurse_dirscan(QList <struct files_list> *, QString, QString);
 };
 
 #endif

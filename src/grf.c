@@ -20,7 +20,7 @@
  * included from windows.h, so we don't need to redefine them ! */
 typedef unsigned char  BYTE;
 typedef unsigned short WORD;
-typedef unsigned long  DWORD;
+typedef unsigned int DWORD;
 #endif
 
 static unsigned char BitMaskTable[8] = {
@@ -367,6 +367,7 @@ GRFEXPORT bool grf_merge(void *_dest, void *_src, uint8_t repack_type) {
 			if (rep->next != NULL) rep->next->prev = rep;
 		}
 		rep->size = cur->size;
+		rep->cycle = cur->cycle;
 		rep->len = cur->len;
 		rep->len_aligned = cur->len_aligned;
 		rep->flags = cur->flags;
@@ -384,11 +385,21 @@ GRFEXPORT bool grf_merge(void *_dest, void *_src, uint8_t repack_type) {
 			}
 		} else {
 #endif
-			ptr = malloc(cur->len_aligned + 1024); // in case of decrypt
+			ptr = calloc(1, cur->len_aligned + 1024); // in case of decrypt
 			if (read(src->fd, ptr, cur->len_aligned) != cur->len_aligned) {
 				free(ptr);
 				hash_del_element(dest->fast_table, rep->filename);
 				return false;
+			}
+			if (repack_type >= GRF_REPACK_DECRYPT) {
+				// we have at least to decrypt the file, if encrypted.
+				if (rep->cycle >= 0) decode_des_etc((unsigned char *)ptr, rep->len_aligned, (rep->cycle)==0, rep->cycle);
+				// clear encryption flags...
+				rep->cycle = -1;
+				rep->flags = rep->flags & ~(GRF_FLAG_MIXCRYPT | GRF_FLAG_DES);
+			}
+			if (repack_type >= GRF_REPACK_RECOMPRESS) {
+				// whoohoo recompress the file x.x
 			}
 			if (write(dest->fd, ptr, rep->len_aligned)!=rep->len_aligned) {
 				free(ptr);
@@ -475,8 +486,8 @@ GRFEXPORT bool grf_repack(void *tmphandler, uint8_t repack_type) {
 				// we have at least to decrypt the file, if encrypted.
 				if (next->cycle >= 0) decode_des_etc((unsigned char *)filemem, next->len_aligned, (next->cycle)==0, next->cycle);
 				// clear encryption flags...
-				next->cycle = 0;
-				next->flags = next->flags & ~(GRF_FLAG_MIXCRYPT & GRF_FLAG_DES);
+				next->cycle = -1;
+				next->flags = next->flags & ~(GRF_FLAG_MIXCRYPT | GRF_FLAG_DES);
 			}
 			if (repack_type >= GRF_REPACK_RECOMPRESS) {
 				// NOT SUPPORTED ! (to be implemented on next release - which will be something like 0.1.22)
@@ -502,8 +513,8 @@ GRFEXPORT bool grf_repack(void *tmphandler, uint8_t repack_type) {
 					while (p<next->len_aligned) p+=read(handler->fd, filemem+p, next->len_aligned - p);
 					decode_des_etc((unsigned char *)filemem, next->len_aligned, (next->cycle)==0, next->cycle);
 					need_write = true;
-					next->cycle = 0;
-					next->flags = next->flags & ~(GRF_FLAG_MIXCRYPT & GRF_FLAG_DES);
+					next->cycle = -1;
+					next->flags = next->flags & ~(GRF_FLAG_MIXCRYPT | GRF_FLAG_DES);
 				}
 			}
 			if (need_write) {
@@ -1101,7 +1112,7 @@ GRFEXPORT uint32_t grf_file_get_contents(void *tmphandler, void *target) {
 	count = read(handler->fd, (char *)comp, fhandler->len_aligned);
 	if (count != fhandler->len_aligned) { free(comp); return 0; }
 	// decrypt (if required)
-	//static void decode_des_etc(unsigned char *buf, int len, int type, int cycle) {
+	//static void decode_des_etc(unsigned char *buf, int len, int type, int cycle) 
 	if (fhandler->cycle >= 0) decode_des_etc((unsigned char *)comp, fhandler->len_aligned, (fhandler->cycle)==0, fhandler->cycle);
 	// decompress to target...
 	count = zlib_buffer_inflate(target, fhandler->size, comp, fhandler->len);
