@@ -141,7 +141,41 @@ int hash_del_element(hash_table *table, char *string) {
 	str=strduptolower(string);
 	hashval=hash_calc(str, table->size);
 	old_element=hash_lookup_raw(table, str);
+	free(str);
+	if (old_element == NULL) return 1; /* not found in table */
 	if (table->free_func != NULL) (table->free_func)(old_element->pointer);
+
+	prev=NULL;
+	for(current_element=table->table[hashval]; current_element != NULL; current_element=current_element->next) {
+		if (current_element==old_element) {
+			if (prev==NULL) {
+				table->table[hashval] = current_element->next;
+				table->count -= 1;
+				free(current_element->string);
+				free(current_element);
+				return 0;
+			}
+			prev->next=current_element->next;
+			table->count -= 1;
+			free(current_element->string);
+			free(current_element);
+			return 0;
+		}
+		prev=current_element;
+	}
+	return 2; /* not found ! */
+}
+
+int hash_remove_element(hash_table *table, char *string) {
+	/* same as previous, but do not free the element */
+	list_element *old_element;
+	list_element *current_element, *prev;
+	unsigned long hashval;
+	char *str;
+
+	str=strduptolower(string);
+	hashval=hash_calc(str, table->size);
+	old_element=hash_lookup_raw(table, str);
 	free(str);
 	if (old_element == NULL) return 1; /* not found in table */
 

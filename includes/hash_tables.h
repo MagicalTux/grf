@@ -50,6 +50,7 @@ void *hash_lookup(hash_table *, const char *);
 int hash_set_element(hash_table *, char *, void *, int);
 int hash_add_element(hash_table *, char *, void *);
 int hash_del_element(hash_table *, char *);
+int hash_remove_element(hash_table *, char *);
 void hash_free_table(hash_table *);
 list_element **hash_foreach(hash_table *);
 void **hash_foreach_val(hash_table *);

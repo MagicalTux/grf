@@ -1001,6 +1001,19 @@ GRFEXPORT void *grf_load(const char *filename, bool writemode) {
 	return grf_load_from_new(handler);
 }
 
+GRFEXPORT bool grf_file_rename(void *tmphandler, const char *newname) {
+	struct grf_node *handler = (struct grf_node *)tmphandler;
+	if (!handler->parent->write_mode) return false;
+	handler->parent->need_save = true;
+	if (hash_remove_element(handler->parent->fast_table, handler->filename)!=0) return false;
+	if (handler->tree_parent != NULL) hash_del_element(handler->tree_parent->parent->subdir, handler->tree_parent->name);
+	free(handler->filename);
+	handler->filename = strdup(newname);
+	hash_add_element(handler->parent->fast_table, handler->filename, handler);
+	if (handler->parent->root != NULL) prv_grf_reg_tree_node(handler->parent->root, handler);
+	return true;
+}
+
 GRFEXPORT bool grf_file_delete(void *tmphandler) {
 	struct grf_node *handler = (struct grf_node *)tmphandler;
 	struct grf_handler *parent = handler->parent;
@@ -1009,6 +1022,7 @@ GRFEXPORT bool grf_file_delete(void *tmphandler) {
 	if (!parent->write_mode) return false;
 	parent->need_save = true;
 	if (hash_del_element(handler->parent->fast_table, handler->filename)!=0) return false;
+	if (handler->tree_parent != NULL) hash_del_element(handler->tree_parent->parent->subdir, handler->tree_parent->name); // will free memory automatically
 	if (parent->first_node==handler) parent->first_node = next;
 	parent->wasted_space += len_aligned; /* wasted_space accounting */
 	parent->filecount--;
