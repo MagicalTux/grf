@@ -130,17 +130,8 @@ static bool euc_kr_append_from_wchar(uint8_t **r, int c) {
 	}
 
 	if (s <= 0) {
-		c1 = c & ~0xffff; /* MBFL_WCSPLANE_MASK */
-		if (c1 == 0x70f10000) { /* MBFL_WCSPLANE_KSC5601 */
-			s = c & 0xffff; /* MBFL_WCSPLANE_MASK */
-		}
-		if (c == 0) {
-			s = 0;
-		} else if (s <= 0) {
-			return false; /* error */
-		}
+		return false; /* error */
 	}
-	if (s < 0) return false;
 	if (s < 0x80) { /* latin */
 		**r = s; (*r)++;
 		return true;

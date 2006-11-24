@@ -163,11 +163,13 @@ GRFEXPORT uint32_t grf_wasted_space(grf_handle); /* grf.c */
  ****************************************************************************/
 
 /* (grf_node) grf_file_add(grf_handle, const char *name, void *buffer, size_t size)
+ * (grf_node) grf_file_add_fd(grf_handle, const char *name, int fd)
  * (grf_node) grf_file_add_path(grf_handle, const char *name, const char *file)
  * Add a file to the specified GRF file (opened for writing) and return the
  * pointer to the created file.
  */
 GRFEXPORT grf_node grf_file_add(grf_handle, const char *, void *, size_t); /* grf.c */
+GRFEXPORT void *grf_file_add_fd(void *, const char *, int); /* grf.c */
 GRFEXPORT void *grf_file_add_path(void *, const char *, const char *); /* grf.c */
 
 /* (grf_node) grf_get_file(grf_handle handle, const char *filename)

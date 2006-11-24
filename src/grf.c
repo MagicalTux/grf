@@ -1287,23 +1287,26 @@ GRFEXPORT void *grf_file_add(void *tmphandler, const char *filename, void *ptr, 
 	return ptr_file;
 }
 
-GRFEXPORT void *grf_file_add_path(void *tmphandler, const char *filename, const char *real_filename) {
-	int fp;
-	struct stat s;
+GRFEXPORT void *grf_file_add_fd(void *tmphandler, const char *filename, int fp) {
 	void *ptr, *res;
+	struct stat s;
 
-	fp = open(real_filename, O_RDONLY);
 	if (fp < 0) return NULL;
-	fstat(fp, &s);
+	if (fstat(fp, &s) != 0) return NULL;
 	ptr = malloc(s.st_size);
-	if (read(fp, ptr, s.st_size) != s.st_size) {
-		close(fp);
-		free(ptr);
-		return NULL;
-	}
-	close(fp);
+	if (read(fp, ptr, s.st_size) != s.st_size) { free(ptr); return NULL; }
 	res = grf_file_add(tmphandler, filename, ptr, s.st_size);
 	free(ptr);
+	return res;
+}
+
+GRFEXPORT void *grf_file_add_path(void *tmphandler, const char *filename, const char *real_filename) {
+	int fp;
+	void *res;
+
+	fp = open(real_filename, O_RDONLY);
+	res = grf_file_add_fd(tmphandler, filename, fp);
+	close(fp);
 	return res;
 }
 

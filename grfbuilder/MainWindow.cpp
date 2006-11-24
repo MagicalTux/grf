@@ -203,30 +203,29 @@ struct files_list {
 	QString p; // path inside grf (no euc-kr)
 };
 
-bool MainWindow::do_recurse_dirscan(QList <struct files_list> *l, QString path, QString vpath) {
+bool MainWindow::do_recurse_dirscan(QList <struct files_list *> *l, QString path, QString vpath) {
 	QDir cdir(path);
 	QStringList c(cdir.entryList());
+//	printf("Scanning %s -> %s\n", path.toUtf8().constData(), vpath.toUtf8().constData());
 	for(int i=c.size()-1;i>=0;i--) {
 		QString e(c[i]);
+		if (e == QString(".")) continue;
+		if (e == QString("..")) continue;
 		QString s;
 		struct files_list *n;
 		// Detect if e is either :
 		// - Korean Unicode
 		// - EUC-KR ANSI
 		// - Invalid string (issue a warning)
-		if (euc_kr_to_utf8(e.toLocal8Bit().constData()) != NULL) {
-			// looks like we're going to do something from that :)
+		if (e.toUtf8() == QString::fromLatin1(e.toLatin1()).toUtf8()) {
 			s = QString::fromUtf8(euc_kr_to_utf8(e.toLocal8Bit().constData()));
 		} else if (utf8_to_euc_kr(e.toUtf8().constData()) != NULL) {
-			// looks like korean encoded as UNICODE
 			s = e;
+			printf("UNICODE=%s\n", utf8_to_euc_kr(e.toUtf8().constData()));
 		} else {
 			QMessageBox::warning(this, tr("GrfBuilder"), tr("Bad encoding for file `%1'. Aborting process!").arg(path+e), QMessageBox::Cancel, QMessageBox::Cancel);
 			return false;
 		}
-		n = new struct files_list;
-		n->f.setFileName(path+e);
-		n->p = s;
 		QFileInfo fi(path+e);
 		if (fi.isDir()) {
 			// do a recursive call XXX
@@ -236,21 +235,52 @@ bool MainWindow::do_recurse_dirscan(QList <struct files_list> *l, QString path, 
 			QString PS("/");
 #endif
 			this->do_recurse_dirscan(l, path+e+PS, vpath+s+"\\");
+			continue;
 		}
+		n = new struct files_list;
+		n->f.setFileName(path+e);
+		n->p = vpath+s;
+		l->append(n);
 	}
 	return true;
 }
 
 void MainWindow::on_btn_mergedir_clicked() {
+	int i=0;
+	if (this->grf == NULL) return;
 	QString xpath = QFileDialog::getExistingDirectory(this, tr("Import directory..."));
 	if (xpath.isNull()) return;
 	// ok, we got a directory, scan it for all files and directories...
-	QList <struct files_list> l;
-	QProgressDialog prog(tr("Merge in progress..."), tr("Cancel"), 0, grf_filecount(grf), this);
+	QList <struct files_list *> l;
+	QProgressDialog prog(tr("Merge in progress..."), tr("Cancel"), 0, 1, this);
 	prog.setWindowModality(Qt::WindowModal);
 	prog.setLabelText(tr("Preparing to merge directory..."));
+	prog.setValue(0);
+	QCoreApplication::processEvents();
 	// We need to *recursively* scan the selected directory~
 	this->do_recurse_dirscan(&l, xpath, QString("data\\"));
+	printf("Found %d files\n", l.size());
+	prog.setRange(0, l.size());
+	// ok now, loop the files, open each, and add to grf
+	while(l.size() > 0) {
+		struct files_list *x = l.takeLast();
+		prog.setLabelText(tr("Adding file `%1'...").arg(x->p));
+		prog.setValue(++i);
+		QCoreApplication::processEvents();
+		if (prog.wasCanceled()) break;
+		if (!x->f.open(QIODevice::ReadOnly)) {
+			QMessageBox::warning(this, tr("GrfBuilder"), tr("Could not open file %1 in read-only mode.").arg(x->f.fileName()), QMessageBox::Cancel, QMessageBox::Cancel);
+			break;
+		}
+		grf_file_add_fd(this->grf, utf8_to_euc_kr(x->p.toUtf8()), x->f.handle());
+		x->f.close();
+		delete x;
+	}
+	grf_save(this->grf);
+
+	prog.close();
+	prog.reset();
+	this->RefreshAfterLoad();
 }
 
 void MainWindow::on_action_Merge_GRF_triggered() {
@@ -672,7 +702,7 @@ void MainWindow::on_btn_extractall_clicked() {
 		QString name(QString::fromUtf8(euc_kr_to_utf8(grf_file_get_filename(cur_file))));
 		n -= grf_file_get_size(cur_file);
 		if (n<=0) {
-			n = 5000000;
+			n = 1000000;
 			prog.setLabelText(tr("Extracting file %1...").arg(name));
 			QCoreApplication::processEvents();
 		}

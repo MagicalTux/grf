@@ -110,7 +110,7 @@ private:
 	void setCompressionLevel(int);
 	void setRepackType(int);
 	void RefreshAfterLoad();
-	bool do_recurse_dirscan(QList <struct files_list> *, QString, QString);
+	bool do_recurse_dirscan(QList <struct files_list *> *, QString, QString);
 };
 
 #endif

@@ -8,12 +8,12 @@
         <translation type="obsolete">Dialog</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="866"/>
+        <location filename="../MainWindow.cpp" line="896"/>
         <source>Close</source>
         <translation>Fermer</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="865"/>
+        <location filename="../MainWindow.cpp" line="895"/>
         <source>Image Preview</source>
         <translation>Prévisualisation d&apos;image</translation>
     </message>
@@ -21,27 +21,27 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../MainWindow.cpp" line="379"/>
+        <location filename="../MainWindow.cpp" line="409"/>
         <source>Open File</source>
         <translation>Ouvrir un fichier</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="380"/>
+        <location filename="../MainWindow.cpp" line="410"/>
         <source>GRF Files (*.grf *.gpf)</source>
         <translation>Fichiers GRF (*.grf *.gpf)</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="798"/>
+        <location filename="../MainWindow.cpp" line="828"/>
         <source>GrfBuilder</source>
         <translation>GrfBuilder</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="388"/>
+        <location filename="../MainWindow.cpp" line="418"/>
         <source>Could not load this file in read/write mode.</source>
         <translation>Impossible d&apos;ouvrir le fichier en lecture/écriture.</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="397"/>
+        <location filename="../MainWindow.cpp" line="427"/>
         <source>The selected file doesn&apos;t look like a valid GRF file.</source>
         <translation>Le fichier séléctionné ne semble pas être un fichier GRF valide.</translation>
     </message>
@@ -321,17 +321,17 @@
         <translation type="obsolete">Type d&apos;e&amp;xtraction</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="664"/>
+        <location filename="../MainWindow.cpp" line="694"/>
         <source>Extraction in progress...</source>
         <translation>Extraction en cours...</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="664"/>
+        <location filename="../MainWindow.cpp" line="694"/>
         <source>Cancel</source>
         <translation>Annuler</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="676"/>
+        <location filename="../MainWindow.cpp" line="706"/>
         <source>Extracting file %1...</source>
         <translation>Extraction de %1...</translation>
     </message>
@@ -366,12 +366,12 @@
         <translation>GrfBuilder v%1.%2.%3 (libgrf v%4.%5.%6) par MagicalTux</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="463"/>
+        <location filename="../MainWindow.cpp" line="493"/>
         <source>&lt;p align=&quot;center&quot;&gt;&lt;b&gt;GrfBuilder v%1.%2.%3 by MagicalTux&lt;/b&gt;&lt;/p&gt;&lt;p align=&quot;left&quot;&gt;Linked against libgrf v%4.%5.%6 (also by MagicalTux)&lt;br /&gt;This tool is designed to allow easy read and write access to GRF files.&lt;br /&gt;This was developped for the sole purpose of demonstrating that Gravity need better developpers.&lt;/p&gt;&lt;p align=&quot;left&quot;&gt;You can contact MagicalTux on &lt;a href=&quot;http://ookoo.org/cgi-bin/cgi-irc/irc.cgi&quot;&gt;irc://irc.ookoo.org/ooKoo&lt;/a&gt;&lt;/p&gt;</source>
         <translation>&lt;p align=&quot;center&quot;&gt;&lt;b&gt;GrfBuilder v%1.%2.%3 par MagicalTux&lt;/b&gt;&lt;/p&gt;&lt;p align=&quot;left&quot;&gt;Lié à la libgrf v%4.%5.%6 (aussi par MagicalTux)&lt;br /&gt;Cet outil a été conçu pour permettre un accès simple en lecture et en écriture aux fichiers GRF.&lt;br /&gt;Il a été développé dans le seul but de démontrer que Gravity a besoin de meilleurs développeurs.&lt;/p&gt;&lt;p align=&quot;left&quot;&gt;Version française par MagicalTux&lt;/p&gt;&lt;p align=&quot;left&quot;&gt;Vous pouvez contacter MagicalTux sur &lt;a href=&quot;http://ookoo.org/cgi-bin/cgi-irc/irc.cgi&quot;&gt;irc://irc.ookoo.org/ooKoo&lt;/a&gt;&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="717"/>
+        <location filename="../MainWindow.cpp" line="747"/>
         <source>Your computer has no audio support. Please make sure you have an audio device available and retry.</source>
         <translation>Votre ordinateur n&apos;a pas de support audio. Veuillez vous assurer que vous disposez d&apos;un périphérique audio disponible et réessayez.</translation>
     </message>
@@ -391,7 +391,7 @@
         <translation type="obsolete">Français</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="720"/>
+        <location filename="../MainWindow.cpp" line="750"/>
         <source>Currently playing file `%1&apos;. Press &quot;Ok&quot; to stop.</source>
         <translation>Lecture de «%1» en cours. Appuyez sur «OK» pour arrêter.</translation>
     </message>
@@ -466,37 +466,37 @@
         <translation>Ctrl+R</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="555"/>
+        <location filename="../MainWindow.cpp" line="585"/>
         <source>Extract file as...</source>
         <translation>Extraire le fichier sous...</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="555"/>
+        <location filename="../MainWindow.cpp" line="585"/>
         <source>%1 files (*.%1)</source>
         <translation>Fichiers %1 (*.%1)</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="559"/>
+        <location filename="../MainWindow.cpp" line="589"/>
         <source>Could not open %1 for writing a file.</source>
         <translation>Impossible d&apos;écrire %1 pour l&apos;écriture d&apos;un fichier.</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="564"/>
+        <location filename="../MainWindow.cpp" line="594"/>
         <source>Could not write data to %1 while extracting a file.</source>
         <translation>Impossible d&apos;écrire dans le fichier %1.</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="263"/>
+        <location filename="../MainWindow.cpp" line="293"/>
         <source>Merging file %1...</source>
         <translation>Fusion du fichier %1...</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="284"/>
+        <location filename="../MainWindow.cpp" line="314"/>
         <source>Could not open file %1 in read-only mode.</source>
         <translation>Impossible d&apos;ouvrir le fichier %1 en lecture seule.</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="294"/>
+        <location filename="../MainWindow.cpp" line="324"/>
         <source>Merge in progress...</source>
         <translation>Fusion en cours...</translation>
     </message>
@@ -506,12 +506,12 @@
         <translation>Effacer</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="489"/>
+        <location filename="../MainWindow.cpp" line="519"/>
         <source>Are you sure you want to delete the file `%1&apos;?</source>
         <translation>Voulez-vous vraiment effacer le fichier «%1» ?</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="494"/>
+        <location filename="../MainWindow.cpp" line="524"/>
         <source>Are you sure you want to delete the %1 selected files?</source>
         <translation>Voulez-vous vraiment effacer ces %1 fichiers ?</translation>
     </message>
@@ -521,7 +521,7 @@
         <translation>Effacer la séléction</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="660"/>
+        <location filename="../MainWindow.cpp" line="690"/>
         <source>Extract to...</source>
         <translation>Extraire vers...</translation>
     </message>
@@ -531,12 +531,12 @@
         <translation>Langue</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="245"/>
+        <location filename="../MainWindow.cpp" line="251"/>
         <source>Import directory...</source>
         <translation>Importer un répertoire...</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="361"/>
+        <location filename="../MainWindow.cpp" line="391"/>
         <source>Create new GRF as...</source>
         <translation>Créer un nouveau GRF sous...</translation>
     </message>
@@ -556,19 +556,24 @@
         <translation>Nouveau</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="798"/>
+        <location filename="../MainWindow.cpp" line="828"/>
         <source>Failed to read file `%1&apos; from GRF.</source>
         <translation>Impossible de lire le fichier «%1» depuis l&apos;archive GRF.</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="224"/>
+        <location filename="../MainWindow.cpp" line="226"/>
         <source>Bad encoding for file `%1&apos;. Aborting process!</source>
         <translation>Mauvais encodage pour le nom du fichier «%1». Annulation de l&apos;opération !</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="251"/>
+        <location filename="../MainWindow.cpp" line="257"/>
         <source>Preparing to merge directory...</source>
         <translation>Préparation à l&apos;ajout du répertoire...</translation>
+    </message>
+    <message>
+        <location filename="../MainWindow.cpp" line="267"/>
+        <source>Adding file `%1&apos;...</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
