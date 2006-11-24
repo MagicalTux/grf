@@ -18,7 +18,7 @@
     <message>
         <location filename="../MainWindow.cpp" line="66"/>
         <source>GrfBuilder v%1.%2.%3 (libgrf v%4.%5.%6) by MagicalTux</source>
-        <translation type="unfinished"></translation>
+        <translation>GrfBuilder v%1.%2.%3 (libgrf v%4.%5.%6) by MagicalTux</translation>
     </message>
     <message>
         <location filename="../MainWindow.cpp" line="81"/>
@@ -48,7 +48,7 @@
     <message>
         <location filename="../MainWindow.cpp" line="617"/>
         <source>GrfBuilder</source>
-        <translation type="unfinished"></translation>
+        <translation>GrfBuilder</translation>
     </message>
     <message>
         <location filename="../MainWindow.cpp" line="183"/>
@@ -178,7 +178,7 @@
     <message>
         <location filename="../ui_MainWindow.h" line="421"/>
         <source>Ctrl+O</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+O</translation>
     </message>
     <message>
         <location filename="../ui_MainWindow.h" line="422"/>
@@ -188,7 +188,7 @@
     <message>
         <location filename="../ui_MainWindow.h" line="423"/>
         <source>Ctrl+E</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+E</translation>
     </message>
     <message>
         <location filename="../ui_MainWindow.h" line="424"/>
@@ -198,7 +198,7 @@
     <message>
         <location filename="../ui_MainWindow.h" line="425"/>
         <source>Ctrl+A</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+A</translation>
     </message>
     <message>
         <location filename="../ui_MainWindow.h" line="426"/>
@@ -208,7 +208,7 @@
     <message>
         <location filename="../ui_MainWindow.h" line="427"/>
         <source>Ctrl+W</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+W</translation>
     </message>
     <message>
         <location filename="../ui_MainWindow.h" line="428"/>
@@ -218,7 +218,7 @@
     <message>
         <location filename="../ui_MainWindow.h" line="429"/>
         <source>Ctrl+M</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+M</translation>
     </message>
     <message>
         <location filename="../ui_MainWindow.h" line="430"/>
@@ -228,7 +228,7 @@
     <message>
         <location filename="../ui_MainWindow.h" line="431"/>
         <source>Ctrl+D</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+D</translation>
     </message>
     <message>
         <location filename="../ui_MainWindow.h" line="432"/>
@@ -238,7 +238,7 @@
     <message>
         <location filename="../ui_MainWindow.h" line="433"/>
         <source>Ctrl+Q</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+Q</translation>
     </message>
     <message>
         <location filename="../ui_MainWindow.h" line="434"/>
@@ -248,7 +248,7 @@
     <message>
         <location filename="../ui_MainWindow.h" line="435"/>
         <source>Ctrl+?</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+?</translation>
     </message>
     <message>
         <location filename="../ui_MainWindow.h" line="436"/>
@@ -278,51 +278,51 @@
     <message>
         <location filename="../ui_MainWindow.h" line="439"/>
         <source>None</source>
-        <translation type="unfinished"></translation>
+        <translation>None</translation>
     </message>
     <message>
         <location filename="../ui_MainWindow.h" line="440"/>
         <source>Totally Low</source>
-        <translation type="unfinished"></translation>
+        <translation>最低</translation>
     </message>
     <message>
         <location filename="../ui_MainWindow.h" line="441"/>
         <source>Really Low</source>
-        <translation type="unfinished"></translation>
+        <translation>中低</translation>
     </message>
     <message>
         <location filename="../ui_MainWindow.h" line="442"/>
         <source>Low</source>
-        <translation type="unfinished"></translation>
+        <translation>低</translation>
     </message>
     <message>
         <location filename="../ui_MainWindow.h" line="443"/>
         <source>Almost Normal</source>
-        <translation type="unfinished"></translation>
+        <translation>比正常低一些</translation>
     </message>
     <message>
         <location filename="../ui_MainWindow.h" line="444"/>
         <source>Normal</source>
-        <translation type="unfinished"></translation>
+        <translation>正常</translation>
     </message>
     <message>
         <location filename="../ui_MainWindow.h" line="445"/>
         <source>More than Normal</source>
-        <translation type="unfinished"></translation>
+        <translation>比正常高一些</translation>
     </message>
     <message>
         <location filename="../ui_MainWindow.h" line="446"/>
         <source>High</source>
-        <translation type="unfinished"></translation>
+        <translation>高</translation>
     </message>
     <message>
         <location filename="../ui_MainWindow.h" line="447"/>
         <source>Really High</source>
-        <translation type="unfinished"></translation>
+        <translation>中高</translation>
     </message>
     <message>
         <location filename="../ui_MainWindow.h" line="448"/>
-        <source>Max</source>
+        <source>最高</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -358,7 +358,7 @@
     <message>
         <location filename="../ui_MainWindow.h" line="453"/>
         <source>Ctrl+R</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+R</translation>
     </message>
     <message>
         <location filename="../ui_MainWindow.h" line="454"/>
@@ -368,7 +368,7 @@
     <message>
         <location filename="../ui_MainWindow.h" line="465"/>
         <source>id</source>
-        <translation type="unfinished"></translation>
+        <translation>ID</translation>
     </message>
     <message>
         <location filename="../ui_MainWindow.h" line="466"/>
@@ -438,7 +438,7 @@
     <message>
         <location filename="../ui_MainWindow.h" line="480"/>
         <source>&amp;?</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;?</translation>
     </message>
     <message>
         <location filename="../ui_MainWindow.h" line="483"/>
@@ -468,7 +468,7 @@
     <message>
         <location filename="../ui_MainWindow.h" line="482"/>
         <source>Language</source>
-        <translation type="unfinished"></translation>
+        <translation>語系</translation>
     </message>
 </context>
 </TS>

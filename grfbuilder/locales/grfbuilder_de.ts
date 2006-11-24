@@ -3,12 +3,12 @@
 <context>
     <name>Dialog</name>
     <message>
-        <location filename="../MainWindow.cpp" line="759"/>
+        <location filename="../MainWindow.cpp" line="783"/>
         <source>Image Preview</source>
         <translation>Bild-Vorbetrachtung</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="760"/>
+        <location filename="../MainWindow.cpp" line="784"/>
         <source>Close</source>
         <translation>Schliessen</translation>
     </message>
@@ -21,52 +21,52 @@
         <translation>GrfBuilder v%1.%2.%3 (libgrf v%4.%5.%6) bei MagicalTux</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="246"/>
+        <location filename="../MainWindow.cpp" line="270"/>
         <source>Open File</source>
         <translation> Eine Kartei öffnen</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="247"/>
+        <location filename="../MainWindow.cpp" line="271"/>
         <source>GRF Files (*.grf *.gpf)</source>
         <translation>GRF Kartei (*.grf *.gpf)</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="617"/>
+        <location filename="../MainWindow.cpp" line="641"/>
         <source>GrfBuilder</source>
         <translation>GrfBuilder</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="256"/>
+        <location filename="../MainWindow.cpp" line="280"/>
         <source>Could not load this file in read/write mode.</source>
         <translation>Unmöglich den Kartei zu lessen in schreibmode.</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="265"/>
+        <location filename="../MainWindow.cpp" line="289"/>
         <source>The selected file doesn&apos;t look like a valid GRF file.</source>
         <translation>Die gewahlte Kartei scheint nicht eine gültige grf-Kartei zu sein.</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="360"/>
+        <location filename="../MainWindow.cpp" line="384"/>
         <source>&lt;p align=&quot;center&quot;&gt;&lt;b&gt;GrfBuilder v%1.%2.%3 by MagicalTux&lt;/b&gt;&lt;/p&gt;&lt;p align=&quot;left&quot;&gt;Linked against libgrf v%4.%5.%6 (also by MagicalTux)&lt;br /&gt;This tool is designed to allow easy read and write access to GRF files.&lt;br /&gt;This was developped for the sole purpose of demonstrating that Gravity need better developpers.&lt;/p&gt;&lt;p align=&quot;left&quot;&gt;You can contact MagicalTux on &lt;a href=&quot;http://ookoo.org/cgi-bin/cgi-irc/irc.cgi&quot;&gt;irc://irc.ookoo.org/ooKoo&lt;/a&gt;&lt;/p&gt;</source>
         <translation>&lt;p align=&quot;center&quot;&gt;&lt;b&gt;GrfBuilder v%1.%2.%3 bei MagicalTux&lt;/b&gt;&lt;/p&gt;&lt;p align=&quot;left&quot;&gt;Gebunden an das libgrf  v%4.%5.%6 (auch durch MagicalTux )&lt;br /&gt;Dieses Werkzeug ist entworfen, um einfaches lektüre zu erlauben und Zugang zu den GRF Akten zu schreiben.&lt;br /&gt;Dieses war developped zum alleinigen Zweck des Zeigens, daß Schwerkraftnotwendigkeit Entwickler verbessern.&lt;/p&gt;&lt;p align=&quot;left&quot;&gt;Deutsche version von Chris&lt;/p&gt;&lt;p align=&quot;left&quot;&gt;Sie können mit MagicalTux an in Verbindung treten &lt;a href=&quot;http://ookoo.org/cgi-bin/cgi-irc/irc.cgi&quot;&gt;irc://irc.ookoo.org/ooKoo&lt;/a&gt;&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="561"/>
+        <location filename="../MainWindow.cpp" line="585"/>
         <source>Extraction in progress...</source>
         <translation> Extraktion in Bewegung...</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="561"/>
+        <location filename="../MainWindow.cpp" line="585"/>
         <source>Cancel</source>
         <translation>Annullieren</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="573"/>
+        <location filename="../MainWindow.cpp" line="597"/>
         <source>Extracting file %1...</source>
         <translation> Extraktion von %1...</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="614"/>
+        <location filename="../MainWindow.cpp" line="638"/>
         <source>Your computer has no audio support. Please make sure you have an audio device available and retry.</source>
         <translation> Ihr Rechner hat keinen Audio- Träger. Gewährleisten Sie sich bitte, dass Sie über ein verfügbares Audio- Peripherigerät verfügen und erneut versuchen.</translation>
     </message>
@@ -371,7 +371,7 @@
         <translation>%1 kiB</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="617"/>
+        <location filename="../MainWindow.cpp" line="641"/>
         <source>Currently playing file `%1&apos;. Press &quot;Ok&quot; to stop.</source>
         <translation>Laufende Lektüre von &apos;%1&apos;. Unterstützen Sie auf &quot;OK&quot;, um sich anzuhalten.</translation>
     </message>
@@ -426,37 +426,37 @@
         <translation>Ctrl+R</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="452"/>
+        <location filename="../MainWindow.cpp" line="476"/>
         <source>Extract file as...</source>
         <translation> Extraktakte wie...</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="452"/>
+        <location filename="../MainWindow.cpp" line="476"/>
         <source>%1 files (*.%1)</source>
         <translation>%1 Kartei (*.%1)</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="456"/>
+        <location filename="../MainWindow.cpp" line="480"/>
         <source>Could not open %1 for writing a file.</source>
         <translation> Konnte nicht %1 für das Schreiben einer Akte öffnen.</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="461"/>
+        <location filename="../MainWindow.cpp" line="485"/>
         <source>Could not write data to %1 while extracting a file.</source>
         <translation> Konnte nicht Daten bis %1 beim Extrahieren einer Akte schreiben.</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="204"/>
+        <location filename="../MainWindow.cpp" line="211"/>
         <source>Merging file %1...</source>
         <translation> Mischenakte %1...</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="224"/>
+        <location filename="../MainWindow.cpp" line="232"/>
         <source>Could not open file %1 in read-only mode.</source>
         <translation> unmöglich die Kartei %1 in nur Lektüre zu öffnen.</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="234"/>
+        <location filename="../MainWindow.cpp" line="242"/>
         <source>Merge in progress...</source>
         <translation> Mischen in Bewegung...</translation>
     </message>
@@ -466,12 +466,12 @@
         <translation>Löschung</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="386"/>
+        <location filename="../MainWindow.cpp" line="410"/>
         <source>Are you sure you want to delete the file `%1&apos;?</source>
         <translation> Sind Sie Sie möchten die Akte `%1 löschen &apos; sicher?</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="391"/>
+        <location filename="../MainWindow.cpp" line="415"/>
         <source>Are you sure you want to delete the %1 selected files?</source>
         <translation>Sind Sie Sie möchten die %1 vorgewählten Akten löschen sicher?</translation>
     </message>
@@ -481,7 +481,7 @@
         <translation>Löschung vorgewählt</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="557"/>
+        <location filename="../MainWindow.cpp" line="581"/>
         <source>Extract to...</source>
         <translation>Extrakt zu...</translation>
     </message>
