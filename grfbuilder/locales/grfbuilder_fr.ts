@@ -573,7 +573,7 @@
     <message>
         <location filename="../MainWindow.cpp" line="267"/>
         <source>Adding file `%1&apos;...</source>
-        <translation type="unfinished"></translation>
+        <translation>Ajout du fichier «%1»...</translation>
     </message>
 </context>
 <context>
