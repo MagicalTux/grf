@@ -214,12 +214,18 @@ GRFEXPORT uint32_t grf_file_get_contents(grf_node, void *); /* grf.c */
  */
 GRFEXPORT uint32_t grf_file_put_contents_to_fd(grf_node, int); /* grf.c */
 
-/* grf_put_contents_to_file(grf_node, const char *filename)
+/* (bool) grf_put_contents_to_file(grf_node, const char *filename)
  * Write the contents of the compressed file to the filesystem.
  */
 GRFEXPORT bool grf_put_contents_to_file(grf_node, const char *); /* grf.c */
 
-/* grf_file_delete(grf_node)
+/* (bool) grf_file_rename(grf_node, const char *new_name)
+ * Rename the given file to new_name. NB: You must provide a FULL filename,
+ * including the full path of the file, eg: data\some_file.txt
+ */
+GRFEXPORT bool grf_file_rename(grf_node, const char *); /* grf.c */
+
+/* (bool) grf_file_delete(grf_node)
  * Removes a file from the GRF.
  * NB: This will not immediatly reduce the size of the resulting GRF file,
  * you will have to repack the GRF to see a reduction in its size. However if
