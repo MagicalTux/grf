@@ -45,6 +45,7 @@ private slots:
 	void on_btn_extractall_clicked();
 	void on_btn_repack_clicked();
 	void on_btn_mergegrf_clicked();
+	void on_btn_mergedir_clicked();
 	void on_listFilter_currentIndexChanged(QString);
 
 	void on_view_allfiles_customContextMenuRequested(const QPoint);
@@ -65,6 +66,7 @@ private slots:
 	void on_action_Extract_All_triggered();
 	void on_actionRepack_triggered();
 	void on_action_Merge_GRF_triggered();
+	void on_actionMerge_Dir_triggered();
 	void on_action_Close_triggered();
 	void on_action_Quit_triggered();
 	void on_actionAbout_triggered();

@@ -3,12 +3,12 @@
 <context>
     <name>Dialog</name>
     <message>
-        <location filename="../MainWindow.cpp" line="759"/>
+        <location filename="../MainWindow.cpp" line="785"/>
         <source>Image Preview</source>
         <translation>檢視圖片</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="760"/>
+        <location filename="../MainWindow.cpp" line="786"/>
         <source>Close</source>
         <translation>關閉</translation>
     </message>
@@ -46,7 +46,7 @@
         <translation>移動 %1 檔案中...</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="617"/>
+        <location filename="../MainWindow.cpp" line="643"/>
         <source>GrfBuilder</source>
         <translation>GrfBuilder</translation>
     </message>
@@ -61,97 +61,97 @@
         <translation>封裝處理中...</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="561"/>
+        <location filename="../MainWindow.cpp" line="587"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="204"/>
+        <location filename="../MainWindow.cpp" line="213"/>
         <source>Merging file %1...</source>
         <translation>合併 %1 檔案中...</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="246"/>
+        <location filename="../MainWindow.cpp" line="272"/>
         <source>Open File</source>
         <translation>開啟檔案</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="247"/>
+        <location filename="../MainWindow.cpp" line="273"/>
         <source>GRF Files (*.grf *.gpf)</source>
         <translation>GRF 檔案 (*.grf *.gpf)</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="224"/>
+        <location filename="../MainWindow.cpp" line="234"/>
         <source>Could not open file %1 in read-only mode.</source>
         <translation>無法開啟 %1 檔案. 請取消唯讀.</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="265"/>
+        <location filename="../MainWindow.cpp" line="291"/>
         <source>The selected file doesn&apos;t look like a valid GRF file.</source>
         <translation>你選擇的檔案不是 GRF 檔案.</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="234"/>
+        <location filename="../MainWindow.cpp" line="244"/>
         <source>Merge in progress...</source>
         <translation>合併處理中...</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="256"/>
+        <location filename="../MainWindow.cpp" line="282"/>
         <source>Could not load this file in read/write mode.</source>
         <translation>檔案使用中，無法開啟這檔案.</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="360"/>
+        <location filename="../MainWindow.cpp" line="386"/>
         <source>&lt;p align=&quot;center&quot;&gt;&lt;b&gt;GrfBuilder v%1.%2.%3 by MagicalTux&lt;/b&gt;&lt;/p&gt;&lt;p align=&quot;left&quot;&gt;Linked against libgrf v%4.%5.%6 (also by MagicalTux)&lt;br /&gt;This tool is designed to allow easy read and write access to GRF files.&lt;br /&gt;This was developped for the sole purpose of demonstrating that Gravity need better developpers.&lt;/p&gt;&lt;p align=&quot;left&quot;&gt;You can contact MagicalTux on &lt;a href=&quot;http://ookoo.org/cgi-bin/cgi-irc/irc.cgi&quot;&gt;irc://irc.ookoo.org/ooKoo&lt;/a&gt;&lt;/p&gt;</source>
         <translation>&lt;p align=&quot;center&quot;&gt;&lt;b&gt;GrfBuilder v%1.%2.%3 by MagicalTux&lt;/b&gt;&lt;/p&gt;&lt;p align=&quot;left&quot;&gt;Linked against libgrf v%4.%5.%6 (also by MagicalTux)&lt;br /&gt;這工具可讓你容易的讀/寫資料到 GRF 檔案中.&lt;br /&gt;研發這工具主要目的是為了證明比重力社研發的還要好.&lt;/p&gt;&lt;p align=&quot;left&quot;&gt;你可以在這裡聯絡到 MagicalTux &lt;a href=&quot;http://ookoo.org/cgi-bin/cgi-irc/irc.cgi&quot;&gt;irc://irc.ookoo.org/ooKoo&lt;/a&gt;&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="386"/>
+        <location filename="../MainWindow.cpp" line="412"/>
         <source>Are you sure you want to delete the file `%1&apos;?</source>
         <translation>你確定要刪除 `%1&apos; 這個檔案嗎?</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="391"/>
+        <location filename="../MainWindow.cpp" line="417"/>
         <source>Are you sure you want to delete the %1 selected files?</source>
         <translation>你確定要刪除你已選擇的 %1 這個檔案嗎?</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="561"/>
+        <location filename="../MainWindow.cpp" line="587"/>
         <source>Extraction in progress...</source>
         <translation>匯出處理中...</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="452"/>
+        <location filename="../MainWindow.cpp" line="478"/>
         <source>Extract file as...</source>
         <translation>匯出檔案為...</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="452"/>
+        <location filename="../MainWindow.cpp" line="478"/>
         <source>%1 files (*.%1)</source>
         <translation>%1 檔案 (*.%1)</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="456"/>
+        <location filename="../MainWindow.cpp" line="482"/>
         <source>Could not open %1 for writing a file.</source>
         <translation>資料無法寫入 %1 檔案.</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="461"/>
+        <location filename="../MainWindow.cpp" line="487"/>
         <source>Could not write data to %1 while extracting a file.</source>
         <translation>匯出檔案時，無法寫入資料至 %1 .</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="573"/>
+        <location filename="../MainWindow.cpp" line="599"/>
         <source>Extracting file %1...</source>
         <translation>匯出 %1 檔案中...</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="614"/>
+        <location filename="../MainWindow.cpp" line="640"/>
         <source>Your computer has no audio support. Please make sure you have an audio device available and retry.</source>
         <translation>你的電腦不支援音效. 請確定你有安裝音效卡驅動程式.</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="617"/>
+        <location filename="../MainWindow.cpp" line="643"/>
         <source>Currently playing file `%1&apos;. Press &quot;Ok&quot; to stop.</source>
         <translation>目前播放 `%1&apos;. 按 &quot;OK&quot; 停止播放.</translation>
     </message>
@@ -321,11 +321,6 @@
         <translation>中高</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="448"/>
-        <source>最高</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../ui_MainWindow.h" line="468"/>
         <source>Deutsch</source>
         <translation type="obsolete">德文</translation>
@@ -461,7 +456,7 @@
         <translation>&amp;檔案</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="557"/>
+        <location filename="../MainWindow.cpp" line="583"/>
         <source>Extract to...</source>
         <translation>匯出到...</translation>
     </message>
@@ -469,6 +464,11 @@
         <location filename="../ui_MainWindow.h" line="482"/>
         <source>Language</source>
         <translation>語系</translation>
+    </message>
+    <message>
+        <location filename="../ui_MainWindow.h" line="448"/>
+        <source>Max</source>
+        <translation type="unfinished"></translation>
     </message>
 </context>
 </TS>

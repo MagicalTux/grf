@@ -537,9 +537,10 @@ GRFEXPORT void grf_create_tree(void *tmphandler) {
 	handler->root->is_dir = true; // root is a directory, that's common knowledge
 	handler->root->name = NULL; // root does not have a name
 	handler->root->subdir = hash_create_table(GRF_TREE_HASH_SIZE, prv_grf_tree_table_free_node);
-	// now, list all files in the archive
+	// now, list all files in the archive...
 	cur_node = handler->first_node;
 	while(cur_node != NULL) {
+		// ... and register 'em
 		prv_grf_reg_tree_node(handler->root, cur_node);
 		cur_node = cur_node->next;
 		i++;
