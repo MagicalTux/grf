@@ -9,8 +9,8 @@
 int main(int argc, char *argv[]) {
 	QApplication app(argc, argv);
 
-	if (grf_version() < (0x118)) { // 0.1.24
-		QMessageBox::warning(NULL, "GrfBuilder", "I need at least libgrf v0.1.24 to run. Make sure you have the last one installed.", QMessageBox::Cancel, QMessageBox::Cancel);
+	if (grf_version() < (0x119)) { // 0.1.25
+		QMessageBox::warning(NULL, "GrfBuilder", "I need at least libgrf v0.1.25 to run. Make sure you have the last one installed.", QMessageBox::Cancel, QMessageBox::Cancel);
 		return 1;
 	}
 

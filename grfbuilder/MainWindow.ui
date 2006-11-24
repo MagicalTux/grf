@@ -388,6 +388,25 @@
     </property>
     <addaction name="actionAbout" />
    </widget>
+   <widget class="QMenu" name="menuFile" >
+    <property name="title" >
+     <string>&amp;File</string>
+    </property>
+    <addaction name="action_Open" />
+    <addaction name="action_Extract" />
+    <addaction name="actionDelete" />
+    <addaction name="action_Extract_All" />
+    <addaction name="actionRepack" />
+    <addaction name="action_Close" />
+    <addaction name="action_Merge_GRF" />
+    <addaction name="actionMerge_Dir" />
+    <addaction name="action_Quit" />
+   </widget>
+   <widget class="QMenu" name="menuLanguage" >
+    <property name="title" >
+     <string>Language</string>
+    </property>
+   </widget>
    <widget class="QMenu" name="menuOptions" >
     <property name="title" >
      <string>&amp;Options</string>
@@ -420,30 +439,12 @@
     <addaction name="actionUnicode" />
     <addaction name="actionStandard" />
     <addaction name="separator" />
-    <addaction name="actionDe" />
-    <addaction name="actionEn" />
-    <addaction name="actionEs" />
-    <addaction name="actionFr" />
-    <addaction name="separator" />
     <addaction name="menuCompression_level" />
     <addaction name="menuRepack_type" />
    </widget>
-   <widget class="QMenu" name="menuFile" >
-    <property name="title" >
-     <string>&amp;File</string>
-    </property>
-    <addaction name="action_Open" />
-    <addaction name="action_Extract" />
-    <addaction name="actionDelete" />
-    <addaction name="action_Extract_All" />
-    <addaction name="actionRepack" />
-    <addaction name="action_Close" />
-    <addaction name="action_Merge_GRF" />
-    <addaction name="actionMerge_Dir" />
-    <addaction name="action_Quit" />
-   </widget>
    <addaction name="menuFile" />
    <addaction name="menuOptions" />
+   <addaction name="menuLanguage" />
    <addaction name="menu" />
   </widget>
   <widget class="QStatusBar" name="statusbar" />
@@ -559,16 +560,6 @@
     <string>Images &amp;Transparency</string>
    </property>
   </action>
-  <action name="actionEn" >
-   <property name="text" >
-    <string>English</string>
-   </property>
-  </action>
-  <action name="actionFr" >
-   <property name="text" >
-    <string>Français</string>
-   </property>
-  </action>
   <action name="actionC0" >
    <property name="checkable" >
     <bool>true</bool>
@@ -647,16 +638,6 @@
    </property>
    <property name="text" >
     <string>Max</string>
-   </property>
-  </action>
-  <action name="actionDe" >
-   <property name="text" >
-    <string>Deutsch</string>
-   </property>
-  </action>
-  <action name="actionEs" >
-   <property name="text" >
-    <string>Español</string>
    </property>
   </action>
   <action name="actionMove_files" >

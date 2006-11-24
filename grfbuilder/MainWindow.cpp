@@ -18,6 +18,20 @@
 
 #include <stdio.h>
 
+void MainWindow::myLocaleChange() {
+	QString newlng(QObject::sender()->objectName());
+//	printf("foo %s\n", QObject::sender()->objectName().toLatin1().data());
+	QCoreApplication::removeTranslator(&this->translator);
+	if (newlng == QString("en")) {
+		this->RetranslateStrings();
+		return;
+	}
+	if (this->translator.load(QString("grfbuilder_") + newlng)) {
+		QCoreApplication::installTranslator(&this->translator);
+		this->RetranslateStrings();
+	}
+}
+
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 	this->grf = NULL;
 	this->image_viewer = NULL;
@@ -27,6 +41,18 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 	ui.view_allfiles->setColumnHidden(0, true);
 	ui.viewSearch->setColumnHidden(0, true);
 	ui.view_filestree->setColumnHidden(2, true);
+
+	// Locales
+	QAction *lng;
+	#define GRFBUILDER_SET_LOCALE(_x,_y) lng = new QAction(this); lng->setObjectName(QString::fromUtf8(_x));  \
+	ui.menuLanguage->addAction(lng); \
+	lng->setText(QString::fromUtf8(_y)); \
+	QObject::connect(lng, SIGNAL(triggered()), this, SLOT(myLocaleChange()));
+	GRFBUILDER_SET_LOCALE(L_TRADITIONAL_CHINESE_LOC, L_TRADITIONAL_CHINESE_NAME);
+	GRFBUILDER_SET_LOCALE(L_ENGLISH_LOC, L_ENGLISH_NAME);
+	GRFBUILDER_SET_LOCALE(L_FRENCH_LOC, L_FRENCH_NAME);
+	GRFBUILDER_SET_LOCALE(L_GERMAN_LOC, L_GERMAN_NAME);
+	GRFBUILDER_SET_LOCALE(L_SPANISH_LOC, L_SPANISH_NAME);
 }
 
 void MainWindow::RetranslateStrings() {
@@ -747,35 +773,6 @@ void MainWindow::doOpenFileById(int id) {
 	Dialog->show();
 	this->image_viewer = Dialog;
 };
-
-void MainWindow::on_actionEn_triggered() {
-	QCoreApplication::removeTranslator(&this->translator);
-	this->RetranslateStrings();
-}
-
-void MainWindow::on_actionFr_triggered() {
-	this->on_actionEn_triggered();
-	if (this->translator.load("grfbuilder_fr")) {
-		QCoreApplication::installTranslator(&this->translator);
-		this->RetranslateStrings();
-	}
-}
-
-void MainWindow::on_actionDe_triggered() {
-	this->on_actionEn_triggered();
-	if (this->translator.load("grfbuilder_de")) {
-		QCoreApplication::installTranslator(&this->translator);
-		this->RetranslateStrings();
-	}
-}
-
-void MainWindow::on_actionEs_triggered() {
-	this->on_actionEn_triggered();
-	if (this->translator.load("grfbuilder_es")) {
-		QCoreApplication::installTranslator(&this->translator);
-		this->RetranslateStrings();
-	}
-}
 
 void MainWindow::DoUpdateFilter(QString text) {
 	if (this->last_search == text) return;

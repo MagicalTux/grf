@@ -3,7 +3,18 @@
 
 #define GRFBUILDER_VERSION_MAJOR 0
 #define GRFBUILDER_VERSION_MINOR 1
-#define GRFBUILDER_VERSION_REVISION 25
+#define GRFBUILDER_VERSION_REVISION 26
+
+#define L_TRADITIONAL_CHINESE_NAME "\xe7\xb9\x81\xe9\xab\x94\xe4\xb8\xad\xe6\x96\x87 (Trad. chinese)"
+#define L_TRADITIONAL_CHINESE_LOC "zh_TW"
+#define L_ENGLISH_NAME "English"
+#define L_ENGLISH_LOC "en"
+#define L_FRENCH_NAME "Fran\303\247ais"
+#define L_FRENCH_LOC "fr"
+#define L_GERMAN_NAME "Deutsch"
+#define L_GERMAN_LOC "de"
+#define L_SPANISH_NAME "Espa\xc3\xb1ol"
+#define L_SPANISH_LOC "es"
 
 #include <QFile>
 #include <QMainWindow>
@@ -45,6 +56,8 @@ private slots:
 	void on_view_filestree_doubleClicked(const QModelIndex);
 	void on_viewSearch_doubleClicked(const QModelIndex);
 
+	// locales
+	void myLocaleChange();
 	// menu
 	void on_action_Open_triggered();
 	void on_action_Extract_triggered();
@@ -70,11 +83,6 @@ private slots:
 	void on_actionMove_files_triggered();
 	void on_actionDecrypt_triggered();
 	void on_actionRecompress_triggered();
-
-	void on_actionEn_triggered();
-	void on_actionFr_triggered();
-	void on_actionDe_triggered();
-	void on_actionEs_triggered();
 
 	void on_actionUnicode_triggered();
 	void on_actionStandard_triggered();

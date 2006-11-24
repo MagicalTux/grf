@@ -8,12 +8,12 @@
         <translation type="obsolete">Dialog</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="734"/>
+        <location filename="../MainWindow.cpp" line="760"/>
         <source>Close</source>
         <translation>Fermer</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="733"/>
+        <location filename="../MainWindow.cpp" line="759"/>
         <source>Image Preview</source>
         <translation>Prévisualisation d&apos;image</translation>
     </message>
@@ -21,27 +21,27 @@
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="../MainWindow.cpp" line="220"/>
+        <location filename="../MainWindow.cpp" line="246"/>
         <source>Open File</source>
         <translation>Ouvrir un fichier</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="221"/>
+        <location filename="../MainWindow.cpp" line="247"/>
         <source>GRF Files (*.grf *.gpf)</source>
         <translation>Fichiers GRF (*.grf *.gpf)</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="591"/>
+        <location filename="../MainWindow.cpp" line="617"/>
         <source>GrfBuilder</source>
         <translation>GrfBuilder</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="230"/>
+        <location filename="../MainWindow.cpp" line="256"/>
         <source>Could not load this file in read/write mode.</source>
         <translation>Impossible d&apos;ouvrir le fichier en lecture/écriture.</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="239"/>
+        <location filename="../MainWindow.cpp" line="265"/>
         <source>The selected file doesn&apos;t look like a valid GRF file.</source>
         <translation>Le fichier séléctionné ne semble pas être un fichier GRF valide.</translation>
     </message>
@@ -56,12 +56,12 @@
         <translation type="obsolete">GrfBuilder v1.0 (libgrf v%1.%2.%3) par MagicalTux</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="477"/>
+        <location filename="../ui_MainWindow.h" line="460"/>
         <source>All files</source>
         <translation>Tout</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="481"/>
+        <location filename="../ui_MainWindow.h" line="464"/>
         <source>Tree view</source>
         <translation>Arborescence</translation>
     </message>
@@ -71,97 +71,97 @@
         <translation type="obsolete">MainWindow</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="433"/>
+        <location filename="../ui_MainWindow.h" line="420"/>
         <source>&amp;Open</source>
         <translation>&amp;Ouvrir</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="434"/>
+        <location filename="../ui_MainWindow.h" line="421"/>
         <source>Ctrl+O</source>
         <translation>Ctrl+O</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="435"/>
+        <location filename="../ui_MainWindow.h" line="422"/>
         <source>&amp;Extract</source>
         <translation>&amp;Extraire</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="436"/>
+        <location filename="../ui_MainWindow.h" line="423"/>
         <source>Ctrl+E</source>
         <translation>Ctrl+E</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="437"/>
+        <location filename="../ui_MainWindow.h" line="424"/>
         <source>Extract &amp;All</source>
         <translation>&amp;Tout extraire</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="438"/>
+        <location filename="../ui_MainWindow.h" line="425"/>
         <source>Ctrl+A</source>
         <translation>Ctrl+A</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="466"/>
+        <location filename="../ui_MainWindow.h" line="449"/>
         <source>Move files</source>
         <translation>Déplacer</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="467"/>
+        <location filename="../ui_MainWindow.h" line="450"/>
         <source>Decrypt</source>
         <translation>Décrypter</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="468"/>
+        <location filename="../ui_MainWindow.h" line="451"/>
         <source>Recompress</source>
         <translation>Recompresser</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="439"/>
+        <location filename="../ui_MainWindow.h" line="426"/>
         <source>&amp;Close</source>
         <translation>&amp;Fermer</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="440"/>
+        <location filename="../ui_MainWindow.h" line="427"/>
         <source>Ctrl+W</source>
         <translation>Ctrl+W</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="441"/>
+        <location filename="../ui_MainWindow.h" line="428"/>
         <source>&amp;Merge GRF</source>
         <translation>Fusionner &amp;GRF</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="442"/>
+        <location filename="../ui_MainWindow.h" line="429"/>
         <source>Ctrl+M</source>
         <translation>Ctrl+M</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="443"/>
+        <location filename="../ui_MainWindow.h" line="430"/>
         <source>Merge &amp;Dir</source>
         <translation>Fusionner &amp;Répertoire</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="444"/>
+        <location filename="../ui_MainWindow.h" line="431"/>
         <source>Ctrl+D</source>
         <translation>Ctrl+D</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="445"/>
+        <location filename="../ui_MainWindow.h" line="432"/>
         <source>&amp;Quit</source>
         <translation>&amp;Quitter</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="446"/>
+        <location filename="../ui_MainWindow.h" line="433"/>
         <source>Ctrl+Q</source>
         <translation>Ctrl+Q</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="447"/>
+        <location filename="../ui_MainWindow.h" line="434"/>
         <source>&amp;About</source>
         <translation>À &amp;propos</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="448"/>
+        <location filename="../ui_MainWindow.h" line="435"/>
         <source>Ctrl+?</source>
         <translation>Ctrl+?</translation>
     </message>
@@ -171,27 +171,27 @@
         <translation type="obsolete">Num</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="483"/>
+        <location filename="../ui_MainWindow.h" line="466"/>
         <source>Comp</source>
         <translation>Comp</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="484"/>
+        <location filename="../ui_MainWindow.h" line="467"/>
         <source>Size</source>
         <translation>Taille</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="485"/>
+        <location filename="../ui_MainWindow.h" line="468"/>
         <source>Position</source>
         <translation>Position</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="486"/>
+        <location filename="../ui_MainWindow.h" line="469"/>
         <source>Filename</source>
         <translation>Nom</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="479"/>
+        <location filename="../ui_MainWindow.h" line="462"/>
         <source>File size</source>
         <translation>Taille</translation>
     </message>
@@ -201,102 +201,102 @@
         <translation type="obsolete">&lt;p align=&quot;right&quot;&gt;Compression :&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="454"/>
+        <location filename="../ui_MainWindow.h" line="439"/>
         <source>None</source>
         <translation>Aucune</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="455"/>
+        <location filename="../ui_MainWindow.h" line="440"/>
         <source>Totally Low</source>
         <translation>Minime</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="456"/>
+        <location filename="../ui_MainWindow.h" line="441"/>
         <source>Really Low</source>
         <translation>Très basse</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="457"/>
+        <location filename="../ui_MainWindow.h" line="442"/>
         <source>Low</source>
         <translation>Basse</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="458"/>
+        <location filename="../ui_MainWindow.h" line="443"/>
         <source>Almost Normal</source>
         <translation>Presque normale</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="459"/>
+        <location filename="../ui_MainWindow.h" line="444"/>
         <source>Normal</source>
         <translation>Normale</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="460"/>
+        <location filename="../ui_MainWindow.h" line="445"/>
         <source>More than Normal</source>
         <translation>Plus que normale</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="461"/>
+        <location filename="../ui_MainWindow.h" line="446"/>
         <source>High</source>
         <translation>Haute</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="462"/>
+        <location filename="../ui_MainWindow.h" line="447"/>
         <source>Really High</source>
         <translation>Très haute</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="463"/>
+        <location filename="../ui_MainWindow.h" line="448"/>
         <source>Max</source>
         <translation>Maximale</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="488"/>
+        <location filename="../ui_MainWindow.h" line="471"/>
         <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Using this button, you can open an existing GRF file.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Ce bouton vous permet d&apos;ouvrir un fichier GRF existant.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="489"/>
+        <location filename="../ui_MainWindow.h" line="472"/>
         <source>Open</source>
         <translation>Ouvrir</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="490"/>
+        <location filename="../ui_MainWindow.h" line="473"/>
         <source>Extract</source>
         <translation>Extraire</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="492"/>
+        <location filename="../ui_MainWindow.h" line="475"/>
         <source>Extract All</source>
         <translation>Tout extraire</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="493"/>
+        <location filename="../ui_MainWindow.h" line="476"/>
         <source>Repack</source>
         <translation>Repacker</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="494"/>
+        <location filename="../ui_MainWindow.h" line="477"/>
         <source>Close</source>
         <translation>Fermer</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="495"/>
+        <location filename="../ui_MainWindow.h" line="478"/>
         <source>Merge GRF</source>
         <translation>Fusionner GRF</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="496"/>
+        <location filename="../ui_MainWindow.h" line="479"/>
         <source>Merge dir</source>
         <translation>Ajouter rép.</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="497"/>
+        <location filename="../ui_MainWindow.h" line="480"/>
         <source>&amp;?</source>
         <translation>&amp;?</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="501"/>
+        <location filename="../ui_MainWindow.h" line="481"/>
         <source>&amp;File</source>
         <translation>&amp;Fichier</translation>
     </message>
@@ -321,57 +321,57 @@
         <translation type="obsolete">Type d&apos;e&amp;xtraction</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="535"/>
+        <location filename="../MainWindow.cpp" line="561"/>
         <source>Extraction in progress...</source>
         <translation>Extraction en cours...</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="535"/>
+        <location filename="../MainWindow.cpp" line="561"/>
         <source>Cancel</source>
         <translation>Annuler</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="547"/>
+        <location filename="../MainWindow.cpp" line="573"/>
         <source>Extracting file %1...</source>
         <translation>Extraction de %1...</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="482"/>
+        <location filename="../ui_MainWindow.h" line="465"/>
         <source>id</source>
         <translation>id</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="449"/>
+        <location filename="../ui_MainWindow.h" line="436"/>
         <source>&amp;Unicode extraction</source>
         <translation>Extraction &amp;Unicode</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="450"/>
+        <location filename="../ui_MainWindow.h" line="437"/>
         <source>&amp;ANSI extraction</source>
         <translation>Extraction &amp;ANSI</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="451"/>
+        <location filename="../ui_MainWindow.h" line="438"/>
         <source>Images &amp;Transparency</source>
         <translation>&amp;Transparence des images</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="498"/>
+        <location filename="../ui_MainWindow.h" line="483"/>
         <source>&amp;Options</source>
         <translation>&amp;Options</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="40"/>
+        <location filename="../MainWindow.cpp" line="66"/>
         <source>GrfBuilder v%1.%2.%3 (libgrf v%4.%5.%6) by MagicalTux</source>
         <translation>GrfBuilder v%1.%2.%3 (libgrf v%4.%5.%6) par MagicalTux</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="334"/>
+        <location filename="../MainWindow.cpp" line="360"/>
         <source>&lt;p align=&quot;center&quot;&gt;&lt;b&gt;GrfBuilder v%1.%2.%3 by MagicalTux&lt;/b&gt;&lt;/p&gt;&lt;p align=&quot;left&quot;&gt;Linked against libgrf v%4.%5.%6 (also by MagicalTux)&lt;br /&gt;This tool is designed to allow easy read and write access to GRF files.&lt;br /&gt;This was developped for the sole purpose of demonstrating that Gravity need better developpers.&lt;/p&gt;&lt;p align=&quot;left&quot;&gt;You can contact MagicalTux on &lt;a href=&quot;http://ookoo.org/cgi-bin/cgi-irc/irc.cgi&quot;&gt;irc://irc.ookoo.org/ooKoo&lt;/a&gt;&lt;/p&gt;</source>
         <translation>&lt;p align=&quot;center&quot;&gt;&lt;b&gt;GrfBuilder v%1.%2.%3 par MagicalTux&lt;/b&gt;&lt;/p&gt;&lt;p align=&quot;left&quot;&gt;Lié à la libgrf v%4.%5.%6 (aussi par MagicalTux)&lt;br /&gt;Cet outil a été conçu pour permettre un accès simple en lecture et en écriture aux fichiers GRF.&lt;br /&gt;Il a été développé dans le seul but de démontrer que Gravity a besoin de meilleurs développeurs.&lt;/p&gt;&lt;p align=&quot;left&quot;&gt;Version française par MagicalTux&lt;/p&gt;&lt;p align=&quot;left&quot;&gt;Vous pouvez contacter MagicalTux sur &lt;a href=&quot;http://ookoo.org/cgi-bin/cgi-irc/irc.cgi&quot;&gt;irc://irc.ookoo.org/ooKoo&lt;/a&gt;&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="588"/>
+        <location filename="../MainWindow.cpp" line="614"/>
         <source>Your computer has no audio support. Please make sure you have an audio device available and retry.</source>
         <translation>Votre ordinateur n&apos;a pas de support audio. Veuillez vous assurer que vous disposez d&apos;un périphérique audio disponible et réessayez.</translation>
     </message>
@@ -381,57 +381,57 @@
         <translation type="obsolete">Lecture de %1 en cours. Appuyez sur «OK» pour arrêter.</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="452"/>
+        <location filename="../ui_MainWindow.h" line="456"/>
         <source>English</source>
-        <translation>English</translation>
+        <translation type="obsolete">English</translation>
     </message>
     <message encoding="UTF-8">
-        <location filename="../ui_MainWindow.h" line="453"/>
+        <location filename="../ui_MainWindow.h" line="457"/>
         <source>Français</source>
-        <translation>Français</translation>
+        <translation type="obsolete">Français</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="591"/>
+        <location filename="../MainWindow.cpp" line="617"/>
         <source>Currently playing file `%1&apos;. Press &quot;Ok&quot; to stop.</source>
         <translation>Lecture de «%1» en cours. Appuyez sur «OK» pour arrêter.</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="487"/>
+        <location filename="../ui_MainWindow.h" line="470"/>
         <source>Search result</source>
         <translation>Résultats</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="499"/>
+        <location filename="../ui_MainWindow.h" line="484"/>
         <source>Compression level</source>
         <translation>Niveau de compression</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="55"/>
+        <location filename="../MainWindow.cpp" line="81"/>
         <source>%1 GiB</source>
         <translation>%1 Gio</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="58"/>
+        <location filename="../MainWindow.cpp" line="84"/>
         <source>%1 MiB</source>
         <translation>%1 Mio</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="61"/>
+        <location filename="../MainWindow.cpp" line="87"/>
         <source>%1 kiB</source>
         <translation>%1 kio</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="464"/>
+        <location filename="../ui_MainWindow.h" line="468"/>
         <source>Deutsch</source>
-        <translation>Deutsch</translation>
+        <translation type="obsolete">Deutsch</translation>
     </message>
     <message encoding="UTF-8">
-        <location filename="../ui_MainWindow.h" line="465"/>
+        <location filename="../ui_MainWindow.h" line="469"/>
         <source>Español</source>
-        <translation>Español</translation>
+        <translation type="obsolete">Español</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="500"/>
+        <location filename="../ui_MainWindow.h" line="485"/>
         <source>Repack type</source>
         <translation>Type de repack</translation>
     </message>
@@ -441,89 +441,94 @@
         <translation type="obsolete">Repacker ce fichier le réduira de %1%. Voulez-vous continuer ?</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="158"/>
+        <location filename="../MainWindow.cpp" line="184"/>
         <source>Repack in progress...</source>
         <translation>Repack en cours...</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="142"/>
+        <location filename="../MainWindow.cpp" line="168"/>
         <source>Moving file %1...</source>
         <translation>Déplacement du fichier %1...</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="63"/>
+        <location filename="../MainWindow.cpp" line="89"/>
         <source>%1 B</source>
         <translation>%1 oct</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="157"/>
+        <location filename="../MainWindow.cpp" line="183"/>
         <source>Repacking this file will reduce it by %1% (%2). Do you want to continue?</source>
         <translation>Repacker ce fichier le réduira de %1% (%2). Voulez-vous continuer ?</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="470"/>
+        <location filename="../ui_MainWindow.h" line="453"/>
         <source>Ctrl+R</source>
         <translation>Ctrl+R</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="426"/>
+        <location filename="../MainWindow.cpp" line="452"/>
         <source>Extract file as...</source>
         <translation>Extraire le fichier sous...</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="426"/>
+        <location filename="../MainWindow.cpp" line="452"/>
         <source>%1 files (*.%1)</source>
         <translation>Fichiers %1 (*.%1)</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="430"/>
+        <location filename="../MainWindow.cpp" line="456"/>
         <source>Could not open %1 for writing a file.</source>
         <translation>Impossible d&apos;écrire %1 pour l&apos;écriture d&apos;un fichier.</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="435"/>
+        <location filename="../MainWindow.cpp" line="461"/>
         <source>Could not write data to %1 while extracting a file.</source>
         <translation>Impossible d&apos;écrire dans le fichier %1.</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="178"/>
+        <location filename="../MainWindow.cpp" line="204"/>
         <source>Merging file %1...</source>
         <translation>Fusion du fichier %1...</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="198"/>
+        <location filename="../MainWindow.cpp" line="224"/>
         <source>Could not open file %1 in read-only mode.</source>
         <translation>Impossible d&apos;ouvrir le fichier %1 en lecture seule.</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="208"/>
+        <location filename="../MainWindow.cpp" line="234"/>
         <source>Merge in progress...</source>
         <translation>Fusion en cours...</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="491"/>
+        <location filename="../ui_MainWindow.h" line="474"/>
         <source>Delete</source>
         <translation>Effacer</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="360"/>
+        <location filename="../MainWindow.cpp" line="386"/>
         <source>Are you sure you want to delete the file `%1&apos;?</source>
         <translation>Voulez-vous vraiment effacer le fichier «%1» ?</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="365"/>
+        <location filename="../MainWindow.cpp" line="391"/>
         <source>Are you sure you want to delete the %1 selected files?</source>
         <translation>Voulez-vous vraiment effacer ces %1 fichiers ?</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="471"/>
+        <location filename="../ui_MainWindow.h" line="454"/>
         <source>Delete selected</source>
         <translation>Effacer la séléction</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="531"/>
+        <location filename="../MainWindow.cpp" line="557"/>
         <source>Extract to...</source>
-        <translation type="unfinished"></translation>
+        <translation>Extraire vers...</translation>
+    </message>
+    <message>
+        <location filename="../ui_MainWindow.h" line="482"/>
+        <source>Language</source>
+        <translation>Langue</translation>
     </message>
 </context>
 <context>
