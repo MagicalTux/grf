@@ -29,7 +29,7 @@
 
 #define VERSION_MAJOR 0
 #define VERSION_MINOR 1
-#define VERSION_REVISION 26
+#define VERSION_REVISION 27
 
 #ifdef __WIN32
 #define VERSION_TYPE "Win32"
@@ -87,12 +87,6 @@ struct grf_handler {
 #define GRF_FILE_OUTPUT_VERISON 0x200
 #define GRF_HASH_TABLE_SIZE 128
 #define GRF_TREE_HASH_SIZE 32
-
-#define GRF_FLAG_FILE 1
-#define GRF_FLAG_MIXCRYPT 2
-#define GRF_FLAG_DES 4
-/* extra custom-flag to delete a file while updating */
-#define GRF_FLAG_DELETE 8
 
 /* values specific to all directories */
 #define GRF_DIRECTORY_LEN 1094

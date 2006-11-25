@@ -3,12 +3,12 @@
 <context>
     <name>Dialog</name>
     <message>
-        <location filename="../MainWindow.cpp" line="895"/>
+        <location filename="../MainWindow.cpp" line="901"/>
         <source>Image Preview</source>
         <translation>檢視圖片</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="896"/>
+        <location filename="../MainWindow.cpp" line="902"/>
         <source>Close</source>
         <translation>關閉</translation>
     </message>
@@ -41,117 +41,117 @@
         <translation>%1 Bytes</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="168"/>
+        <location filename="../MainWindow.cpp" line="226"/>
         <source>Moving file %1...</source>
         <translation>移動 %1 檔案中...</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="828"/>
+        <location filename="../MainWindow.cpp" line="834"/>
         <source>GrfBuilder</source>
         <translation>GrfBuilder</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="183"/>
+        <location filename="../MainWindow.cpp" line="241"/>
         <source>Repacking this file will reduce it by %1% (%2). Do you want to continue?</source>
         <translation>封裝後檔案將減少 %1%  (%2). 你確定要繼續嗎?</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="184"/>
+        <location filename="../MainWindow.cpp" line="242"/>
         <source>Repack in progress...</source>
         <translation>封裝處理中...</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="694"/>
+        <location filename="../MainWindow.cpp" line="700"/>
         <source>Cancel</source>
         <translation>取消</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="293"/>
+        <location filename="../MainWindow.cpp" line="350"/>
         <source>Merging file %1...</source>
         <translation>合併 %1 檔案中...</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="409"/>
+        <location filename="../MainWindow.cpp" line="415"/>
         <source>Open File</source>
         <translation>開啟檔案</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="410"/>
+        <location filename="../MainWindow.cpp" line="416"/>
         <source>GRF Files (*.grf *.gpf)</source>
         <translation>GRF 檔案 (*.grf *.gpf)</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="314"/>
+        <location filename="../MainWindow.cpp" line="370"/>
         <source>Could not open file %1 in read-only mode.</source>
         <translation>無法開啟 %1 檔案. 請取消唯讀.</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="427"/>
+        <location filename="../MainWindow.cpp" line="433"/>
         <source>The selected file doesn&apos;t look like a valid GRF file.</source>
         <translation>你選擇的檔案不是 GRF 檔案.</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="324"/>
+        <location filename="../MainWindow.cpp" line="380"/>
         <source>Merge in progress...</source>
         <translation>合併處理中...</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="418"/>
+        <location filename="../MainWindow.cpp" line="424"/>
         <source>Could not load this file in read/write mode.</source>
         <translation>檔案使用中，無法開啟這檔案.</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="493"/>
+        <location filename="../MainWindow.cpp" line="499"/>
         <source>&lt;p align=&quot;center&quot;&gt;&lt;b&gt;GrfBuilder v%1.%2.%3 by MagicalTux&lt;/b&gt;&lt;/p&gt;&lt;p align=&quot;left&quot;&gt;Linked against libgrf v%4.%5.%6 (also by MagicalTux)&lt;br /&gt;This tool is designed to allow easy read and write access to GRF files.&lt;br /&gt;This was developped for the sole purpose of demonstrating that Gravity need better developpers.&lt;/p&gt;&lt;p align=&quot;left&quot;&gt;You can contact MagicalTux on &lt;a href=&quot;http://ookoo.org/cgi-bin/cgi-irc/irc.cgi&quot;&gt;irc://irc.ookoo.org/ooKoo&lt;/a&gt;&lt;/p&gt;</source>
         <translation>&lt;p align=&quot;center&quot;&gt;&lt;b&gt;GrfBuilder v%1.%2.%3 by MagicalTux&lt;/b&gt;&lt;/p&gt;&lt;p align=&quot;left&quot;&gt;Linked against libgrf v%4.%5.%6 (also by MagicalTux)&lt;br /&gt;這工具可讓你容易的讀/寫資料到 GRF 檔案中.&lt;br /&gt;研發這工具主要目的是為了證明比重力社研發的還要好.&lt;/p&gt;&lt;p align=&quot;left&quot;&gt;你可以在這裡聯絡到 MagicalTux &lt;a href=&quot;http://ookoo.org/cgi-bin/cgi-irc/irc.cgi&quot;&gt;irc://irc.ookoo.org/ooKoo&lt;/a&gt;&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="519"/>
+        <location filename="../MainWindow.cpp" line="525"/>
         <source>Are you sure you want to delete the file `%1&apos;?</source>
         <translation>你確定要刪除 `%1&apos; 這個檔案嗎?</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="524"/>
+        <location filename="../MainWindow.cpp" line="530"/>
         <source>Are you sure you want to delete the %1 selected files?</source>
         <translation>你確定要刪除你已選擇的 %1 這個檔案嗎?</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="694"/>
+        <location filename="../MainWindow.cpp" line="700"/>
         <source>Extraction in progress...</source>
         <translation>匯出處理中...</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="585"/>
+        <location filename="../MainWindow.cpp" line="591"/>
         <source>Extract file as...</source>
         <translation>匯出檔案為...</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="585"/>
+        <location filename="../MainWindow.cpp" line="591"/>
         <source>%1 files (*.%1)</source>
         <translation>%1 檔案 (*.%1)</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="589"/>
+        <location filename="../MainWindow.cpp" line="595"/>
         <source>Could not open %1 for writing a file.</source>
         <translation>資料無法寫入 %1 檔案.</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="594"/>
+        <location filename="../MainWindow.cpp" line="600"/>
         <source>Could not write data to %1 while extracting a file.</source>
         <translation>匯出檔案時，無法寫入資料至 %1 .</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="706"/>
+        <location filename="../MainWindow.cpp" line="712"/>
         <source>Extracting file %1...</source>
         <translation>匯出 %1 檔案中...</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="747"/>
+        <location filename="../MainWindow.cpp" line="753"/>
         <source>Your computer has no audio support. Please make sure you have an audio device available and retry.</source>
         <translation>你的電腦不支援音效. 請確定你有安裝音效卡驅動程式.</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="750"/>
+        <location filename="../MainWindow.cpp" line="756"/>
         <source>Currently playing file `%1&apos;. Press &quot;Ok&quot; to stop.</source>
         <translation>目前播放 `%1&apos;. 按 &quot;OK&quot; 停止播放.</translation>
     </message>
@@ -456,7 +456,7 @@
         <translation>&amp;檔案</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="690"/>
+        <location filename="../MainWindow.cpp" line="696"/>
         <source>Extract to...</source>
         <translation>匯出到...</translation>
     </message>
@@ -471,12 +471,12 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="251"/>
+        <location filename="../MainWindow.cpp" line="308"/>
         <source>Import directory...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="391"/>
+        <location filename="../MainWindow.cpp" line="397"/>
         <source>Create new GRF as...</source>
         <translation type="unfinished"></translation>
     </message>
@@ -496,22 +496,22 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="828"/>
+        <location filename="../MainWindow.cpp" line="834"/>
         <source>Failed to read file `%1&apos; from GRF.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="226"/>
+        <location filename="../MainWindow.cpp" line="283"/>
         <source>Bad encoding for file `%1&apos;. Aborting process!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="257"/>
+        <location filename="../MainWindow.cpp" line="314"/>
         <source>Preparing to merge directory...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="267"/>
+        <location filename="../MainWindow.cpp" line="324"/>
         <source>Adding file `%1&apos;...</source>
         <translation type="unfinished"></translation>
     </message>

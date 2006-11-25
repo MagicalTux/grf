@@ -1083,6 +1083,10 @@ GRFEXPORT uint32_t grf_file_get_storage_pos(void *handler) {
 	return ((struct grf_node *)handler)->pos;
 }
 
+GRFEXPORT uint32_t grf_file_get_storage_flags(void *handler) {
+	return ((struct grf_node *)handler)->flags;
+}
+
 GRFEXPORT uint32_t grf_file_get_storage_size(void *handler) {
 	return ((struct grf_node *)handler)->len_aligned;
 }

@@ -68,6 +68,13 @@ typedef void * grf_treenode;
 #define GRF_REPACK_DECRYPT 2
 #define GRF_REPACK_RECOMPRESS 3
 
+/* do not ask questions about that */
+#define GRF_FLAG_FILE 1
+#define GRF_FLAG_MIXCRYPT 2
+#define GRF_FLAG_DES 4
+/* extra custom-flag to delete a file while updating */
+#define GRF_FLAG_DELETE 8
+
 /*****************************************************************************
  *************************** BASE FUNCTIONS **********************************
  ****************************************************************************/
@@ -202,6 +209,11 @@ GRFEXPORT uint32_t grf_file_get_storage_pos(grf_node); /* grf.c */
  * Returns the real (compressed) size of the file.
  */
 GRFEXPORT uint32_t grf_file_get_storage_size(grf_node); /* grf.c */
+
+/* (unsigned int) grf_file_get_storage_flags(grf_node)
+ * Test if the first bit is set to know if a node is a file, or not.
+ */
+GRFEXPORT uint32_t grf_file_get_storage_flags(grf_node); /* grf.c */
 
 /* (unsigned int) grf_file_get_contents(grf_node, void *ptr)
  * Extracts the file to the provided pointer and returns the number of bytes
