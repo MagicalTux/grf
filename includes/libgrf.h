@@ -51,6 +51,7 @@ typedef int bool;
 typedef void * grf_handle;
 typedef void * grf_node;
 typedef void * grf_treenode;
+#define __LIBGRF_HAS_TYPEDEF
 #endif
 
 /* Some defines used by grf_merge() and grf_repack() : 
@@ -176,14 +177,14 @@ GRFEXPORT uint32_t grf_wasted_space(grf_handle); /* grf.c */
  * pointer to the created file.
  */
 GRFEXPORT grf_node grf_file_add(grf_handle, const char *, void *, size_t); /* grf.c */
-GRFEXPORT void *grf_file_add_fd(void *, const char *, int); /* grf.c */
-GRFEXPORT void *grf_file_add_path(void *, const char *, const char *); /* grf.c */
+GRFEXPORT grf_node grf_file_add_fd(grf_handle, const char *, int); /* grf.c */
+GRFEXPORT grf_node grf_file_add_path(grf_handle, const char *, const char *); /* grf.c */
 
 /* (grf_node) grf_get_file(grf_handle handle, const char *filename)
  * Returns a node handle to the specified file inside the GRF file. If the
  * function fails, NULL is returned.
  */
-GRFEXPORT void *grf_get_file(void *, const char *); /* grf.c */
+GRFEXPORT grf_node grf_get_file(grf_handle, const char *); /* grf.c */
 
 /* (const char *) grf_file_get_filename(grf_node)
  * Returns the full filename of a file.
@@ -236,6 +237,8 @@ GRFEXPORT bool grf_put_contents_to_file(grf_node, const char *); /* grf.c */
 /* (bool) grf_file_rename(grf_node, const char *new_name)
  * Rename the given file to new_name. NB: You must provide a FULL filename,
  * including the full path of the file, eg: data\some_file.txt
+ * Renaming to an already existing file will delete it. Renaming to a
+ * directory name will give unexpected results.
  */
 GRFEXPORT bool grf_file_rename(grf_node, const char *); /* grf.c */
 
@@ -307,7 +310,7 @@ GRFEXPORT grf_treenode grf_file_get_tree(grf_node); /* grf.c */
 /* (unsigned int) grf_tree_dir_count_files(grf_treenode)
  * Returns the number of files contained in a treenode dir.
  */
-GRFEXPORT uint32_t grf_tree_dir_count_files(void *); /* grf.c */
+GRFEXPORT uint32_t grf_tree_dir_count_files(grf_treenode); /* grf.c */
 
 /*****************************************************************************
  ************************** FILE LISTING FUNCTIONS ***************************
@@ -342,15 +345,20 @@ GRFEXPORT grf_node grf_get_file_prev(grf_node); /* grf.c */
  ****************************************************************************/
 
 /* (grf_node*) grf_get_file_id_list(grf_handle)
- * Returns the global list of files. Its order may vary each time GRF file is
- * modified.
+ * Returns the global list of files. The order may change each time you call
+ * grf_update_id_list().
  */
 GRFEXPORT grf_node *grf_get_file_id_list(grf_handle);
+
+/* grf_update_id_list(grf_handle)
+ * Recompute the ID list (needed after add/remove)
+ */
+GRFEXPORT void grf_update_id_list(grf_handle); /* grf.c */
 
 /* (unsigned int) grf_file_get_id(grf_node)
  * Returns ID (index position in the list) of a file.
  */
-GRFEXPORT uint32_t grf_file_get_id(void *); /* grf.c */
+GRFEXPORT uint32_t grf_file_get_id(grf_node); /* grf.c */
 
 /* (grf_node) grf_get_file_by_id(grf_handle, unsigned int id)
  * Returns the file corresponding to the given ID.

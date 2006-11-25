@@ -263,14 +263,14 @@ static void prv_grf_reg_tree_node(struct grf_treenode *root, struct grf_node *cu
 	hash_add_element(parent->subdir, (char *)&dirname, new);
 }
 
-GRFEXPORT void *grf_new_by_fd(int fd, bool writemode) {
-	struct grf_handler *handler;
+GRFEXPORT grf_handle grf_new_by_fd(int fd, bool writemode) {
+	grf_handle handler;
 
 	if (fd < 0) return NULL;
 
-	handler = (struct grf_handler *)calloc(1, sizeof(struct grf_handler));
+	handler = (grf_handle)calloc(1, sizeof(struct grf_handler));
 	if (handler == NULL) { close(fd); return NULL; }
-	memset(handler, 0, sizeof(struct grf_handler));
+	memset(handler, 0, sizeof(grf_handle));
 	handler->fast_table = hash_create_table(GRF_HASH_TABLE_SIZE, prv_grf_free_node);
 	handler->fd = fd;
 	handler->need_save = writemode; // file should be new (flag will be unset by prv_grf_load)
@@ -280,12 +280,12 @@ GRFEXPORT void *grf_new_by_fd(int fd, bool writemode) {
 	return handler;
 }
 
-inline struct grf_node *prv_grf_find_free_space(struct grf_handler *handler, size_t size, struct grf_node *inode) {
+inline grf_node prv_grf_find_free_space(grf_handle handler, size_t size, grf_node inode) {
 	// find a "leak" between two files, to put our own file
 	// our files are sorted, that's a good thing:)
 	// We just have to return the node where the space is available, the other func will
 	// insert his new node just after this one, so everything stays cool
-	struct grf_node *cur = handler->first_node;
+	grf_node cur = handler->first_node;
 	// case: inode is the first node (and is not null)
 	if ((cur == inode) && (cur != NULL)) cur = cur->next;
 	// case: there's no (other) file
@@ -305,7 +305,7 @@ inline struct grf_node *prv_grf_find_free_space(struct grf_handler *handler, siz
 	return cur;
 }
 
-GRFEXPORT void *grf_new(const char *filename, bool writemode) {
+GRFEXPORT grf_handle grf_new(const char *filename, bool writemode) {
 	int fd;
 
 #ifdef O_LARGEFILE
@@ -316,13 +316,12 @@ GRFEXPORT void *grf_new(const char *filename, bool writemode) {
 	return grf_new_by_fd(fd, writemode);
 }
 
-GRFEXPORT void grf_set_callback(void *tmphandler, bool (*callback)(void *, void *, int, int, const char *), void *etc) {
-	((struct grf_handler *)tmphandler)->callback = callback;
-	((struct grf_handler *)tmphandler)->callback_etc = etc;
+GRFEXPORT void grf_set_callback(grf_handle handler, bool (*callback)(void *, grf_handle, int, int, const char *), void *etc) {
+	handler->callback = callback;
+	handler->callback_etc = etc;
 }
 
-GRFEXPORT bool grf_merge(void *_dest, void *_src, uint8_t repack_type) {
-	struct grf_handler *dest=_dest, *src = _src;
+GRFEXPORT bool grf_merge(grf_handle dest, grf_handle src, uint8_t repack_type) {
 	struct grf_node *cur, *rep, *prev;
 	void *ptr;
 	uint32_t i=0;
@@ -435,8 +434,7 @@ static void prv_grf_recount_wasted_space(struct grf_handler *handler) {
 	handler->wasted_space = w;
 }
 
-GRFEXPORT bool grf_repack(void *tmphandler, uint8_t repack_type) {
-	struct grf_handler *handler = tmphandler;
+GRFEXPORT bool grf_repack(grf_handle handler, uint8_t repack_type) {
 	struct grf_node *node = handler->first_node;
 	struct grf_node *prenode;
 	uint32_t i=0;
@@ -536,9 +534,8 @@ static inline size_t prv_grf_strnlen(const char *str, const size_t maxlen) {
 	return maxlen;
 }
 
-GRFEXPORT void grf_create_tree(void *tmphandler) {
+GRFEXPORT void grf_create_tree(grf_handle handler) {
 	struct grf_node *cur_node;
-	struct grf_handler *handler = tmphandler;
 	uint32_t i=0, j=100;
 	if (handler->root != NULL) return;
 	// the idea is simple : get to each file and scan them~
@@ -567,41 +564,40 @@ GRFEXPORT void grf_create_tree(void *tmphandler) {
 	}
 }
 
-GRFEXPORT void *grf_tree_get_root(void *handler) {
-	return ((struct grf_handler *)handler)->root;
+GRFEXPORT grf_treenode grf_tree_get_root(grf_handle handler) {
+	return handler->root;
 }
 
-GRFEXPORT void **grf_tree_list_node(void *tmpnode) {
-	struct grf_treenode *node = tmpnode;
+GRFEXPORT grf_treenode *grf_tree_list_node(grf_treenode node) {
 	if (!node->is_dir) return NULL;
-	return hash_foreach_val(node->subdir);
+	return (grf_treenode *)hash_foreach_val(node->subdir);
 }
 
-GRFEXPORT bool grf_tree_is_dir(void *node) {
-	return ((struct grf_treenode *)node)->is_dir;
+GRFEXPORT bool grf_tree_is_dir(grf_treenode node) {
+	return node->is_dir;
 }
 
-GRFEXPORT uint32_t grf_tree_dir_count_files(void *node) {
-	return ((struct grf_treenode *)node)->subdir->count;
+GRFEXPORT uint32_t grf_tree_dir_count_files(grf_treenode node) {
+	return node->subdir->count;
 }
 
-GRFEXPORT void *grf_tree_get_file(void *node) {
-	return ((struct grf_treenode *)node)->ptr;
+GRFEXPORT grf_node grf_tree_get_file(grf_treenode node) {
+	return node->ptr;
 }
 
-GRFEXPORT const char *grf_tree_get_name(void *node) {
-	return ((struct grf_treenode *)node)->name;
+GRFEXPORT const char *grf_tree_get_name(grf_treenode node) {
+	return node->name;
 }
 
-GRFEXPORT void *grf_tree_get_parent(void *node) {
-	return ((struct grf_treenode *)node)->parent;
+GRFEXPORT grf_treenode grf_tree_get_parent(grf_treenode node) {
+	return node->parent;
 }
 
-GRFEXPORT void *grf_file_get_tree(void *handler) {
-	return ((struct grf_node *)handler)->tree_parent;
+GRFEXPORT grf_treenode grf_file_get_tree(grf_node handler) {
+	return handler->tree_parent;
 }
 
-static void prv_grf_update_node_table(struct grf_handler *handler) {
+GRFEXPORT void grf_update_id_list(grf_handle handler) {
 	struct grf_node *cur;
 	int i=0;
 	if (handler->node_table != NULL) free(handler->node_table);
@@ -660,7 +656,7 @@ static bool prv_grf_quicksort(struct grf_handler *handler, uint32_t elements) {
 	piv->next = NULL;
 	handler->first_node = arr[0];
 	free(arr);
-	prv_grf_update_node_table(handler);
+	grf_update_id_list(handler);
 	return true;
 }
 
@@ -995,7 +991,7 @@ static bool prv_grf_load(struct grf_handler *handler) {
 	return true;
 }
 
-GRFEXPORT void *grf_load_from_new(void *handler) {
+GRFEXPORT grf_handle grf_load_from_new(grf_handle handler) {
 	if (handler == NULL) return NULL;
 	
 	if (prv_grf_load((struct grf_handler *)handler) == false) {
@@ -1005,7 +1001,7 @@ GRFEXPORT void *grf_load_from_new(void *handler) {
 	return handler;
 }
 
-GRFEXPORT void *grf_load(const char *filename, bool writemode) {
+GRFEXPORT grf_handle grf_load(const char *filename, bool writemode) {
 	void *handler;
 
 	handler = grf_new(filename, writemode);
@@ -1013,8 +1009,7 @@ GRFEXPORT void *grf_load(const char *filename, bool writemode) {
 	return grf_load_from_new(handler);
 }
 
-GRFEXPORT bool grf_file_rename(void *tmphandler, const char *newname) {
-	struct grf_node *handler = (struct grf_node *)tmphandler;
+GRFEXPORT bool grf_file_rename(grf_node handler, const char *newname) {
 	if (!handler->parent->write_mode) return false;
 	handler->parent->need_save = true;
 	if (hash_remove_element(handler->parent->fast_table, handler->filename)!=0) return false;
@@ -1026,13 +1021,14 @@ GRFEXPORT bool grf_file_rename(void *tmphandler, const char *newname) {
 	return true;
 }
 
-GRFEXPORT bool grf_file_delete(void *tmphandler) {
-	struct grf_node *handler = (struct grf_node *)tmphandler;
+GRFEXPORT bool grf_file_delete(grf_node handler) {
 	struct grf_handler *parent = handler->parent;
 	uint32_t len_aligned = handler->len_aligned;
-	struct grf_node *next = handler->next;
+	struct grf_node *next, *rep = handler->next;
 	if (!parent->write_mode) return false;
 	parent->need_save = true;
+	rep = grf_get_file(parent, handler->filename);
+	if (rep != NULL) grf_file_delete(rep);
 	if (hash_del_element(handler->parent->fast_table, handler->filename)!=0) return false;
 	if (handler->tree_parent != NULL) hash_del_element(handler->tree_parent->parent->subdir, handler->tree_parent->name); // will free memory automatically
 	if (parent->first_node==handler) parent->first_node = next;
@@ -1041,74 +1037,61 @@ GRFEXPORT bool grf_file_delete(void *tmphandler) {
 	return true;
 }
 
-GRFEXPORT uint32_t grf_filecount(void *tmphandler) {
-	struct grf_handler *handler;
-	handler = (struct grf_handler *)tmphandler;
+GRFEXPORT uint32_t grf_filecount(grf_handle handler) {
 	return handler->filecount;
 }
 
-GRFEXPORT uint32_t grf_wasted_space(void *tmphandler) {
-	struct grf_handler *handler;
-	handler = (struct grf_handler *)tmphandler;
+GRFEXPORT uint32_t grf_wasted_space(grf_handle handler) {
 	return handler->wasted_space;
 }
 
-GRFEXPORT void *grf_get_file(void *tmphandler, const char *filename) {
-	struct grf_handler *handler;
-	handler = (struct grf_handler *)tmphandler;
+GRFEXPORT grf_node grf_get_file(grf_handle handler, const char *filename) {
 	return hash_lookup(handler->fast_table, filename);
 }
 
-GRFEXPORT const char *grf_file_get_filename(void *tmphandler) {
-	struct grf_node *handler;
-	handler = (struct grf_node *)tmphandler;
+GRFEXPORT const char *grf_file_get_filename(grf_node handler) {
 	return handler->filename;
 }
 
-GRFEXPORT const char *grf_file_get_basename(void *tmphandler) {
-	struct grf_node *handler = (struct grf_node *)tmphandler;
+GRFEXPORT const char *grf_file_get_basename(grf_node handler) {
 	char *name = handler->filename;
 	char *name2 = name + strlen(name);
 	for(;(*(name2-1)!='/') && (*(name2-1)!='\\') && (name2>name);name2--);
 	return name2;
 }
 
-GRFEXPORT uint32_t grf_file_get_size(void *tmphandler) {
-	struct grf_node *handler;
-	handler = (struct grf_node *)tmphandler;
+GRFEXPORT uint32_t grf_file_get_size(grf_node handler) {
 	return handler->size;
 }
 
-GRFEXPORT uint32_t grf_file_get_storage_pos(void *handler) {
-	return ((struct grf_node *)handler)->pos;
+GRFEXPORT uint32_t grf_file_get_storage_pos(grf_node handler) {
+	return handler->pos;
 }
 
-GRFEXPORT uint32_t grf_file_get_storage_flags(void *handler) {
-	return ((struct grf_node *)handler)->flags;
+GRFEXPORT uint32_t grf_file_get_storage_flags(grf_node handler) {
+	return handler->flags;
 }
 
-GRFEXPORT uint32_t grf_file_get_storage_size(void *handler) {
-	return ((struct grf_node *)handler)->len_aligned;
+GRFEXPORT uint32_t grf_file_get_storage_size(grf_node handler) {
+	return handler->len_aligned;
 }
 
-GRFEXPORT uint32_t grf_file_get_id(void *node) {
-	return ((struct grf_node *)node)->id;
+GRFEXPORT uint32_t grf_file_get_id(grf_node node) {
+	return node->id;
 }
 
-GRFEXPORT void *grf_get_file_by_id(void *handler, uint32_t id) {
-	return ((struct grf_handler *)handler)->node_table[id];
+GRFEXPORT grf_node grf_get_file_by_id(grf_handle handler, uint32_t id) {
+	return handler->node_table[id];
 }
 
-GRFEXPORT void **grf_get_file_id_list(void *handler) {
-	return (void **)((struct grf_handler *)handler)->node_table;
+GRFEXPORT grf_node *grf_get_file_id_list(grf_handle handler) {
+	return handler->node_table;
 }
 
-GRFEXPORT uint32_t grf_file_get_contents(void *tmphandler, void *target) {
+GRFEXPORT uint32_t grf_file_get_contents(grf_node fhandler, void *target) {
 	void *comp;
-	struct grf_node *fhandler;
 	struct grf_handler *handler;
 	uint32_t count;
-	fhandler = (struct grf_node *)tmphandler;
 	handler = fhandler->parent;
 	if ((fhandler->flags & GRF_FLAG_FILE) == 0) return 0; // not a file
 	comp = calloc(1, fhandler->len_aligned + 1024); // seems that we need to allocate 1024 more bytes to decrypt file safely
@@ -1124,7 +1107,7 @@ GRFEXPORT uint32_t grf_file_get_contents(void *tmphandler, void *target) {
 	return count;
 }
 
-GRFEXPORT uint32_t grf_file_put_contents_to_fd(void *file, int fd) {
+GRFEXPORT uint32_t grf_file_put_contents_to_fd(grf_node file, int fd) {
 	uint32_t size;
 	void *ptr;
 	uint32_t p=0;
@@ -1179,7 +1162,7 @@ static bool prv_grf_do_mkdir(char *name) {
 	return true;
 }
 
-GRFEXPORT bool grf_put_contents_to_file(void *file, const char *fn) {
+GRFEXPORT bool grf_put_contents_to_file(grf_node file, const char *fn) {
 	int i,p=0;
 	char *name;
 	size_t len, size;
@@ -1221,10 +1204,8 @@ GRFEXPORT bool grf_put_contents_to_file(void *file, const char *fn) {
 }
 
 
-GRFEXPORT void *grf_file_add(void *tmphandler, const char *filename, void *ptr, size_t size) {
+GRFEXPORT grf_node grf_file_add(grf_handle handler, const char *filename, void *ptr, size_t size) {
 	// returns pointer to the newly created file structure
-	struct grf_handler *handler;
- 	handler = (struct grf_handler *)tmphandler;
 	void *ptr_comp;
 	struct grf_node *prev, *ptr_file;
 	uint32_t comp_size, comp_size_aligned;
@@ -1291,7 +1272,7 @@ GRFEXPORT void *grf_file_add(void *tmphandler, const char *filename, void *ptr, 
 	return ptr_file;
 }
 
-GRFEXPORT void *grf_file_add_fd(void *tmphandler, const char *filename, int fp) {
+GRFEXPORT grf_node grf_file_add_fd(grf_handle handler, const char *filename, int fp) {
 	void *ptr, *res;
 	struct stat s;
 
@@ -1299,44 +1280,38 @@ GRFEXPORT void *grf_file_add_fd(void *tmphandler, const char *filename, int fp) 
 	if (fstat(fp, &s) != 0) return NULL;
 	ptr = malloc(s.st_size);
 	if (read(fp, ptr, s.st_size) != s.st_size) { free(ptr); return NULL; }
-	res = grf_file_add(tmphandler, filename, ptr, s.st_size);
+	res = grf_file_add(handler, filename, ptr, s.st_size);
 	free(ptr);
 	return res;
 }
 
-GRFEXPORT void *grf_file_add_path(void *tmphandler, const char *filename, const char *real_filename) {
+GRFEXPORT grf_node grf_file_add_path(grf_handle handler, const char *filename, const char *real_filename) {
 	int fp;
 	void *res;
 
 	fp = open(real_filename, O_RDONLY);
-	res = grf_file_add_fd(tmphandler, filename, fp);
+	res = grf_file_add_fd(handler, filename, fp);
 	close(fp);
 	return res;
 }
 
-GRFEXPORT void **grf_get_file_list(void *tmphandler) {
-	struct grf_handler *handler;
-	handler = (struct grf_handler *)tmphandler;
-	return hash_foreach_val(handler->fast_table);
+GRFEXPORT grf_node *grf_get_file_list(grf_handle handler) {
+	return (grf_node *)hash_foreach_val(handler->fast_table);
 }
 
-GRFEXPORT void *grf_get_file_first(void *tmphandler) {
-	struct grf_handler *handler = tmphandler;
+GRFEXPORT grf_node grf_get_file_first(grf_handle handler) {
 	return handler->first_node;
 }
 
-GRFEXPORT void *grf_get_file_next(void *tmphandler) {
-	struct grf_node *handler = tmphandler;
+GRFEXPORT grf_node grf_get_file_next(grf_node handler) {
 	return handler->next;
 }
 
-GRFEXPORT void *grf_get_file_prev(void *tmphandler) {
-	struct grf_node *handler = tmphandler;
+GRFEXPORT grf_node grf_get_file_prev(grf_node handler) {
 	return handler->prev;
 }
 
-GRFEXPORT void grf_set_compression_level(void *tmphandler, int level) {
-	struct grf_handler *handler = tmphandler;
+GRFEXPORT void grf_set_compression_level(grf_handle handler, int level) {
 	handler->compression_level = level;
 }
 
@@ -1441,31 +1416,18 @@ static bool prv_grf_write_table(struct grf_handler *handler) {
 	return true;
 }
 
-GRFEXPORT void grf_free(void *tmphandler) {
-	struct grf_handler *handler;
-//	struct grf_node *fn, *fn2;
-	handler = (struct grf_handler *)tmphandler;
+GRFEXPORT void grf_free(grf_handle handler) {
 	if (handler == NULL) return;
 
 	if (handler->need_save) grf_save(handler);
 	close(handler->fd);
-	/*
-	fn = handler->first_node;
-	while(fn != NULL) {
-		free(fn->filename);
-		fn2=fn->next;
-		free(fn);
-		fn=fn2;
-	}*/
 	hash_free_table(handler->fast_table);
 	if (handler->root != NULL) prv_grf_tree_table_free_node(handler->root);
 	if (handler->node_table != NULL) free(handler->node_table);
 	free(handler);
 }
 
-GRFEXPORT bool grf_save(void *tmphandler) {
-	struct grf_handler *handler;
-	handler = (struct grf_handler *)tmphandler;
+GRFEXPORT bool grf_save(grf_handle handler) {
 	if (handler == NULL) return false;
 
 	handler->filecount = handler->fast_table->count;

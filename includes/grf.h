@@ -51,6 +51,11 @@
 
 #define VERSION_STRING "Gravity Ragnarok Files lib v%d.%d.%d (" VERSION_TYPE VERSION_EXTRA VERSION_EXTRA2 ") by MagicalTux <MagicalTux@ooKoo.org>\nBundled zlib version %s"
 
+typedef struct grf_handler *grf_handle;
+typedef struct grf_node *grf_node;
+typedef struct grf_treenode *grf_treenode;
+#define __LIBGRF_HAS_TYPEDEF
+
 struct grf_node {
 	struct grf_node *prev, *next;
 	struct grf_handler *parent;
@@ -77,7 +82,7 @@ struct grf_handler {
 	struct grf_node *first_node;
 	hash_table *fast_table;
 	struct grf_treenode *root;
-	bool (* callback)(void *, void *, int, int, const char *);
+	bool (* callback)(void *, grf_handle, int, int, const char *);
 	void *callback_etc;
 	struct grf_node **node_table;
 };

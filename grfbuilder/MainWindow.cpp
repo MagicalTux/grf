@@ -176,10 +176,13 @@ void MainWindow::on_tab_sel_currentChanged(int idx) {
 
 void MainWindow::RefreshAfterLoad() {
 	void *f;
+	if (this->grf == NULL) return;
 	QBrush fg_des(qRgb(0,0x80,0));
 	QBrush fg_mixcrypt(qRgb(0,0,255));
 	ui.tab_sel->setCurrentIndex(0);
+	grf_update_id_list(this->grf);
 	f = grf_get_file_first(this->grf);
+	ui.view_allfiles->clear();
 	while(f != NULL) {
 		QTreeWidgetItem *__item = new QTreeWidgetItem(ui.view_allfiles);
 		unsigned int flags = grf_file_get_storage_flags(f);
@@ -198,6 +201,8 @@ void MainWindow::RefreshAfterLoad() {
 		f = grf_get_file_next(f);
 	}
 	ui.view_allfiles->sortItems(4, Qt::AscendingOrder);
+	this->grf_has_tree = false;
+	ui.view_filestree->clear();
 	// enable buttons
 	ui.btn_extract->setEnabled(true);
 	ui.btn_delete->setEnabled(true);
@@ -507,7 +512,6 @@ void MainWindow::on_btn_delete_clicked() {
 void MainWindow::on_actionDelete_triggered() {
 	QList<QTreeWidgetItem *> objlist;
 	int lsize, i;
-	void *f;
 	if (this->grf == NULL) return;
 
 	switch(ui.tab_sel->currentIndex()) {
@@ -539,23 +543,7 @@ void MainWindow::on_actionDelete_triggered() {
 			break;
 	}
 	grf_save(this->grf);
-	ui.tab_sel->setCurrentIndex(0);
-	f = grf_get_file_first(this->grf);
-	ui.view_allfiles->clear();
-	while(f != NULL) {
-		QTreeWidgetItem *__item = new QTreeWidgetItem(ui.view_allfiles);
-		__item->setText(0, QString("%1").arg(grf_file_get_id(f)));
-		__item->setText(1, this->showSizeAsString(grf_file_get_storage_size(f))); // compsize
-		__item->setText(2, this->showSizeAsString(grf_file_get_size(f))); // realsize
-		__item->setText(3, QString("%1").arg(grf_file_get_storage_pos(f))); // pos
-//		if (euc_kr_to_utf8(grf_file_get_filename(f)) == NULL) printf("ARGH %s\n", grf_file_get_filename(f));
-		__item->setText(4, QString::fromUtf8(euc_kr_to_utf8(grf_file_get_filename(f)))); // name
-//		__item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsUserCheckable | Qt::ItemIsEnabled | Qt::ItemIsDragEnabled | Qt::ItemIsEditable);
-		f = grf_get_file_next(f);
-	}
-	ui.view_allfiles->sortItems(4, Qt::AscendingOrder);
-	this->grf_has_tree = false;
-	ui.view_filestree->clear();
+	this->RefreshAfterLoad();
 }
 
 
@@ -571,11 +559,14 @@ void MainWindow::on_action_Extract_triggered() {
 	if (this->grf == NULL) return;
 
 	switch(ui.tab_sel->currentIndex()) {
+		case 1:
+			objlist = ui.view_tree.selectedItems();
+			objlist = this->myTreeViewRecuriveSearch(objlist);
 		case 0:
 		case 2:
 			if (ui.tab_sel->currentIndex() == 0) {
 				objlist = ui.view_allfiles->selectedItems();
-			} else {
+			} else if (ui.tab_sel->currentIndex() == 2) {
 				objlist = ui.viewSearch->selectedItems();
 			}
 			if (objlist.size()==0) break;
@@ -649,9 +640,6 @@ void MainWindow::on_action_Extract_triggered() {
 			prog.reset();
 			prog.close();
 			QDir::setCurrent(ppath);
-			break;
-		case 1:
-			QMessageBox::warning(this, tr("GrfBuilder"), QString("Sorry, this is not working yet."), QMessageBox::Cancel, QMessageBox::Cancel);
 			break;
 	}
 }

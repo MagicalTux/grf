@@ -111,6 +111,7 @@ private:
 	void setRepackType(int);
 	void RefreshAfterLoad();
 	bool do_recurse_dirscan(QList <struct files_list *> *, QString, QString);
+	QList<QTreeWidgetItem *>* myTreeViewRecuriveSearch(QList<QTreeWidgetItem *>*);
 };
 
 #endif

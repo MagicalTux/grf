@@ -3,12 +3,12 @@
 <context>
     <name>Dialog</name>
     <message>
-        <location filename="../MainWindow.cpp" line="901"/>
+        <location filename="../MainWindow.cpp" line="890"/>
         <source>Image Preview</source>
         <translation>Bild-Vorbetrachtung</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="902"/>
+        <location filename="../MainWindow.cpp" line="891"/>
         <source>Close</source>
         <translation>Schliessen</translation>
     </message>
@@ -21,52 +21,52 @@
         <translation>GrfBuilder v%1.%2.%3 (libgrf v%4.%5.%6) bei MagicalTux</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="415"/>
+        <location filename="../MainWindow.cpp" line="420"/>
         <source>Open File</source>
         <translation> Eine Kartei öffnen</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="416"/>
+        <location filename="../MainWindow.cpp" line="421"/>
         <source>GRF Files (*.grf *.gpf)</source>
         <translation>GRF Kartei (*.grf *.gpf)</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="834"/>
+        <location filename="../MainWindow.cpp" line="823"/>
         <source>GrfBuilder</source>
         <translation>GrfBuilder</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="424"/>
+        <location filename="../MainWindow.cpp" line="429"/>
         <source>Could not load this file in read/write mode.</source>
         <translation>Unmöglich den Kartei zu lessen in schreibmode.</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="433"/>
+        <location filename="../MainWindow.cpp" line="438"/>
         <source>The selected file doesn&apos;t look like a valid GRF file.</source>
         <translation>Die gewahlte Kartei scheint nicht eine gültige grf-Kartei zu sein.</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="499"/>
+        <location filename="../MainWindow.cpp" line="504"/>
         <source>&lt;p align=&quot;center&quot;&gt;&lt;b&gt;GrfBuilder v%1.%2.%3 by MagicalTux&lt;/b&gt;&lt;/p&gt;&lt;p align=&quot;left&quot;&gt;Linked against libgrf v%4.%5.%6 (also by MagicalTux)&lt;br /&gt;This tool is designed to allow easy read and write access to GRF files.&lt;br /&gt;This was developped for the sole purpose of demonstrating that Gravity need better developpers.&lt;/p&gt;&lt;p align=&quot;left&quot;&gt;You can contact MagicalTux on &lt;a href=&quot;http://ookoo.org/cgi-bin/cgi-irc/irc.cgi&quot;&gt;irc://irc.ookoo.org/ooKoo&lt;/a&gt;&lt;/p&gt;</source>
         <translation>&lt;p align=&quot;center&quot;&gt;&lt;b&gt;GrfBuilder v%1.%2.%3 bei MagicalTux&lt;/b&gt;&lt;/p&gt;&lt;p align=&quot;left&quot;&gt;Gebunden an das libgrf  v%4.%5.%6 (auch durch MagicalTux )&lt;br /&gt;Dieses Werkzeug ist entworfen, um einfaches lektüre zu erlauben und Zugang zu den GRF Akten zu schreiben.&lt;br /&gt;Dieses war developped zum alleinigen Zweck des Zeigens, daß Schwerkraftnotwendigkeit Entwickler verbessern.&lt;/p&gt;&lt;p align=&quot;left&quot;&gt;Deutsche version von Chris&lt;/p&gt;&lt;p align=&quot;left&quot;&gt;Sie können mit MagicalTux an in Verbindung treten &lt;a href=&quot;http://ookoo.org/cgi-bin/cgi-irc/irc.cgi&quot;&gt;irc://irc.ookoo.org/ooKoo&lt;/a&gt;&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="700"/>
+        <location filename="../MainWindow.cpp" line="689"/>
         <source>Extraction in progress...</source>
         <translation> Extraktion in Bewegung...</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="700"/>
+        <location filename="../MainWindow.cpp" line="689"/>
         <source>Cancel</source>
         <translation>Annullieren</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="712"/>
+        <location filename="../MainWindow.cpp" line="701"/>
         <source>Extracting file %1...</source>
         <translation> Extraktion von %1...</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="753"/>
+        <location filename="../MainWindow.cpp" line="742"/>
         <source>Your computer has no audio support. Please make sure you have an audio device available and retry.</source>
         <translation> Ihr Rechner hat keinen Audio- Träger. Gewährleisten Sie sich bitte, dass Sie über ein verfügbares Audio- Peripherigerät verfügen und erneut versuchen.</translation>
     </message>
@@ -371,7 +371,7 @@
         <translation>%1 kiB</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="756"/>
+        <location filename="../MainWindow.cpp" line="745"/>
         <source>Currently playing file `%1&apos;. Press &quot;Ok&quot; to stop.</source>
         <translation>Laufende Lektüre von &apos;%1&apos;. Unterstützen Sie auf &quot;OK&quot;, um sich anzuhalten.</translation>
     </message>
@@ -401,12 +401,12 @@
         <translation> Packen Sie Art ein</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="242"/>
+        <location filename="../MainWindow.cpp" line="247"/>
         <source>Repack in progress...</source>
         <translation> Packen Sie in Bewegung...</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="226"/>
+        <location filename="../MainWindow.cpp" line="231"/>
         <source>Moving file %1...</source>
         <translation> Bewegliche Akte %1...</translation>
     </message>
@@ -416,7 +416,7 @@
         <translation>%1 B</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="241"/>
+        <location filename="../MainWindow.cpp" line="246"/>
         <source>Repacking this file will reduce it by %1% (%2). Do you want to continue?</source>
         <translation> Die Wiederverpackung dieser Akte verringert sie vorbei %1% (%2).  Möchten Sie fortfahren?</translation>
     </message>
@@ -426,37 +426,37 @@
         <translation>Ctrl+R</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="591"/>
+        <location filename="../MainWindow.cpp" line="580"/>
         <source>Extract file as...</source>
         <translation> Extraktakte wie...</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="591"/>
+        <location filename="../MainWindow.cpp" line="580"/>
         <source>%1 files (*.%1)</source>
         <translation>%1 Kartei (*.%1)</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="595"/>
+        <location filename="../MainWindow.cpp" line="584"/>
         <source>Could not open %1 for writing a file.</source>
         <translation> Konnte nicht %1 für das Schreiben einer Akte öffnen.</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="600"/>
+        <location filename="../MainWindow.cpp" line="589"/>
         <source>Could not write data to %1 while extracting a file.</source>
         <translation> Konnte nicht Daten bis %1 beim Extrahieren einer Akte schreiben.</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="350"/>
+        <location filename="../MainWindow.cpp" line="355"/>
         <source>Merging file %1...</source>
         <translation> Mischenakte %1...</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="370"/>
+        <location filename="../MainWindow.cpp" line="375"/>
         <source>Could not open file %1 in read-only mode.</source>
         <translation> unmöglich die Kartei %1 in nur Lektüre zu öffnen.</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="380"/>
+        <location filename="../MainWindow.cpp" line="385"/>
         <source>Merge in progress...</source>
         <translation> Mischen in Bewegung...</translation>
     </message>
@@ -466,12 +466,12 @@
         <translation>Löschung</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="525"/>
+        <location filename="../MainWindow.cpp" line="530"/>
         <source>Are you sure you want to delete the file `%1&apos;?</source>
         <translation> Sind Sie Sie möchten die Akte `%1 löschen &apos; sicher?</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="530"/>
+        <location filename="../MainWindow.cpp" line="535"/>
         <source>Are you sure you want to delete the %1 selected files?</source>
         <translation>Sind Sie Sie möchten die %1 vorgewählten Akten löschen sicher?</translation>
     </message>
@@ -481,59 +481,59 @@
         <translation>Löschung vorgewählt</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="696"/>
+        <location filename="../MainWindow.cpp" line="685"/>
         <source>Extract to...</source>
         <translation>Extrakt zu...</translation>
     </message>
     <message>
         <location filename="../ui_MainWindow.h" line="494"/>
         <source>Language</source>
-        <translation type="unfinished"></translation>
+        <translation>Sprache</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="308"/>
+        <location filename="../MainWindow.cpp" line="313"/>
         <source>Import directory...</source>
-        <translation type="unfinished"></translation>
+        <translation>Ein Register importieren...</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="397"/>
+        <location filename="../MainWindow.cpp" line="402"/>
         <source>Create new GRF as...</source>
-        <translation type="unfinished"></translation>
+        <translation>Ein neues GRF schaffen unter...</translation>
     </message>
     <message>
         <location filename="../ui_MainWindow.h" line="465"/>
         <source>&amp;New</source>
-        <translation type="unfinished"></translation>
+        <translation>&amp;Neu</translation>
     </message>
     <message>
         <location filename="../ui_MainWindow.h" line="466"/>
         <source>Ctrl+N</source>
-        <translation type="unfinished"></translation>
+        <translation>Ctrl+N</translation>
     </message>
     <message>
         <location filename="../ui_MainWindow.h" line="483"/>
         <source>New</source>
-        <translation type="unfinished"></translation>
+        <translation>Neu</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="834"/>
+        <location filename="../MainWindow.cpp" line="823"/>
         <source>Failed to read file `%1&apos; from GRF.</source>
-        <translation type="unfinished"></translation>
+        <translation>Unmöglich die Kartei &quot;%1&quot; seit dem grf-Archiv zu lesen.</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="283"/>
+        <location filename="../MainWindow.cpp" line="288"/>
         <source>Bad encoding for file `%1&apos;. Aborting process!</source>
-        <translation type="unfinished"></translation>
+        <translation>Schlechtes Kodieren für den Namen der Kartei &quot;%1&quot;. Annullierung der Operation!</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="314"/>
+        <location filename="../MainWindow.cpp" line="319"/>
         <source>Preparing to merge directory...</source>
-        <translation type="unfinished"></translation>
+        <translation>Vorbereitung auf den Zusatz des Registers...</translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="324"/>
+        <location filename="../MainWindow.cpp" line="329"/>
         <source>Adding file `%1&apos;...</source>
-        <translation type="unfinished"></translation>
+        <translation> Zusatz der Kartei &apos;%1&apos;...</translation>
     </message>
 </context>
 </TS>
