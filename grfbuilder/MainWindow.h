@@ -3,10 +3,12 @@
 
 #define GRFBUILDER_VERSION_MAJOR 0
 #define GRFBUILDER_VERSION_MINOR 1
-#define GRFBUILDER_VERSION_REVISION 27
+#define GRFBUILDER_VERSION_REVISION 28
 
-#define L_TRADITIONAL_CHINESE_NAME "\xe7\xb9\x81\xe9\xab\x94\xe4\xb8\xad\xe6\x96\x87 (Trad. chinese)"
+#define L_TRADITIONAL_CHINESE_NAME "\xe7\xb9\x81\xe9\xab\x94\xe4\xb8\xad\xe6\x96\x87 (Trad. Chinese)"
 #define L_TRADITIONAL_CHINESE_LOC "zh_TW"
+#define L_SIMPLIFIED_CHINESE_NAME "\xe7\xb0\xa1\xe9\xab\x94\xe4\xb8\xad\xe6\x96\x87 (Simp. Chinese)"
+#define L_SIMPLIFIED_CHINESE_LOC "zh_CN"
 #define L_ENGLISH_NAME "English"
 #define L_ENGLISH_LOC "en"
 #define L_FRENCH_NAME "Fran\303\247ais"
@@ -111,7 +113,7 @@ private:
 	void setRepackType(int);
 	void RefreshAfterLoad();
 	bool do_recurse_dirscan(QList <struct files_list *> *, QString, QString);
-	QList<QTreeWidgetItem *>* myTreeViewRecuriveSearch(QList<QTreeWidgetItem *>*);
+	QList<QTreeWidgetItem *> myTreeViewRecuriveSearch(QList<QTreeWidgetItem *>*);
 };
 
 #endif

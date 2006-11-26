@@ -48,9 +48,9 @@ typedef int bool;
 #endif
 
 #ifndef __LIBGRF_HAS_TYPEDEF
-typedef void * grf_handle;
-typedef void * grf_node;
-typedef void * grf_treenode;
+typedef void *grf_handle;
+typedef void *grf_node;
+typedef void *grf_treenode;
 #define __LIBGRF_HAS_TYPEDEF
 #endif
 

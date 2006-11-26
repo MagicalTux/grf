@@ -68,13 +68,8 @@
              <bool>true</bool>
             </property>
             <property name="columnCount" >
-             <number>5</number>
+             <number>4</number>
             </property>
-            <column>
-             <property name="text" >
-              <string>id</string>
-             </property>
-            </column>
             <column>
              <property name="text" >
               <string>Comp</string>
@@ -141,11 +136,6 @@
               <string>File size</string>
              </property>
             </column>
-            <column>
-             <property name="text" >
-              <string>id</string>
-             </property>
-            </column>
            </widget>
           </item>
          </layout>
@@ -189,13 +179,8 @@
              <bool>true</bool>
             </property>
             <property name="columnCount" >
-             <number>5</number>
+             <number>4</number>
             </property>
-            <column>
-             <property name="text" >
-              <string>id</string>
-             </property>
-            </column>
             <column>
              <property name="text" >
               <string>Comp</string>

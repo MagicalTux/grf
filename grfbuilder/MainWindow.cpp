@@ -38,9 +38,9 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 	ui.setupUi(this);
 	this->setCompressionLevel(5);
 	this->setRepackType(GRF_REPACK_FAST);
-	ui.view_allfiles->setColumnHidden(0, true);
-	ui.viewSearch->setColumnHidden(0, true);
-	ui.view_filestree->setColumnHidden(2, true);
+//	ui.view_allfiles->setColumnHidden(0, true);
+//	ui.viewSearch->setColumnHidden(0, true);
+//	ui.view_filestree->setColumnHidden(0, true);
 
 	// Locales
 	QAction *lng;
@@ -48,6 +48,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 	ui.menuLanguage->addAction(lng); \
 	lng->setText(QString::fromUtf8(_y)); \
 	QObject::connect(lng, SIGNAL(triggered()), this, SLOT(myLocaleChange()));
+	GRFBUILDER_SET_LOCALE(L_SIMPLIFIED_CHINESE_LOC, L_SIMPLIFIED_CHINESE_NAME);
 	GRFBUILDER_SET_LOCALE(L_TRADITIONAL_CHINESE_LOC, L_TRADITIONAL_CHINESE_NAME);
 	GRFBUILDER_SET_LOCALE(L_ENGLISH_LOC, L_ENGLISH_NAME);
 	GRFBUILDER_SET_LOCALE(L_FRENCH_LOC, L_FRENCH_NAME);
@@ -96,26 +97,29 @@ unsigned int MainWindow::fillFilesTree(void *dir, QTreeWidgetItem *parent) {
 	QBrush fg_mixcrypt(qRgb(0,0,255));
 	for(int i=0;list[i]!=NULL;i++) {
 		unsigned int s;
-		QTreeWidgetItem *__f = new QTreeWidgetItem(parent);
-		__f->setText(0, QString::fromUtf8(euc_kr_to_utf8(grf_tree_get_name(list[i])))); // name
+		QTreeWidgetItem *__f;
 		if (grf_tree_is_dir(list[i])) {
+			__f = new QTreeWidgetItem(parent, -1);
+			__f->setText(0, QString::fromUtf8(euc_kr_to_utf8(grf_tree_get_name(list[i])))); // name
 			s=MainWindow::fillFilesTree(list[i], __f);
 			total_size += s;
 //			__f->setText(1, QString("[%1]").arg(s));
 			__f->setText(1, QString("[") + this->showSizeAsString(s) + QString("]")); // realsize
-			__f->setText(2, "-1");
 		} else {
 			void *f = grf_tree_get_file(list[i]);
 			unsigned int flags = grf_file_get_storage_flags(f);
+			__f = new QTreeWidgetItem(parent, grf_file_get_id(f));
+			__f->setText(0, QString::fromUtf8(euc_kr_to_utf8(grf_tree_get_name(list[i])))); // name
 			if ((flags & GRF_FLAG_MIXCRYPT) == GRF_FLAG_MIXCRYPT) {
 				__f->setForeground(0, fg_mixcrypt);
+				__f->setForeground(1, fg_mixcrypt);
 			} else if ((flags & GRF_FLAG_DES) == GRF_FLAG_DES) {
 				__f->setForeground(0, fg_des);
+				__f->setForeground(1, fg_des);
 			}
 			s = grf_file_get_size(f);
 			total_size += s;
 			__f->setText(1, this->showSizeAsString(s)); // realsize
-			__f->setText(2, QString("%1").arg(grf_file_get_id(f)));
 		}
 	}
 	delete list;
@@ -129,25 +133,29 @@ unsigned int MainWindow::fillFilesTree(void *dir, QTreeWidget *parent) {
 	QBrush fg_mixcrypt(qRgb(0,0,255));
 	for(int i=0;list[i]!=NULL;i++) {
 		unsigned int s;
-		QTreeWidgetItem *__f = new QTreeWidgetItem(parent);
-		__f->setText(0, QString::fromUtf8(euc_kr_to_utf8(grf_tree_get_name(list[i])))); // name
+		QTreeWidgetItem *__f;
 		if (grf_tree_is_dir(list[i])) {
+			__f = new QTreeWidgetItem(parent, -1);
+			__f->setText(0, QString::fromUtf8(euc_kr_to_utf8(grf_tree_get_name(list[i])))); // name
 			s=MainWindow::fillFilesTree(list[i], __f);
 			total_size += s;
+//			__f->setText(1, QString("[%1]").arg(s));
 			__f->setText(1, QString("[") + this->showSizeAsString(s) + QString("]")); // realsize
-			__f->setText(2, "-1");
 		} else {
 			void *f = grf_tree_get_file(list[i]);
 			unsigned int flags = grf_file_get_storage_flags(f);
+			__f = new QTreeWidgetItem(parent, grf_file_get_id(f));
+			__f->setText(0, QString::fromUtf8(euc_kr_to_utf8(grf_tree_get_name(list[i])))); // name
 			if ((flags & GRF_FLAG_MIXCRYPT) == GRF_FLAG_MIXCRYPT) {
 				__f->setForeground(0, fg_mixcrypt);
+				__f->setForeground(1, fg_mixcrypt);
 			} else if ((flags & GRF_FLAG_DES) == GRF_FLAG_DES) {
 				__f->setForeground(0, fg_des);
+				__f->setForeground(1, fg_des);
 			}
 			s = grf_file_get_size(f);
 			total_size += s;
 			__f->setText(1, this->showSizeAsString(s)); // realsize
-			__f->setText(2, QString("%1").arg(grf_file_get_id(f)));
 		}
 	}
 	delete list;
@@ -184,23 +192,22 @@ void MainWindow::RefreshAfterLoad() {
 	f = grf_get_file_first(this->grf);
 	ui.view_allfiles->clear();
 	while(f != NULL) {
-		QTreeWidgetItem *__item = new QTreeWidgetItem(ui.view_allfiles);
+		QTreeWidgetItem *__item = new QTreeWidgetItem(ui.view_allfiles, grf_file_get_id(f));
 		unsigned int flags = grf_file_get_storage_flags(f);
 		if ((flags & GRF_FLAG_MIXCRYPT) == GRF_FLAG_MIXCRYPT) {
 			for (int i=0;i<=4;i++) __item->setForeground(i, fg_mixcrypt);
 		} else if ((flags & GRF_FLAG_DES) == GRF_FLAG_DES) {
 			for (int i=0;i<=4;i++) __item->setForeground(i, fg_des);
 		}
-		__item->setText(0, QString("%1").arg(grf_file_get_id(f)));
-		__item->setText(1, this->showSizeAsString(grf_file_get_storage_size(f))); // compsize
-		__item->setText(2, this->showSizeAsString(grf_file_get_size(f))); // realsize
-		__item->setText(3, QString("%1").arg(grf_file_get_storage_pos(f))); // pos
+		__item->setText(0, this->showSizeAsString(grf_file_get_storage_size(f))); // compsize
+		__item->setText(1, this->showSizeAsString(grf_file_get_size(f))); // realsize
+		__item->setText(2, QString("%1").arg(grf_file_get_storage_pos(f))); // pos
 //		if (euc_kr_to_utf8(grf_file_get_filename(f)) == NULL) printf("ARGH %s\n", grf_file_get_filename(f));
-		__item->setText(4, QString::fromUtf8(euc_kr_to_utf8(grf_file_get_filename(f)))); // name
+		__item->setText(3, QString::fromUtf8(euc_kr_to_utf8(grf_file_get_filename(f)))); // name
 //		__item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsUserCheckable | Qt::ItemIsEnabled | Qt::ItemIsDragEnabled | Qt::ItemIsEditable);
 		f = grf_get_file_next(f);
 	}
-	ui.view_allfiles->sortItems(4, Qt::AscendingOrder);
+	ui.view_allfiles->sortItems(3, Qt::AscendingOrder);
 	this->grf_has_tree = false;
 	ui.view_filestree->clear();
 	// enable buttons
@@ -312,6 +319,11 @@ void MainWindow::on_btn_mergedir_clicked() {
 	if (this->grf == NULL) return;
 	QString xpath = QFileDialog::getExistingDirectory(this, tr("Import directory..."));
 	if (xpath.isNull()) return;
+#ifdef __WIN32
+	xpath += "\\";
+#else
+	xpath += "/";
+#endif
 	// ok, we got a directory, scan it for all files and directories...
 	QList <struct files_list *> l;
 	QProgressDialog prog(tr("Merge in progress..."), tr("Cancel"), 0, 1, this);
@@ -515,16 +527,19 @@ void MainWindow::on_actionDelete_triggered() {
 	if (this->grf == NULL) return;
 
 	switch(ui.tab_sel->currentIndex()) {
+		case 1:
+			objlist = ui.view_filestree->selectedItems();
+			objlist = this->myTreeViewRecuriveSearch(&objlist);
 		case 0: case 2:
 			if (ui.tab_sel->currentIndex() == 0) {
 				objlist = ui.view_allfiles->selectedItems();
-			} else {
+			} else if (ui.tab_sel->currentIndex() == 2) {
 				objlist = ui.viewSearch->selectedItems();
 			}
 			if (objlist.size()==0) break;
 			if (objlist.size()==1) {
 				// YAY easy to do :o
-				void *gfile = grf_get_file_by_id(this->grf, objlist[0]->text(0).toUInt());
+				void *gfile = grf_get_file_by_id(this->grf, objlist[0]->type());
 				QString name(QString::fromUtf8(euc_kr_to_utf8(grf_file_get_basename(gfile))));
 				if (QMessageBox::question(this, tr("GrfBuilder"), tr("Are you sure you want to delete the file `%1'?").arg(name), QMessageBox::Ok | QMessageBox::Cancel, QMessageBox::Ok) == QMessageBox::Cancel) return;
 				grf_file_delete(gfile);
@@ -534,12 +549,9 @@ void MainWindow::on_actionDelete_triggered() {
 			if (QMessageBox::question(this, tr("GrfBuilder"), tr("Are you sure you want to delete the %1 selected files?").arg(lsize), QMessageBox::Ok | QMessageBox::Cancel, QMessageBox::Ok) == QMessageBox::Cancel) return;
 			for(i=0;i<lsize;i++) {
 				QTreeWidgetItem *cur = objlist[i];
-				void *cur_file = grf_get_file_by_id(this->grf, cur->text(0).toUInt());
+				void *cur_file = grf_get_file_by_id(this->grf, cur->type());
 				grf_file_delete(cur_file);
 			}
-			break;
-		case 1:
-			QMessageBox::warning(this, tr("GrfBuilder"), QString("Sorry, this is not working yet."), QMessageBox::Cancel, QMessageBox::Cancel);
 			break;
 	}
 	grf_save(this->grf);
@@ -551,6 +563,37 @@ void MainWindow::on_btn_extract_clicked() {
 	this->on_action_Extract_triggered();
 }
 
+static QList<QTreeWidgetItem *> recusiveScanOfTreeItems(QTreeWidgetItem *it) {
+	QList<QTreeWidgetItem *> l;
+	// scan each item in this, and return a list...
+	int c = it->childCount();
+	for(int i=0;i<c;i++) {
+		QTreeWidgetItem *sit = it->child(i);
+		if (sit->type()==-1) {
+			// recursively scan
+			l+=recusiveScanOfTreeItems(sit);
+		} else {
+			l.append(sit);
+		}
+	}
+	return l;
+}
+
+QList<QTreeWidgetItem *> MainWindow::myTreeViewRecuriveSearch(QList<QTreeWidgetItem *> *oldlist) {
+	int lsize = oldlist->size();
+	QList<QTreeWidgetItem *> newlist;
+	for(int i=0;i<lsize;i++) {
+		QTreeWidgetItem *it = oldlist->at(i);
+		if (it->type()==-1) {
+			// recursively scan
+			newlist += recusiveScanOfTreeItems(it);
+		} else {
+			newlist.append(it);
+		}
+	}
+	return newlist;
+}
+
 void MainWindow::on_action_Extract_triggered() {
 	QList<QTreeWidgetItem *> objlist; // <-- BUG ON THIS LINE
 	QString xpath, ppath;
@@ -560,8 +603,8 @@ void MainWindow::on_action_Extract_triggered() {
 
 	switch(ui.tab_sel->currentIndex()) {
 		case 1:
-			objlist = ui.view_tree.selectedItems();
-			objlist = this->myTreeViewRecuriveSearch(objlist);
+			objlist = ui.view_filestree->selectedItems();
+			objlist = this->myTreeViewRecuriveSearch(&objlist);
 		case 0:
 		case 2:
 			if (ui.tab_sel->currentIndex() == 0) {
@@ -572,7 +615,7 @@ void MainWindow::on_action_Extract_triggered() {
 			if (objlist.size()==0) break;
 			if (objlist.size()==1) {
 				// YAY easy to do :o
-				void *gfile = grf_get_file_by_id(this->grf, objlist[0]->text(0).toUInt());
+				void *gfile = grf_get_file_by_id(this->grf, objlist[0]->type());
 				QFileInfo file;
 				if (ui.actionUnicode->isChecked()) {
 					file.setFile(QString::fromUtf8(euc_kr_to_utf8(grf_file_get_basename(gfile))));
@@ -603,7 +646,7 @@ void MainWindow::on_action_Extract_triggered() {
 			prog.setRange(0, lsize);
 			for(i=0;i<lsize;i++) {
 				QTreeWidgetItem *cur = objlist[i];
-				void *cur_file = grf_get_file_by_id(this->grf, cur->text(0).toUInt());
+				void *cur_file = grf_get_file_by_id(this->grf, cur->type());
 				QString name(QString::fromUtf8(euc_kr_to_utf8(grf_file_get_filename(cur_file))));
 				QCoreApplication::processEvents();
 				if (prog.wasCanceled()) break;
@@ -769,7 +812,7 @@ void MainWindow::do_display_wav(void *f) {
 }
 
 void MainWindow::on_viewSearch_doubleClicked(const QModelIndex idx) {
-	this->doOpenFileById(ui.viewSearch->topLevelItem(idx.row())->text(0).toInt());
+	this->doOpenFileById(ui.viewSearch->topLevelItem(idx.row())->type());
 }
 
 static QTreeWidgetItem *getFilestreeItemRecursive(const QModelIndex idx, const QTreeWidget *cur) {
@@ -791,8 +834,8 @@ static QTreeWidgetItem *getFilestreeItemRecursive(const QModelIndex idx, const Q
 
 void MainWindow::on_view_filestree_doubleClicked(const QModelIndex idx) {
 	QTreeWidgetItem *item = getFilestreeItemRecursive(idx, ui.view_filestree);
-	if (item->text(2).toInt() == -1) return;
-	this->doOpenFileById(item->text(2).toInt());
+	if (item->type() == -1) return;
+	this->doOpenFileById(item->type());
 }
 
 void MainWindow::on_view_allfiles_doubleClicked(const QModelIndex idx) {
@@ -800,7 +843,7 @@ void MainWindow::on_view_allfiles_doubleClicked(const QModelIndex idx) {
 	// item = ui.view_allfiles->topLevelItem(idx.row())
 //	int id=ui.view_allfiles->topLevelItem(idx.row())->text(0).toInt();
 //	printf("x=%d\n", ui.view_allfiles->topLevelItem(idx.row())->text(0).toInt());
-	this->doOpenFileById(ui.view_allfiles->topLevelItem(idx.row())->text(0).toInt());
+	this->doOpenFileById(ui.view_allfiles->topLevelItem(idx.row())->type());
 }
 
 void MainWindow::doOpenFileById(int id) {
@@ -913,16 +956,15 @@ void MainWindow::DoUpdateFilter(QString text) {
 	int i=0, max=grf_filecount(this->grf);
 	ui.viewSearch->clear();
 	while (*it) {
-		void *cur_file = grf_get_file_by_id(this->grf, (*it)->text(0).toUInt());
+		void *cur_file = grf_get_file_by_id(this->grf, (*it)->type());
 		match = r.exactMatch(QString::fromUtf8(euc_kr_to_utf8(grf_file_get_filename(cur_file))));
 		if (!match) match = r.exactMatch(QString::fromUtf8(euc_kr_to_utf8(grf_file_get_basename(cur_file))));
 		if (match) {
-			QTreeWidgetItem *__item = new QTreeWidgetItem(ui.viewSearch);
+			QTreeWidgetItem *__item = new QTreeWidgetItem(ui.viewSearch, (*it)->type());
 			__item->setText(0, (*it)->text(0));
 			__item->setText(1, (*it)->text(1)); // compsize
 			__item->setText(2, (*it)->text(2)); // realsize
 			__item->setText(3, (*it)->text(3)); // pos
-			__item->setText(4, (*it)->text(4)); // filename
 		}
 		ui.progbar->setValue((i++) * 100 / max);
 		++it;

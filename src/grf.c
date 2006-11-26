@@ -370,6 +370,7 @@ GRFEXPORT bool grf_merge(grf_handle dest, grf_handle src, uint8_t repack_type) {
 		rep->len = cur->len;
 		rep->len_aligned = cur->len_aligned;
 		rep->flags = cur->flags;
+		rep->parent = dest;
 		// 5. Copy memory to file, and free() it
 		lseek(dest->fd, rep->pos + GRF_HEADER_SIZE, SEEK_SET);
 		lseek(src->fd, cur->pos + GRF_HEADER_SIZE, SEEK_SET);
@@ -1024,7 +1025,7 @@ GRFEXPORT bool grf_file_rename(grf_node handler, const char *newname) {
 GRFEXPORT bool grf_file_delete(grf_node handler) {
 	struct grf_handler *parent = handler->parent;
 	uint32_t len_aligned = handler->len_aligned;
-	struct grf_node *next, *rep = handler->next;
+	struct grf_node *next = handler->next, *rep;
 	if (!parent->write_mode) return false;
 	parent->need_save = true;
 	rep = grf_get_file(parent, handler->filename);

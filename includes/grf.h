@@ -29,7 +29,7 @@
 
 #define VERSION_MAJOR 0
 #define VERSION_MINOR 1
-#define VERSION_REVISION 27
+#define VERSION_REVISION 28
 
 #ifdef __WIN32
 #define VERSION_TYPE "Win32"

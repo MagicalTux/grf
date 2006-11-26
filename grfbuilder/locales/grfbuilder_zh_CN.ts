@@ -5,12 +5,12 @@
     <message>
         <location filename="../MainWindow.cpp" line="932"/>
         <source>Image Preview</source>
-        <translation>檢視圖片</translation>
+        <translation>检视图片</translation>
     </message>
     <message>
         <location filename="../MainWindow.cpp" line="933"/>
         <source>Close</source>
-        <translation>關閉</translation>
+        <translation>关闭</translation>
     </message>
 </context>
 <context>
@@ -43,7 +43,7 @@
     <message>
         <location filename="../MainWindow.cpp" line="238"/>
         <source>Moving file %1...</source>
-        <translation>移動 %1 檔案中...</translation>
+        <translation>移动 %1 档案中...</translation>
     </message>
     <message>
         <location filename="../MainWindow.cpp" line="865"/>
@@ -53,12 +53,12 @@
     <message>
         <location filename="../MainWindow.cpp" line="253"/>
         <source>Repacking this file will reduce it by %1% (%2). Do you want to continue?</source>
-        <translation>封裝後檔案將減少 %1%  (%2). 你確定要繼續嗎?</translation>
+        <translation>封装后档案将减少 %1%  (%2). 你确定要继续吗?</translation>
     </message>
     <message>
         <location filename="../MainWindow.cpp" line="254"/>
         <source>Repack in progress...</source>
-        <translation>封裝處理中...</translation>
+        <translation>封装处理中...</translation>
     </message>
     <message>
         <location filename="../MainWindow.cpp" line="731"/>
@@ -68,87 +68,87 @@
     <message>
         <location filename="../MainWindow.cpp" line="367"/>
         <source>Merging file %1...</source>
-        <translation>合併 %1 檔案中...</translation>
+        <translation>合并 %1 档案中...</translation>
     </message>
     <message>
         <location filename="../MainWindow.cpp" line="432"/>
         <source>Open File</source>
-        <translation>開啟檔案</translation>
+        <translation>开启档案</translation>
     </message>
     <message>
         <location filename="../MainWindow.cpp" line="433"/>
         <source>GRF Files (*.grf *.gpf)</source>
-        <translation>GRF 檔案 (*.grf *.gpf)</translation>
+        <translation>GRF 档案 (*.grf *.gpf)</translation>
     </message>
     <message>
         <location filename="../MainWindow.cpp" line="387"/>
         <source>Could not open file %1 in read-only mode.</source>
-        <translation>無法開啟 %1 檔案. 請取消唯讀.</translation>
+        <translation>无法开启 %1 档案. 请取消唯读.</translation>
     </message>
     <message>
         <location filename="../MainWindow.cpp" line="450"/>
         <source>The selected file doesn&apos;t look like a valid GRF file.</source>
-        <translation>你選擇的檔案不是 GRF 檔案.</translation>
+        <translation>你选择的档案不是 GRF 档案.</translation>
     </message>
     <message>
         <location filename="../MainWindow.cpp" line="397"/>
         <source>Merge in progress...</source>
-        <translation>合併處理中...</translation>
+        <translation>合并处理中...</translation>
     </message>
     <message>
         <location filename="../MainWindow.cpp" line="441"/>
         <source>Could not load this file in read/write mode.</source>
-        <translation>檔案使用中，無法開啟這檔案.</translation>
+        <translation>档案使用中，无法开启这档案.</translation>
     </message>
     <message>
         <location filename="../MainWindow.cpp" line="516"/>
         <source>&lt;p align=&quot;center&quot;&gt;&lt;b&gt;GrfBuilder v%1.%2.%3 by MagicalTux&lt;/b&gt;&lt;/p&gt;&lt;p align=&quot;left&quot;&gt;Linked against libgrf v%4.%5.%6 (also by MagicalTux)&lt;br /&gt;This tool is designed to allow easy read and write access to GRF files.&lt;br /&gt;This was developped for the sole purpose of demonstrating that Gravity need better developpers.&lt;/p&gt;&lt;p align=&quot;left&quot;&gt;You can contact MagicalTux on &lt;a href=&quot;http://ookoo.org/cgi-bin/cgi-irc/irc.cgi&quot;&gt;irc://irc.ookoo.org/ooKoo&lt;/a&gt;&lt;/p&gt;</source>
-        <translation>&lt;p align=&quot;center&quot;&gt;&lt;b&gt;GrfBuilder v%1.%2.%3 by MagicalTux&lt;/b&gt;&lt;/p&gt;&lt;p align=&quot;left&quot;&gt;Linked against libgrf v%4.%5.%6 (also by MagicalTux)&lt;br /&gt;這工具可讓你容易的讀/寫資料到 GRF 檔案中.&lt;br /&gt;研發這工具主要目的是為了證明比重力社研發的還要好.&lt;/p&gt;&lt;p align=&quot;left&quot;&gt;你可以在這裡聯絡到 MagicalTux &lt;a href=&quot;http://ookoo.org/cgi-bin/cgi-irc/irc.cgi&quot;&gt;irc://irc.ookoo.org/ooKoo&lt;/a&gt;&lt;/p&gt;</translation>
+        <translation>&lt;p align=&quot;center&quot;&gt;&lt;b&gt;GrfBuilder v%1.%2.%3 by MagicalTux&lt;/b&gt;&lt;/p&gt;&lt;p align=&quot;left&quot;&gt;Linked against libgrf v%4.%5.%6 (also by MagicalTux)&lt;br /&gt;这工具可让你容易的读/写资料到 GRF 档案中.&lt;br /&gt;研发这工具主要目的是为了证明比重力社研发的还要好.&lt;/p&gt;&lt;p align=&quot;left&quot;&gt;你可以在这里联络到 MagicalTux &lt;a href=&quot;http://ookoo.org/cgi-bin/cgi-irc/irc.cgi&quot;&gt;irc://irc.ookoo.org/ooKoo&lt;/a&gt;&lt;/p&gt;</translation>
     </message>
     <message>
         <location filename="../MainWindow.cpp" line="544"/>
         <source>Are you sure you want to delete the file `%1&apos;?</source>
-        <translation>你確定要刪除 `%1&apos; 這個檔案嗎?</translation>
+        <translation>你确定要删除 `%1&apos; 这个档案吗?</translation>
     </message>
     <message>
         <location filename="../MainWindow.cpp" line="549"/>
         <source>Are you sure you want to delete the %1 selected files?</source>
-        <translation>你確定要刪除你已選擇的 %1 這個檔案嗎?</translation>
+        <translation>你确定要删除你已选择的 %1 这个档案吗?</translation>
     </message>
     <message>
         <location filename="../MainWindow.cpp" line="731"/>
         <source>Extraction in progress...</source>
-        <translation>匯出處理中...</translation>
+        <translation>汇出处理中...</translation>
     </message>
     <message>
         <location filename="../MainWindow.cpp" line="625"/>
         <source>Extract file as...</source>
-        <translation>匯出檔案為...</translation>
+        <translation>汇出档案为...</translation>
     </message>
     <message>
         <location filename="../MainWindow.cpp" line="625"/>
         <source>%1 files (*.%1)</source>
-        <translation>%1 檔案 (*.%1)</translation>
+        <translation>%1 档案 (*.%1)</translation>
     </message>
     <message>
         <location filename="../MainWindow.cpp" line="629"/>
         <source>Could not open %1 for writing a file.</source>
-        <translation>資料無法寫入 %1 檔案.</translation>
+        <translation>资料无法写入 %1 档案.</translation>
     </message>
     <message>
         <location filename="../MainWindow.cpp" line="634"/>
         <source>Could not write data to %1 while extracting a file.</source>
-        <translation>匯出檔案時，無法寫入資料至 %1 .</translation>
+        <translation>汇出档案时，无法写入资料至 %1 .</translation>
     </message>
     <message>
         <location filename="../MainWindow.cpp" line="743"/>
         <source>Extracting file %1...</source>
-        <translation>匯出 %1 檔案中...</translation>
+        <translation>汇出 %1 档案中...</translation>
     </message>
     <message>
         <location filename="../MainWindow.cpp" line="784"/>
         <source>Your computer has no audio support. Please make sure you have an audio device available and retry.</source>
-        <translation>你的電腦不支援音效. 請確定你有安裝音效卡驅動程式.</translation>
+        <translation>你的电脑不支援音效. 请确定你有安装音效卡驱动程式.</translation>
     </message>
     <message>
         <location filename="../MainWindow.cpp" line="787"/>
@@ -158,22 +158,22 @@
     <message>
         <location filename="../ui_MainWindow.h" line="471"/>
         <source>All files</source>
-        <translation>所有檔案</translation>
+        <translation>所有档案</translation>
     </message>
     <message>
         <location filename="../ui_MainWindow.h" line="474"/>
         <source>Tree view</source>
-        <translation>樹狀檢視</translation>
+        <translation>树状检视</translation>
     </message>
     <message>
         <location filename="../ui_MainWindow.h" line="479"/>
         <source>Search result</source>
-        <translation>搜尋結果</translation>
+        <translation>搜寻结果</translation>
     </message>
     <message>
         <location filename="../ui_MainWindow.h" line="430"/>
         <source>&amp;Open</source>
-        <translation>&amp;開啟</translation>
+        <translation>&amp;开启</translation>
     </message>
     <message>
         <location filename="../ui_MainWindow.h" line="431"/>
@@ -183,7 +183,7 @@
     <message>
         <location filename="../ui_MainWindow.h" line="432"/>
         <source>&amp;Extract</source>
-        <translation>&amp;匯出</translation>
+        <translation>&amp;汇出</translation>
     </message>
     <message>
         <location filename="../ui_MainWindow.h" line="433"/>
@@ -193,7 +193,7 @@
     <message>
         <location filename="../ui_MainWindow.h" line="434"/>
         <source>Extract &amp;All</source>
-        <translation>全部&amp;匯出</translation>
+        <translation>全部&amp;汇出</translation>
     </message>
     <message>
         <location filename="../ui_MainWindow.h" line="435"/>
@@ -203,7 +203,7 @@
     <message>
         <location filename="../ui_MainWindow.h" line="436"/>
         <source>&amp;Close</source>
-        <translation>&amp;關閉</translation>
+        <translation>&amp;关闭</translation>
     </message>
     <message>
         <location filename="../ui_MainWindow.h" line="437"/>
@@ -213,7 +213,7 @@
     <message>
         <location filename="../ui_MainWindow.h" line="438"/>
         <source>&amp;Merge GRF</source>
-        <translation>&amp;合併 GRF</translation>
+        <translation>&amp;合并 GRF</translation>
     </message>
     <message>
         <location filename="../ui_MainWindow.h" line="439"/>
@@ -223,7 +223,7 @@
     <message>
         <location filename="../ui_MainWindow.h" line="440"/>
         <source>Merge &amp;Dir</source>
-        <translation>合併 &amp;資料夾</translation>
+        <translation>合并 &amp;资料夹</translation>
     </message>
     <message>
         <location filename="../ui_MainWindow.h" line="441"/>
@@ -233,7 +233,7 @@
     <message>
         <location filename="../ui_MainWindow.h" line="442"/>
         <source>&amp;Quit</source>
-        <translation>&amp;結束程式</translation>
+        <translation>&amp;结束程式</translation>
     </message>
     <message>
         <location filename="../ui_MainWindow.h" line="443"/>
@@ -243,7 +243,7 @@
     <message>
         <location filename="../ui_MainWindow.h" line="444"/>
         <source>&amp;About</source>
-        <translation>&amp;關於</translation>
+        <translation>&amp;关于</translation>
     </message>
     <message>
         <location filename="../ui_MainWindow.h" line="445"/>
@@ -263,16 +263,16 @@
     <message>
         <location filename="../ui_MainWindow.h" line="448"/>
         <source>Images &amp;Transparency</source>
-        <translation>圖片 &amp;檢視</translation>
+        <translation>图片 &amp;检视</translation>
     </message>
     <message>
         <location filename="../ui_MainWindow.h" line="456"/>
         <source>English</source>
         <translation type="obsolete">英文</translation>
     </message>
-    <message encoding="UTF-8">
+    <message>
         <location filename="../ui_MainWindow.h" line="457"/>
-        <source>Français</source>
+        <source>Francais</source>
         <translation type="obsolete">法文</translation>
     </message>
     <message>
@@ -325,15 +325,15 @@
         <source>Deutsch</source>
         <translation type="obsolete">德文</translation>
     </message>
-    <message encoding="UTF-8">
+    <message>
         <location filename="../ui_MainWindow.h" line="469"/>
-        <source>Español</source>
+        <source>Espanol</source>
         <translation type="obsolete">西班牙文</translation>
     </message>
     <message>
         <location filename="../ui_MainWindow.h" line="459"/>
         <source>Move files</source>
-        <translation>移動檔案</translation>
+        <translation>移动档案</translation>
     </message>
     <message>
         <location filename="../ui_MainWindow.h" line="460"/>
@@ -343,12 +343,12 @@
     <message>
         <location filename="../ui_MainWindow.h" line="461"/>
         <source>Recompress</source>
-        <translation>重新壓縮</translation>
+        <translation>重新压缩</translation>
     </message>
     <message>
         <location filename="../ui_MainWindow.h" line="486"/>
         <source>Repack</source>
-        <translation>開始封裝</translation>
+        <translation>开始封装</translation>
     </message>
     <message>
         <location filename="../ui_MainWindow.h" line="463"/>
@@ -358,7 +358,7 @@
     <message>
         <location filename="../ui_MainWindow.h" line="464"/>
         <source>Delete selected</source>
-        <translation>刪除已選擇檔案</translation>
+        <translation>删除已选择档案</translation>
     </message>
     <message>
         <location filename="../ui_MainWindow.h" line="477"/>
@@ -368,12 +368,12 @@
     <message>
         <location filename="../ui_MainWindow.h" line="475"/>
         <source>Comp</source>
-        <translation>壓縮後檔案大小</translation>
+        <translation>压缩后档案大小</translation>
     </message>
     <message>
         <location filename="../ui_MainWindow.h" line="476"/>
         <source>Size</source>
-        <translation>原始檔案大小</translation>
+        <translation>原始档案大小</translation>
     </message>
     <message>
         <location filename="../ui_MainWindow.h" line="477"/>
@@ -383,52 +383,52 @@
     <message>
         <location filename="../ui_MainWindow.h" line="478"/>
         <source>Filename</source>
-        <translation>檔案名稱</translation>
+        <translation>档案名称</translation>
     </message>
     <message>
         <location filename="../ui_MainWindow.h" line="473"/>
         <source>File size</source>
-        <translation>檔案大小</translation>
+        <translation>档案大小</translation>
     </message>
     <message>
         <location filename="../ui_MainWindow.h" line="481"/>
         <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Using this button, you can open an existing GRF file.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
-        <translation>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;按下這個按鈕, 你可以開啟 GRF 檔案.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+        <translation>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;按下这个按钮, 你可以开启 GRF 档案.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
         <location filename="../ui_MainWindow.h" line="482"/>
         <source>Open</source>
-        <translation>開啟</translation>
+        <translation>开启</translation>
     </message>
     <message>
         <location filename="../ui_MainWindow.h" line="483"/>
         <source>Extract</source>
-        <translation>匯出</translation>
+        <translation>汇出</translation>
     </message>
     <message>
         <location filename="../ui_MainWindow.h" line="484"/>
         <source>Delete</source>
-        <translation>刪除</translation>
+        <translation>删除</translation>
     </message>
     <message>
         <location filename="../ui_MainWindow.h" line="485"/>
         <source>Extract All</source>
-        <translation>全部匯出</translation>
+        <translation>全部汇出</translation>
     </message>
     <message>
         <location filename="../ui_MainWindow.h" line="487"/>
         <source>Close</source>
-        <translation>關閉</translation>
+        <translation>关闭</translation>
     </message>
     <message>
         <location filename="../ui_MainWindow.h" line="488"/>
         <source>Merge GRF</source>
-        <translation>合併 GRF</translation>
+        <translation>合并 GRF</translation>
     </message>
     <message>
         <location filename="../ui_MainWindow.h" line="489"/>
         <source>Merge dir</source>
-        <translation>合併資料夾</translation>
+        <translation>合并资料夹</translation>
     </message>
     <message>
         <location filename="../ui_MainWindow.h" line="490"/>
@@ -438,32 +438,32 @@
     <message>
         <location filename="../ui_MainWindow.h" line="492"/>
         <source>&amp;Options</source>
-        <translation>&amp;選項</translation>
+        <translation>&amp;选项</translation>
     </message>
     <message>
         <location filename="../ui_MainWindow.h" line="493"/>
         <source>Compression level</source>
-        <translation>壓縮等級</translation>
+        <translation>压缩等级</translation>
     </message>
     <message>
         <location filename="../ui_MainWindow.h" line="494"/>
         <source>Repack type</source>
-        <translation>封裝類型</translation>
+        <translation>封装类型</translation>
     </message>
     <message>
         <location filename="../ui_MainWindow.h" line="495"/>
         <source>&amp;File</source>
-        <translation>&amp;檔案</translation>
+        <translation>&amp;档案</translation>
     </message>
     <message>
         <location filename="../MainWindow.cpp" line="727"/>
         <source>Extract to...</source>
-        <translation>匯出到...</translation>
+        <translation>汇出到...</translation>
     </message>
     <message>
         <location filename="../ui_MainWindow.h" line="491"/>
         <source>Language</source>
-        <translation>語系</translation>
+        <translation>语系</translation>
     </message>
     <message>
         <location filename="../ui_MainWindow.h" line="458"/>
@@ -473,12 +473,12 @@
     <message>
         <location filename="../MainWindow.cpp" line="320"/>
         <source>Import directory...</source>
-        <translation>匯入資料夾</translation>
+        <translation>汇入资料夹</translation>
     </message>
     <message>
         <location filename="../MainWindow.cpp" line="414"/>
         <source>Create new GRF as...</source>
-        <translation>新建GRF,檔名為...</translation>
+        <translation>新建GRF,档名为...</translation>
     </message>
     <message>
         <location filename="../ui_MainWindow.h" line="465"/>
@@ -498,22 +498,22 @@
     <message>
         <location filename="../MainWindow.cpp" line="865"/>
         <source>Failed to read file `%1&apos; from GRF.</source>
-        <translation>從GRF中讀取`%1&apos;檔案失敗.</translation>
+        <translation>从GRF中读取`%1&apos;档案失败.</translation>
     </message>
     <message>
         <location filename="../MainWindow.cpp" line="295"/>
         <source>Bad encoding for file `%1&apos;. Aborting process!</source>
-        <translation>`%1&apos;檔案毀損. 中止操作!</translation>
+        <translation>`%1&apos;档案毁损. 中止操作!</translation>
     </message>
     <message>
         <location filename="../MainWindow.cpp" line="331"/>
         <source>Preparing to merge directory...</source>
-        <translation>準備合併到資料夾中...</translation>
+        <translation>准备合并到资料夹中...</translation>
     </message>
     <message>
         <location filename="../MainWindow.cpp" line="341"/>
         <source>Adding file `%1&apos;...</source>
-        <translation>新增`%1&apos;檔案中...</translation>
+        <translation>新增`%1&apos;档案中...</translation>
     </message>
 </context>
 </TS>
