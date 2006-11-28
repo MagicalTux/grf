@@ -213,7 +213,7 @@
     <message>
         <location filename="../ui_MainWindow.h" line="438"/>
         <source>&amp;Merge GRF</source>
-        <translation>&amp;合併 GRF</translation>
+        <translation>&amp;合併GRF</translation>
     </message>
     <message>
         <location filename="../ui_MainWindow.h" line="439"/>
@@ -223,7 +223,7 @@
     <message>
         <location filename="../ui_MainWindow.h" line="440"/>
         <source>Merge &amp;Dir</source>
-        <translation>合併 &amp;資料夾</translation>
+        <translation>匯入&amp;資料夾</translation>
     </message>
     <message>
         <location filename="../ui_MainWindow.h" line="441"/>
@@ -423,12 +423,12 @@
     <message>
         <location filename="../ui_MainWindow.h" line="488"/>
         <source>Merge GRF</source>
-        <translation>合併 GRF</translation>
+        <translation>合併GRF</translation>
     </message>
     <message>
         <location filename="../ui_MainWindow.h" line="489"/>
         <source>Merge dir</source>
-        <translation>合併資料夾</translation>
+        <translation>匯入資料夾</translation>
     </message>
     <message>
         <location filename="../ui_MainWindow.h" line="490"/>
@@ -473,7 +473,7 @@
     <message>
         <location filename="../MainWindow.cpp" line="320"/>
         <source>Import directory...</source>
-        <translation>匯入資料夾</translation>
+        <translation>匯入資料夾...</translation>
     </message>
     <message>
         <location filename="../MainWindow.cpp" line="414"/>
@@ -508,7 +508,7 @@
     <message>
         <location filename="../MainWindow.cpp" line="331"/>
         <source>Preparing to merge directory...</source>
-        <translation>準備合併到資料夾中...</translation>
+        <translation>準備匯入資料夾中...</translation>
     </message>
     <message>
         <location filename="../MainWindow.cpp" line="341"/>
