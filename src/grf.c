@@ -1011,8 +1011,11 @@ GRFEXPORT grf_handle grf_load(const char *filename, bool writemode) {
 }
 
 GRFEXPORT bool grf_file_rename(grf_node handler, const char *newname) {
+	void *rep;
 	if (!handler->parent->write_mode) return false;
 	handler->parent->need_save = true;
+	rep = grf_get_file(handler->parent, newname);
+	if (rep != NULL) grf_file_delete(rep);
 	if (hash_remove_element(handler->parent->fast_table, handler->filename)!=0) return false;
 	if (handler->tree_parent != NULL) hash_del_element(handler->tree_parent->parent->subdir, handler->tree_parent->name);
 	free(handler->filename);
@@ -1025,11 +1028,9 @@ GRFEXPORT bool grf_file_rename(grf_node handler, const char *newname) {
 GRFEXPORT bool grf_file_delete(grf_node handler) {
 	struct grf_handler *parent = handler->parent;
 	uint32_t len_aligned = handler->len_aligned;
-	struct grf_node *next = handler->next, *rep;
+	struct grf_node *next = handler->next;
 	if (!parent->write_mode) return false;
 	parent->need_save = true;
-	rep = grf_get_file(parent, handler->filename);
-	if (rep != NULL) grf_file_delete(rep);
 	if (hash_del_element(handler->parent->fast_table, handler->filename)!=0) return false;
 	if (handler->tree_parent != NULL) hash_del_element(handler->tree_parent->parent->subdir, handler->tree_parent->name); // will free memory automatically
 	if (parent->first_node==handler) parent->first_node = next;

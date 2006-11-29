@@ -215,7 +215,7 @@ grfbuilder-%.tar.gz: $(TARGET) $(TARGET64) doc/README $(GB_TARGET) $(GB_TARGET64
 	tar -cvzf $@ --exclude '*.o' --exclude '.svn' --exclude 'data' $^
 
 dist: make_dirs version.sh
-	. version.sh; for foo in $(subst ^,$$VERSION_MAJOR.$$VERSION_MINOR.$$VERSION_REVISION,$(DIST_FILES)); do echo make -C . "$$foo" DEBUG=no; done
+	. version.sh; for foo in $(subst ^,$$VERSION_MAJOR.$$VERSION_MINOR.$$VERSION_REVISION,$(DIST_FILES)); do $(MAKE) -C . "$$foo" DEBUG=no; done
 
 grf_test_win.exe: win32/test_32.o $(TARGET_WIN)
 	@echo -e "  LD\t$@              "

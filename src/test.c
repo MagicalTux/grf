@@ -82,8 +82,7 @@ void test_new_handler() {
 	printf(" - test_new_handler(): There are %d files in this GRF - %d byte(s) wasted.\n", grf_filecount(handler), grf_wasted_space(handler));
 	f = grf_get_file(handler, "data/Alpha.grf");
 	printf(" - test_new_handler(): file `%s' found at %p - deleting...\n", grf_file_get_filename(f), f);
-//	if (!grf_file_delete(f)) {
-	if (!grf_file_rename(f, "data\\newname.grf")) {
+	if (!grf_file_delete(f)) {
 		printf(" - test_new_handler(): delete failed\n");
 	} else {
 		printf(" - test_new_handler(): delete OK\n");

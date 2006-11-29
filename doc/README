@@ -1,5 +1,6 @@
 GRF library
 ===========
+http://www.grfbuilder.com/
 
 This library is NOT opensource, but is free to use.
 
@@ -7,6 +8,16 @@ You can submit bugs by mailing me (magicaltux@ookoo.org).
 
 If you use my library, you can drop me an email, it'll give me more motivation
 and will allow you to have more updates :)
+
+Running GrfBuilder on Linux without installing the GRF lib
+==========================================================
+
+By default, the Linux system will try to load the GRF library from system's
+library path (/lib, /usr/lib, etc). You can override this by using the
+LD_LIBRARY_PATH environnement variable.
+Running GrfBuilder would be done by typing :
+
+ $ LD_LIBRARY_PATH=. ./grfbuilder.bin
 
 Audio support on Linux with Qt
 ==============================
