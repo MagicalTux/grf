@@ -101,11 +101,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../MainWindow.cpp" line="516"/>
-        <source>&lt;p align=&quot;center&quot;&gt;&lt;b&gt;GrfBuilder v%1.%2.%3 by MagicalTux&lt;/b&gt;&lt;/p&gt;&lt;p align=&quot;left&quot;&gt;Linked against libgrf v%4.%5.%6 (also by MagicalTux)&lt;br /&gt;This tool is designed to allow easy read and write access to GRF files.&lt;br /&gt;This was developped for the sole purpose of demonstrating that Gravity need better developpers.&lt;/p&gt;&lt;p align=&quot;left&quot;&gt;You can contact MagicalTux on &lt;a href=&quot;http://ookoo.org/cgi-bin/cgi-irc/irc.cgi&quot;&gt;irc://irc.ookoo.org/ooKoo&lt;/a&gt;&lt;/p&gt;</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../MainWindow.cpp" line="544"/>
         <source>Are you sure you want to delete the file `%1&apos;?</source>
         <translation type="unfinished"></translation>
@@ -488,6 +483,11 @@
     <message>
         <location filename="../MainWindow.cpp" line="341"/>
         <source>Adding file `%1&apos;...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../MainWindow.cpp" line="516"/>
+        <source>&lt;p align=&quot;center&quot;&gt;&lt;b&gt;GrfBuilder v%1.%2.%3 by MagicalTux&lt;/b&gt;&lt;/p&gt;&lt;p align=&quot;left&quot;&gt;Linked against libgrf v%4.%5.%6 (also by MagicalTux)&lt;br /&gt;This tool is designed to allow easy read and write access to GRF files.&lt;br /&gt;This was developped for the sole purpose of demonstrating that Gravity need better developpers.&lt;/p&gt;&lt;p align=&quot;center&quot;&gt;&lt;a href=&quot;http://www.grfbuilder.com/&quot;&gt;http://www.grfbuilder.com/&lt;/a&gt;&lt;/p&gt;</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

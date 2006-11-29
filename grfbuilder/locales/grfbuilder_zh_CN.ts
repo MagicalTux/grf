@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE TS><TS version="1.1">
+<!DOCTYPE TS><TS version="1.1" language="zh">
 <context>
     <name>Dialog</name>
     <message>
@@ -103,7 +103,7 @@
     <message>
         <location filename="../MainWindow.cpp" line="516"/>
         <source>&lt;p align=&quot;center&quot;&gt;&lt;b&gt;GrfBuilder v%1.%2.%3 by MagicalTux&lt;/b&gt;&lt;/p&gt;&lt;p align=&quot;left&quot;&gt;Linked against libgrf v%4.%5.%6 (also by MagicalTux)&lt;br /&gt;This tool is designed to allow easy read and write access to GRF files.&lt;br /&gt;This was developped for the sole purpose of demonstrating that Gravity need better developpers.&lt;/p&gt;&lt;p align=&quot;left&quot;&gt;You can contact MagicalTux on &lt;a href=&quot;http://ookoo.org/cgi-bin/cgi-irc/irc.cgi&quot;&gt;irc://irc.ookoo.org/ooKoo&lt;/a&gt;&lt;/p&gt;</source>
-        <translation>&lt;p align=&quot;center&quot;&gt;&lt;b&gt;GrfBuilder v%1.%2.%3 by MagicalTux&lt;/b&gt;&lt;/p&gt;&lt;p align=&quot;left&quot;&gt;Linked against libgrf v%4.%5.%6 (also by MagicalTux)&lt;br /&gt;这工具可让你容易的读/写资料到 GRF 档案中.&lt;br /&gt;研发这工具主要目的是为了证明比重力社研发的还要好.&lt;/p&gt;&lt;p align=&quot;left&quot;&gt;你可以在这里联络到 MagicalTux &lt;a href=&quot;http://ookoo.org/cgi-bin/cgi-irc/irc.cgi&quot;&gt;irc://irc.ookoo.org/ooKoo&lt;/a&gt;&lt;/p&gt;</translation>
+        <translation type="obsolete">&lt;p align=&quot;center&quot;&gt;&lt;b&gt;GrfBuilder v%1.%2.%3 by MagicalTux&lt;/b&gt;&lt;/p&gt;&lt;p align=&quot;left&quot;&gt;Linked against libgrf v%4.%5.%6 (also by MagicalTux)&lt;br /&gt;这工具可让你容易的读/写资料到 GRF 档案中.&lt;br /&gt;研发这工具主要目的是为了证明比重力社研发的还要好.&lt;/p&gt;&lt;p align=&quot;left&quot;&gt;你可以在这里联络到 MagicalTux &lt;a href=&quot;http://ookoo.org/cgi-bin/cgi-irc/irc.cgi&quot;&gt;irc://irc.ookoo.org/ooKoo&lt;/a&gt;&lt;/p&gt;</translation>
     </message>
     <message>
         <location filename="../MainWindow.cpp" line="544"/>
@@ -514,6 +514,11 @@
         <location filename="../MainWindow.cpp" line="341"/>
         <source>Adding file `%1&apos;...</source>
         <translation>新增`%1&apos;档案中...</translation>
+    </message>
+    <message>
+        <location filename="../MainWindow.cpp" line="516"/>
+        <source>&lt;p align=&quot;center&quot;&gt;&lt;b&gt;GrfBuilder v%1.%2.%3 by MagicalTux&lt;/b&gt;&lt;/p&gt;&lt;p align=&quot;left&quot;&gt;Linked against libgrf v%4.%5.%6 (also by MagicalTux)&lt;br /&gt;This tool is designed to allow easy read and write access to GRF files.&lt;br /&gt;This was developped for the sole purpose of demonstrating that Gravity need better developpers.&lt;/p&gt;&lt;p align=&quot;center&quot;&gt;&lt;a href=&quot;http://www.grfbuilder.com/&quot;&gt;http://www.grfbuilder.com/&lt;/a&gt;&lt;/p&gt;</source>
+        <translation>&lt;p align=&quot;center&quot;&gt;&lt;b&gt;GrfBuilder v%1.%2.%3 by MagicalTux&lt;/b&gt;&lt;/p&gt;&lt;p align=&quot;left&quot;&gt;Linked against libgrf v%4.%5.%6 (also by MagicalTux)&lt;br /&gt;这工具可让你容易的读/写资料到 GRF 档案中.&lt;br /&gt;研发这工具主要目的是为了证明比重力社研发的还要好.&lt;/p&gt;&lt;p align=&quot;center&quot;&gt;&lt;a href=&quot;http://www.grfbuilder.com/&quot;&gt;http://www.grfbuilder.com/&lt;/a&gt;&lt;/p&gt;</translation>
     </message>
 </context>
 </TS>

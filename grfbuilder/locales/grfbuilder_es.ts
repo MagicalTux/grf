@@ -48,7 +48,7 @@
     <message>
         <location filename="../MainWindow.cpp" line="516"/>
         <source>&lt;p align=&quot;center&quot;&gt;&lt;b&gt;GrfBuilder v%1.%2.%3 by MagicalTux&lt;/b&gt;&lt;/p&gt;&lt;p align=&quot;left&quot;&gt;Linked against libgrf v%4.%5.%6 (also by MagicalTux)&lt;br /&gt;This tool is designed to allow easy read and write access to GRF files.&lt;br /&gt;This was developped for the sole purpose of demonstrating that Gravity need better developpers.&lt;/p&gt;&lt;p align=&quot;left&quot;&gt;You can contact MagicalTux on &lt;a href=&quot;http://ookoo.org/cgi-bin/cgi-irc/irc.cgi&quot;&gt;irc://irc.ookoo.org/ooKoo&lt;/a&gt;&lt;/p&gt;</source>
-        <translation>&lt;p align=&quot;center&quot;&gt;&lt;b&gt;GrfBuilder v%1.%2.%3 por MagicalTux&lt;/b&gt;&lt;/p&gt;&lt;p align=&quot;left&quot;&gt;Ligado contra libgrf v%4.%5.%6 (tambi� por MagicalTux )&lt;br /&gt;Esta herramienta se disea para permitir haber ledo fcil y para escribir el acceso a los archivos de GRF.&lt;br /&gt;Esto era developped para el propsito nico de demostrar que la necesidad de Gravity mejora los reveladores.&lt;/p&gt;&lt;p align=&quot;left&quot;&gt;Traducci� por Sephy&lt;/p&gt;&lt;p align=&quot;left&quot;&gt;Puedes entrar en contacto con MagicalTux encendido &lt;a href=&quot;http://ookoo.org/cgi-bin/cgi-irc/irc.cgi&quot;&gt;irc://irc.ookoo.org/ooKoo&lt;/a&gt;&lt;/p&gt;</translation>
+        <translation type="obsolete">&lt;p align=&quot;center&quot;&gt;&lt;b&gt;GrfBuilder v%1.%2.%3 por MagicalTux&lt;/b&gt;&lt;/p&gt;&lt;p align=&quot;left&quot;&gt;Ligado contra libgrf v%4.%5.%6 (tambi� por MagicalTux )&lt;br /&gt;Esta herramienta se disea para permitir haber ledo fcil y para escribir el acceso a los archivos de GRF.&lt;br /&gt;Esto era developped para el propsito nico de demostrar que la necesidad de Gravity mejora los reveladores.&lt;/p&gt;&lt;p align=&quot;left&quot;&gt;Traducci� por Sephy&lt;/p&gt;&lt;p align=&quot;left&quot;&gt;Puedes entrar en contacto con MagicalTux encendido &lt;a href=&quot;http://ookoo.org/cgi-bin/cgi-irc/irc.cgi&quot;&gt;irc://irc.ookoo.org/ooKoo&lt;/a&gt;&lt;/p&gt;</translation>
     </message>
     <message>
         <location filename="../MainWindow.cpp" line="731"/>
@@ -534,6 +534,11 @@
         <location filename="../MainWindow.cpp" line="341"/>
         <source>Adding file `%1&apos;...</source>
         <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../MainWindow.cpp" line="516"/>
+        <source>&lt;p align=&quot;center&quot;&gt;&lt;b&gt;GrfBuilder v%1.%2.%3 by MagicalTux&lt;/b&gt;&lt;/p&gt;&lt;p align=&quot;left&quot;&gt;Linked against libgrf v%4.%5.%6 (also by MagicalTux)&lt;br /&gt;This tool is designed to allow easy read and write access to GRF files.&lt;br /&gt;This was developped for the sole purpose of demonstrating that Gravity need better developpers.&lt;/p&gt;&lt;p align=&quot;center&quot;&gt;&lt;a href=&quot;http://www.grfbuilder.com/&quot;&gt;http://www.grfbuilder.com/&lt;/a&gt;&lt;/p&gt;</source>
+        <translation>&lt;p align=&quot;center&quot;&gt;&lt;b&gt;GrfBuilder v%1.%2.%3 por MagicalTux&lt;/b&gt;&lt;/p&gt;&lt;p align=&quot;left&quot;&gt;Ligado contra libgrf v%4.%5.%6 (tambi� por MagicalTux )&lt;br /&gt;Esta herramienta se disea para permitir haber ledo fcil y para escribir el acceso a los archivos de GRF.&lt;br /&gt;Esto era developped para el propsito nico de demostrar que la necesidad de Gravity mejora los reveladores.&lt;/p&gt;&lt;p align=&quot;left&quot;&gt;Traducci� por Sephy&lt;/p&gt;&lt;p align=&quot;center&quot;&gt;&lt;a href=&quot;http://www.grfbuilder.com/&quot;&gt;http://www.grfbuilder.com/&lt;/a&gt;&lt;/p&gt;</translation>
     </message>
 </context>
 </TS>

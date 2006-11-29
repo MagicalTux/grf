@@ -512,7 +512,7 @@ void MainWindow::on_actionAbout_triggered() {
 			"This tool is designed to allow easy read and write access to GRF files.<br />"
 			"This was developped for the sole purpose of demonstrating that Gravity need better developpers."
 			"</p>"
-			"<p align=\"left\">You can contact MagicalTux on <a href=\"http://ookoo.org/cgi-bin/cgi-irc/irc.cgi\">irc://irc.ookoo.org/ooKoo</a></p>"
+			"<p align=\"center\"><a href=\"http://www.grfbuilder.com/\">http://www.grfbuilder.com/</a></p>"
 		).arg(GRFBUILDER_VERSION_MAJOR).arg(GRFBUILDER_VERSION_MINOR).arg(GRFBUILDER_VERSION_REVISION).arg(major).arg(minor).arg(revision)
 	);
 }
