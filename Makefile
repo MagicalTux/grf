@@ -5,6 +5,7 @@ OBJECTS64=$(patsubst %.o,%_64.o,$(OBJECTS))
 GB_OBJECTS=main.o MainWindow.o moc_MainWindow.o
 GB_OBJECTS32=$(patsubst %.o,%_32.o,$(GB_OBJECTS))
 GB_OBJECTS64=$(patsubst %.o,%_64.o,$(GB_OBJECTS))
+DIST_FILES=libgrf-^.zip libgrf-^.tar.gz grfbuilder-^.zip grfbuilder-^.tar.gz
 TARGET=libgrf.so
 TARGET64=libgrf64.so
 TARGET_WIN=grf.dll
@@ -199,12 +200,22 @@ endif
 version.sh: includes/grf.h
 	cat $< | grep "define VERSION" | grep -E "MAJOR|MINOR|REVISION" | sed -e 's/^#define //;s/ /=/' >$@
 
-libgrf-%.zip: $(TARGET) $(TARGET64) $(TARGET_WIN) includes/libgrf.h $(wildcard examples/*) doc/README doc/grf_magic QtCore4.dll QtGui4.dll mingwm10.dll $(GB_TARGET) $(GB_TARGET64) $(GB_TARGET_WIN) $(GB_LOCALES)
+libgrf-%.zip: $(TARGET) $(TARGET64) $(TARGET_WIN) includes/libgrf.h $(wildcard examples/*) doc/README doc/grf_magic
 	$(RM) $@
-	zip -9r $@ $^ -x .svn '*.o'
+	zip -9r $@ $^ -x .svn '*.o' data
+
+libgrf-%.tar.gz: $(TARGET) $(TARGET64) $(TARGET_WIN) includes/libgrf.h $(wildcard examples/*) doc/README doc/grf_magic
+	tar -cvzf $@ --exclude '*.o' --exclude '.svn' --exclude 'data' $^
+
+grfbuilder-%.zip: $(TARGET_WIN) doc/README QtCore4.dll QtGui4.dll mingwm10.dll $(GB_TARGET_WIN) $(GB_LOCALES)
+	$(RM) $@
+	zip -9r $@ $^ -x .svn '*.o' data
+
+grfbuilder-%.tar.gz: $(TARGET) $(TARGET64) doc/README $(GB_TARGET) $(GB_TARGET64) $(GB_LOCALES)
+	tar -cvzf $@ --exclude '*.o' --exclude '.svn' --exclude 'data' $^
 
 dist: make_dirs version.sh
-	. version.sh; make -C . libgrf-$$VERSION_MAJOR.$$VERSION_MINOR.$$VERSION_REVISION.zip DEBUG=no
+	. version.sh; for foo in $(subst ^,$$VERSION_MAJOR.$$VERSION_MINOR.$$VERSION_REVISION,$(DIST_FILES)); do echo make -C . "$$foo" DEBUG=no; done
 
 grf_test_win.exe: win32/test_32.o $(TARGET_WIN)
 	@echo -e "  LD\t$@              "
@@ -255,7 +266,8 @@ grfbuilder_%.qm: grfbuilder/grfbuilder_%.qm
 	cp $< $@
 
 clean:
-	$(RM) -r linux $(TARGET) $(TARGET64) win32 $(TARGET_WIN) $(GB_TARGET) $(GB_TARGET64) $(GB_TARGET_WIN) grf_test_win.exe grf_test_linux libgrf-*.zip version.sh
+	$(RM) -r linux $(TARGET) $(TARGET64) win32 $(TARGET_WIN) $(GB_TARGET) $(GB_TARGET64) $(GB_TARGET_WIN) grf_test_win.exe grf_test_linux version.sh
 	$(RM) grfbuilder/ui_MainWindow.h grfbuilder/moc_MainWindow.cpp grfbuilder/grfbuilder_fr.qm grfbuilder_fr.qm
 	$(RM) mingwm10.dll QtCore4.dll QtGui4.dll $(GB_LOCALES) $(patsubst %,grfbuilder/%,$(GB_LOCALES))
+	$(RM) $(subst ^,*.*.*,$(DIST_FILES))
 
