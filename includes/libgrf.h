@@ -321,6 +321,10 @@ GRFEXPORT uint32_t grf_tree_dir_count_files(grf_treenode); /* grf.c */
  * random and files may be inserted anyway in this list, so don't rely too
  * much on that, 'kay?
  * NB: Remember to free() it after use too, m'kay?
+ *
+ * DEPRECATED: Please use grf_get_file_id_list() instead. This is the same
+ * as grf_get_file_list(), but you don't have to free the list after, and
+ * it's less cpu-intensive (just return a pointer instead of building a list).
  */
 GRFEXPORT grf_node *grf_get_file_list(grf_handle); /* grf.c */
 
