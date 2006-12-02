@@ -3,7 +3,7 @@
 
 #define GRFBUILDER_VERSION_MAJOR 0
 #define GRFBUILDER_VERSION_MINOR 1
-#define GRFBUILDER_VERSION_REVISION 28
+#define GRFBUILDER_VERSION_REVISION 29
 
 #define L_TRADITIONAL_CHINESE_NAME "\xe7\xb9\x81\xe9\xab\x94\xe4\xb8\xad\xe6\x96\x87 (Trad. Chinese)"
 #define L_TRADITIONAL_CHINESE_LOC "zh_TW"
@@ -22,6 +22,7 @@
 #include <QMainWindow>
 #include <QTranslator>
 #include <QProgressDialog>
+#include <QSettings>
 
 #include "ui_MainWindow.h"
 
@@ -74,6 +75,8 @@ private slots:
 	void on_action_Close_triggered();
 	void on_action_Quit_triggered();
 	void on_actionAbout_triggered();
+	// Recent files
+	void myOpenRecent();
 	// compression
 	void on_actionC0_triggered();
 	void on_actionC1_triggered();
@@ -95,9 +98,11 @@ private slots:
 
 private:
 	Ui::MainWindow ui;
+	QSettings *settings;
 	QFile grf_file;
 	QDialog *image_viewer;
 	QString last_search;
+	QMenu *recent_files_menu;
 	int repack_type;
 	int compression_level;
 	unsigned int fillFilesTree(void *, QTreeWidget *);
@@ -114,6 +119,9 @@ private:
 	void RefreshAfterLoad();
 	bool do_recurse_dirscan(QList <struct files_list *> *, QString, QString);
 	QList<QTreeWidgetItem *> myTreeViewRecuriveSearch(QList<QTreeWidgetItem *>*);
+	void refreshRecentList();
+	void setRecentFile(QString);
+	void doLoadFile(QString);
 };
 
 #endif

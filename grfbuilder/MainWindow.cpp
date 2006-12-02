@@ -24,20 +24,30 @@ void MainWindow::myLocaleChange() {
 	QCoreApplication::removeTranslator(&this->translator);
 	if (newlng == QString("en")) {
 		this->RetranslateStrings();
+		this->refreshRecentList();
 		return;
 	}
 	if (this->translator.load(QString("grfbuilder_") + newlng)) {
 		QCoreApplication::installTranslator(&this->translator);
 		this->RetranslateStrings();
+		this->refreshRecentList();
 	}
+}
+
+void MainWindow::myOpenRecent() {
+	QAction *action = qobject_cast<QAction *>(sender());
+	if (action) this->doLoadFile(action->data().toString());
 }
 
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 	this->grf = NULL;
 	this->image_viewer = NULL;
+	this->recent_files_menu = NULL;
 	ui.setupUi(this);
-	this->setCompressionLevel(5);
-	this->setRepackType(GRF_REPACK_FAST);
+	this->settings = new QSettings;
+	this->setCompressionLevel(this->settings->value("grf/compression", 5).toInt());
+	this->setRepackType(this->settings->value("grf/repack", GRF_REPACK_FAST).toInt());
+	this->refreshRecentList();
 //	ui.view_allfiles->setColumnHidden(0, true);
 //	ui.viewSearch->setColumnHidden(0, true);
 //	ui.view_filestree->setColumnHidden(0, true);
@@ -54,6 +64,44 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent) {
 	GRFBUILDER_SET_LOCALE(L_FRENCH_LOC, L_FRENCH_NAME);
 	GRFBUILDER_SET_LOCALE(L_GERMAN_LOC, L_GERMAN_NAME);
 	GRFBUILDER_SET_LOCALE(L_SPANISH_LOC, L_SPANISH_NAME);
+}
+
+void MainWindow::setRecentFile(QString filename) {
+	QStringList files = this->settings->value("recentFileList").toStringList();
+	if (files.contains(filename)) return;
+	files.prepend(filename);
+	this->settings->setValue("recentFileList", files);
+	this->refreshRecentList();
+}
+
+void MainWindow::refreshRecentList() {
+	// actionOpen_recent
+	if (this->recent_files_menu == NULL) {
+		this->recent_files_menu = new QMenu(ui.menuFile);
+    ui.menuFile->insertAction(ui.action_Extract, this->recent_files_menu->menuAction());
+	} else {
+		QList<QAction *> ac = this->recent_files_menu->actions();
+		for(int i=ac.size()-1;i>=0;i--) delete ac[i];
+	}
+	this->recent_files_menu->setTitle(tr("Open recent"));
+	// Read recent files list from settings
+	QStringList files = this->settings->value("recentFileList").toStringList();
+	while (files.size() > 5) files.removeLast();
+	this->settings->setValue("recentFileList", files);
+	if (files.size()==0) {
+		QAction *n = new QAction(this);
+		n->setText(tr("No recent files"));
+		n->setEnabled(false);
+		this->recent_files_menu->addAction(n);
+	}
+	for(int i=0;i<files.size();i++) {
+		QAction *n = new QAction(this);
+		QString text = QString("&%1 %2").arg(i+1).arg(QFileInfo(files[i]).fileName());
+		n->setText(text);
+		n->setData(files[i]);
+		QObject::connect(n, SIGNAL(triggered()), this, SLOT(myOpenRecent()));
+		this->recent_files_menu->addAction(n);
+	}
 }
 
 void MainWindow::RetranslateStrings() {
@@ -421,6 +469,7 @@ void MainWindow::on_btn_new_clicked() {
 		QMessageBox::warning(this, tr("GrfBuilder"), tr("Could not load this file in read/write mode."), QMessageBox::Cancel, QMessageBox::Cancel);
 		return;
 	}
+	this->setRecentFile(str);
 	this->grf = grf_new_by_fd(this->grf_file.handle(), true);
 	this->grf_has_tree = false;
 	grf_set_callback(this->grf, grf_callback_caller, (void *)this);
@@ -434,6 +483,10 @@ void MainWindow::on_btn_open_clicked() {
 
 	if (str.isNull()) return;
 
+	this->doLoadFile(str);
+}
+
+void MainWindow::doLoadFile(QString str) {
 	this->on_btn_close_clicked();
 
 	this->grf_file.setFileName(str);
@@ -450,6 +503,7 @@ void MainWindow::on_btn_open_clicked() {
 		QMessageBox::warning(this, tr("GrfBuilder"), tr("The selected file doesn't look like a valid GRF file."), QMessageBox::Cancel, QMessageBox::Cancel);
 		return;
 	}
+	this->setRecentFile(str);
 	this->RefreshAfterLoad();
 }
 
@@ -979,7 +1033,14 @@ void MainWindow::on_listFilter_currentIndexChanged(QString text) {
 }
 
 void MainWindow::setRepackType(int type) {
+	switch(type) {
+		case GRF_REPACK_FAST: case GRF_REPACK_DECRYPT: case GRF_REPACK_RECOMPRESS:
+			break;
+		default:
+			type = GRF_REPACK_FAST;
+	}
 	this->repack_type = type;
+	this->settings->setValue("grf/repack", this->repack_type);
 	ui.actionMove_files->setChecked(type == GRF_REPACK_FAST);
 	ui.actionDecrypt->setChecked(type == GRF_REPACK_DECRYPT);
 	ui.actionRecompress->setChecked(type == GRF_REPACK_RECOMPRESS);
@@ -990,8 +1051,11 @@ void MainWindow::on_actionDecrypt_triggered() { this->setRepackType(GRF_REPACK_D
 void MainWindow::on_actionRecompress_triggered() { this->setRepackType(GRF_REPACK_RECOMPRESS); }
 
 void MainWindow::setCompressionLevel(int lvl) {
+	if (lvl>9) lvl=9;
+	if (lvl<0) lvl=0;
 	this->compression_level = lvl;
 	if (this->grf != NULL) grf_set_compression_level(this->grf, this->compression_level);
+	this->settings->setValue("grf/compression", this->compression_level);
 	ui.actionC0->setChecked(lvl==0);
 	ui.actionC1->setChecked(lvl==1);
 	ui.actionC2->setChecked(lvl==2);

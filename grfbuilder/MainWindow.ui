@@ -684,6 +684,11 @@
     <string>Ctrl+N</string>
    </property>
   </action>
+  <action name="actionOpen_recent" >
+   <property name="text" >
+    <string>Open recent</string>
+   </property>
+  </action>
  </widget>
  <resources/>
  <connections/>
