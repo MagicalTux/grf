@@ -156,112 +156,112 @@
         <translation>目前播放 `%1&apos;. 按 &quot;OK&quot; 停止播放.</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="475"/>
+        <location filename="../ui_MainWindow.h" line="498"/>
         <source>All files</source>
         <translation>所有檔案</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="478"/>
+        <location filename="../ui_MainWindow.h" line="501"/>
         <source>Tree view</source>
         <translation>樹狀檢視</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="483"/>
+        <location filename="../ui_MainWindow.h" line="506"/>
         <source>Search result</source>
         <translation>搜尋結果</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="433"/>
+        <location filename="../ui_MainWindow.h" line="456"/>
         <source>&amp;Open</source>
         <translation>&amp;開啟</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="434"/>
+        <location filename="../ui_MainWindow.h" line="457"/>
         <source>Ctrl+O</source>
         <translation>Ctrl+O</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="435"/>
+        <location filename="../ui_MainWindow.h" line="458"/>
         <source>&amp;Extract</source>
         <translation>&amp;匯出</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="436"/>
+        <location filename="../ui_MainWindow.h" line="459"/>
         <source>Ctrl+E</source>
         <translation>Ctrl+E</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="437"/>
+        <location filename="../ui_MainWindow.h" line="460"/>
         <source>Extract &amp;All</source>
         <translation>全部&amp;匯出</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="438"/>
+        <location filename="../ui_MainWindow.h" line="461"/>
         <source>Ctrl+A</source>
         <translation>Ctrl+A</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="439"/>
+        <location filename="../ui_MainWindow.h" line="462"/>
         <source>&amp;Close</source>
         <translation>&amp;關閉</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="440"/>
+        <location filename="../ui_MainWindow.h" line="463"/>
         <source>Ctrl+W</source>
         <translation>Ctrl+W</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="441"/>
+        <location filename="../ui_MainWindow.h" line="464"/>
         <source>&amp;Merge GRF</source>
         <translation>&amp;合併GRF</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="442"/>
+        <location filename="../ui_MainWindow.h" line="465"/>
         <source>Ctrl+M</source>
         <translation>Ctrl+M</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="443"/>
+        <location filename="../ui_MainWindow.h" line="466"/>
         <source>Merge &amp;Dir</source>
         <translation>匯入&amp;資料夾</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="444"/>
+        <location filename="../ui_MainWindow.h" line="467"/>
         <source>Ctrl+D</source>
         <translation>Ctrl+D</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="445"/>
+        <location filename="../ui_MainWindow.h" line="468"/>
         <source>&amp;Quit</source>
         <translation>&amp;結束程式</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="446"/>
+        <location filename="../ui_MainWindow.h" line="469"/>
         <source>Ctrl+Q</source>
         <translation>Ctrl+Q</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="447"/>
+        <location filename="../ui_MainWindow.h" line="470"/>
         <source>&amp;About</source>
         <translation>&amp;關於</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="448"/>
+        <location filename="../ui_MainWindow.h" line="471"/>
         <source>Ctrl+?</source>
         <translation>Ctrl+?</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="449"/>
+        <location filename="../ui_MainWindow.h" line="472"/>
         <source>&amp;Unicode extraction</source>
         <translation>&amp;Unicode 模式</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="450"/>
+        <location filename="../ui_MainWindow.h" line="473"/>
         <source>&amp;ANSI extraction</source>
         <translation>&amp;ANSI 模式</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="451"/>
+        <location filename="../ui_MainWindow.h" line="474"/>
         <source>Images &amp;Transparency</source>
         <translation>圖片 &amp;檢視</translation>
     </message>
@@ -276,47 +276,47 @@
         <translation type="obsolete">法文</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="452"/>
+        <location filename="../ui_MainWindow.h" line="475"/>
         <source>None</source>
         <translation>None</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="453"/>
+        <location filename="../ui_MainWindow.h" line="476"/>
         <source>Totally Low</source>
         <translation>最低</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="454"/>
+        <location filename="../ui_MainWindow.h" line="477"/>
         <source>Really Low</source>
         <translation>中低</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="455"/>
+        <location filename="../ui_MainWindow.h" line="478"/>
         <source>Low</source>
         <translation>低</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="456"/>
+        <location filename="../ui_MainWindow.h" line="479"/>
         <source>Almost Normal</source>
         <translation>比正常低一些</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="457"/>
+        <location filename="../ui_MainWindow.h" line="480"/>
         <source>Normal</source>
         <translation>正常</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="458"/>
+        <location filename="../ui_MainWindow.h" line="481"/>
         <source>More than Normal</source>
         <translation>比正常高一些</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="459"/>
+        <location filename="../ui_MainWindow.h" line="482"/>
         <source>High</source>
         <translation>高</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="460"/>
+        <location filename="../ui_MainWindow.h" line="483"/>
         <source>Really High</source>
         <translation>中高</translation>
     </message>
@@ -331,32 +331,32 @@
         <translation type="obsolete">西班牙文</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="462"/>
+        <location filename="../ui_MainWindow.h" line="485"/>
         <source>Move files</source>
         <translation>移動檔案</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="463"/>
+        <location filename="../ui_MainWindow.h" line="486"/>
         <source>Decrypt</source>
         <translation>解密</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="464"/>
+        <location filename="../ui_MainWindow.h" line="487"/>
         <source>Recompress</source>
         <translation>重新壓縮</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="490"/>
+        <location filename="../ui_MainWindow.h" line="513"/>
         <source>Repack</source>
         <translation>開始封裝</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="466"/>
+        <location filename="../ui_MainWindow.h" line="489"/>
         <source>Ctrl+R</source>
         <translation>Ctrl+R</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="467"/>
+        <location filename="../ui_MainWindow.h" line="490"/>
         <source>Delete selected</source>
         <translation>刪除已選擇檔案</translation>
     </message>
@@ -366,92 +366,92 @@
         <translation type="obsolete">ID</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="479"/>
+        <location filename="../ui_MainWindow.h" line="502"/>
         <source>Comp</source>
         <translation>壓縮後檔案大小</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="480"/>
+        <location filename="../ui_MainWindow.h" line="503"/>
         <source>Size</source>
         <translation>原始檔案大小</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="481"/>
+        <location filename="../ui_MainWindow.h" line="504"/>
         <source>Position</source>
         <translation>位置</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="482"/>
+        <location filename="../ui_MainWindow.h" line="505"/>
         <source>Filename</source>
         <translation>檔案名稱</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="477"/>
+        <location filename="../ui_MainWindow.h" line="500"/>
         <source>File size</source>
         <translation>檔案大小</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="485"/>
+        <location filename="../ui_MainWindow.h" line="508"/>
         <source>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;Using this button, you can open an existing GRF file.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;/head&gt;&lt;body style=&quot; white-space: pre-wrap; font-family:Sans Serif; font-size:9pt; font-weight:400; font-style:normal; text-decoration:none;&quot;&gt;&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;按下這個按鈕, 你可以開啟 GRF 檔案.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="486"/>
+        <location filename="../ui_MainWindow.h" line="509"/>
         <source>Open</source>
         <translation>開啟</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="487"/>
+        <location filename="../ui_MainWindow.h" line="510"/>
         <source>Extract</source>
         <translation>匯出</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="488"/>
+        <location filename="../ui_MainWindow.h" line="511"/>
         <source>Delete</source>
         <translation>刪除</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="489"/>
+        <location filename="../ui_MainWindow.h" line="512"/>
         <source>Extract All</source>
         <translation>全部匯出</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="491"/>
+        <location filename="../ui_MainWindow.h" line="514"/>
         <source>Close</source>
         <translation>關閉</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="492"/>
+        <location filename="../ui_MainWindow.h" line="515"/>
         <source>Merge GRF</source>
         <translation>合併GRF</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="493"/>
+        <location filename="../ui_MainWindow.h" line="516"/>
         <source>Merge dir</source>
         <translation>匯入資料夾</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="494"/>
+        <location filename="../ui_MainWindow.h" line="517"/>
         <source>&amp;?</source>
         <translation>&amp;?</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="496"/>
+        <location filename="../ui_MainWindow.h" line="519"/>
         <source>&amp;Options</source>
         <translation>&amp;選項</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="497"/>
+        <location filename="../ui_MainWindow.h" line="520"/>
         <source>Compression level</source>
         <translation>壓縮等級</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="498"/>
+        <location filename="../ui_MainWindow.h" line="521"/>
         <source>Repack type</source>
         <translation>封裝類型</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="499"/>
+        <location filename="../ui_MainWindow.h" line="522"/>
         <source>&amp;File</source>
         <translation>&amp;檔案</translation>
     </message>
@@ -461,12 +461,12 @@
         <translation>匯出到...</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="495"/>
+        <location filename="../ui_MainWindow.h" line="518"/>
         <source>Language</source>
         <translation>語系</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="461"/>
+        <location filename="../ui_MainWindow.h" line="484"/>
         <source>Max</source>
         <translation>最大</translation>
     </message>
@@ -481,17 +481,17 @@
         <translation>新建GRF,檔名為...</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="468"/>
+        <location filename="../ui_MainWindow.h" line="491"/>
         <source>&amp;New</source>
         <translation>&amp;新建GRF</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="469"/>
+        <location filename="../ui_MainWindow.h" line="492"/>
         <source>Ctrl+N</source>
         <translation>Ctrl+N</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="484"/>
+        <location filename="../ui_MainWindow.h" line="507"/>
         <source>New</source>
         <translation>新建GRF</translation>
     </message>
@@ -521,7 +521,7 @@
         <translation>&lt;p align=&quot;center&quot;&gt;&lt;b&gt;GrfBuilder v%1.%2.%3 by MagicalTux&lt;/b&gt;&lt;/p&gt;&lt;p align=&quot;left&quot;&gt;Linked against libgrf v%4.%5.%6 (also by MagicalTux)&lt;br /&gt;這工具可讓你容易的讀/寫資料到 GRF 檔案中.&lt;br /&gt;研發這工具主要目的是為了證明比重力社研發的還要好.&lt;/p&gt;&lt;p align=&quot;center&quot;&gt;&lt;a href=&quot;http://www.grfbuilder.com/&quot;&gt;http://www.grfbuilder.com/&lt;/a&gt;&lt;/p&gt;</translation>
     </message>
     <message>
-        <location filename="../ui_MainWindow.h" line="470"/>
+        <location filename="../ui_MainWindow.h" line="493"/>
         <source>Open recent</source>
         <translation type="unfinished"></translation>
     </message>

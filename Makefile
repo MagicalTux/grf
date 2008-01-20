@@ -41,9 +41,9 @@ ifeq ($(UNAME),Linux)
 # *** Linux config
 # *****
 # TODO: Put back gcc32/g++32
-CC=gcc32
+CC=gcc -m32
 CC64=gcc
-CXX=g++32
+CXX=g++ -m32
 CXX64=g++
 STRIP=strip
 # /opt/xmingw/ for old gentoo, i586-mingw32msvc-gcc for debian
@@ -100,6 +100,8 @@ ifeq ($(GCC_WIN_VERSION),4)
 WINFLAGS+=-Wno-attributes
 endif
 
+GCC_VERSION=$(shell $(CC) -dumpversion)
+
 win32/%_32.o: src/%.c
 	@echo -en "  CC\t$<           \015"
 	@$(CC_WIN) $(CFLAGS) $(WINFLAGS) $(INCLUDES) -c -o $@ $<
@@ -149,7 +151,7 @@ make_dirs:
 
 $(TARGET_WIN): $(patsubst %.o,win32/%.o,$(ZOBJS32) $(OBJECTS32))
 	@echo -e "  LD\t$@              "
-	@$(CC_WIN) $(CFLAGS) $(WINFLAGS) $(LDFLAGS) -o $@ $^
+	@$(CC_WIN) $(CFLAGS) $(WINFLAGS) $(LDFLAGS) -Wl,--output-def,grf.def,--out-implib,libgrfdll.a -o $@ $^
 ifeq ($(DEBUG),no)
 	@echo -e " STRIP\t$@"
 	@$(STRIP_WIN) $@
@@ -175,7 +177,7 @@ $(GB_TARGET): $(patsubst %.o,linux/gb_%.o,$(GB_OBJECTS32))
 	@echo -e "  LD\t$@              "
 #	@$(CXX) -nostdlib $(CXXFLAGS) $(LINFLAGS) $(QT_LIN32_INCLUDE) -o $@ $^ -L/var/chroot/ia32/lib -L/var/chroot/ia32/usr/lib -L/var/chroot/ia32/usr/lib/qt4 `echo "$(QT_LIN_LIBS)" | sed -e 's#-lpthread#/var/chroot/ia32/lib/libpthread.so.0#g'` -L. -lgrf /var/chroot/ia32/usr/lib/gcc/i686-pc-linux-gnu/4.1.1/libgcc.a /usr/lib/gcc/x86_64-pc-linux-gnu/4.1.1/32/libgcc.a /var/chroot/ia32/lib/libc.so.6
 #	@$(CXX) -v $(CXXFLAGS) $(LINFLAGS) $(QT_LIN32_INCLUDE) -o $@ $^ -L/var/chroot/ia32/lib -L/var/chroot/ia32/usr/lib -L/var/chroot/ia32/usr/lib/qt4 `echo "$(QT_LIN_LIBS)" | sed -e 's#-lpthread#/var/chroot/ia32/lib/libpthread.so.0#g'` -L. -lgrf /var/chroot/ia32/usr/lib/gcc/i686-pc-linux-gnu/4.1.1/libgcc.a /usr/lib/gcc/x86_64-pc-linux-gnu/4.1.1/32/libgcc.a /var/chroot/ia32/lib/libc.so.6
-	@$(CXX) -nostdlib $(CXXFLAGS) $(LINFLAGS) $(QT_LIN32_INCLUDE) -o $@ /usr/lib/gcc/x86_64-pc-linux-gnu/4.1.1/../../../../lib32/crt1.o /usr/lib/gcc/x86_64-pc-linux-gnu/4.1.1/../../../../lib32/crti.o /usr/lib/gcc/x86_64-pc-linux-gnu/4.1.1/32/crtbegin.o $^ -L/var/chroot/ia32/lib -L/var/chroot/ia32/usr/lib -L/var/chroot/ia32/usr/lib/qt4 `echo "$(QT_LIN_LIBS)" | sed -e 's#-lpthread#/var/chroot/ia32/lib/libpthread.so.0#g'` -L. -lgrf /var/chroot/ia32/usr/lib/gcc/i686-pc-linux-gnu/4.1.1/libgcc.a /usr/lib/gcc/x86_64-pc-linux-gnu/4.1.1/32/libgcc.a /usr/lib32/libc.so -L/usr/lib/gcc/x86_64-pc-linux-gnu/4.1.1/32 -lstdc++ -lm -lgcc_s -lgcc -lgcc_s /usr/lib32/libc.so -lgcc /usr/lib/gcc/x86_64-pc-linux-gnu/4.1.1/32/crtend.o /usr/lib/gcc/x86_64-pc-linux-gnu/4.1.1/../../../../lib32/crtn.o
+	@$(CXX) -nostdlib $(CXXFLAGS) $(LINFLAGS) $(QT_LIN32_INCLUDE) -o $@ /usr/lib/gcc/x86_64-pc-linux-gnu/$(GCC_VERSION)/../../../../lib32/crt1.o /usr/lib/gcc/x86_64-pc-linux-gnu/$(GCC_VERSION)/../../../../lib32/crti.o /usr/lib/gcc/x86_64-pc-linux-gnu/$(GCC_VERSION)/32/crtbegin.o $^ -L/var/chroot/ia32/lib -L/var/chroot/ia32/usr/lib -L/var/chroot/ia32/usr/lib/qt4 `echo "$(QT_LIN_LIBS)" | sed -e 's#-lpthread#/var/chroot/ia32/lib/libpthread.so.0#g'` -L. -lgrf /var/chroot/ia32/usr/lib/gcc/i686-pc-linux-gnu/$(GCC_VERSION)/libgcc.a /usr/lib/gcc/x86_64-pc-linux-gnu/$(GCC_VERSION)/32/libgcc.a /usr/lib32/libc.so -L/usr/lib/gcc/x86_64-pc-linux-gnu/$(GCC_VERSION)/32 -lstdc++ -lm -lgcc_s -lgcc -lgcc_s /usr/lib32/libc.so -lgcc /usr/lib/gcc/x86_64-pc-linux-gnu/$(GCC_VERSION)/32/crtend.o /usr/lib/gcc/x86_64-pc-linux-gnu/$(GCC_VERSION)/../../../../lib32/crtn.o
 ifeq ($(DEBUG),no)
 	@echo -e " STRIP\t$@"
 	@$(STRIP) $@
@@ -197,14 +199,16 @@ ifeq ($(DEBUG),no)
 	@$(STRIP_WIN) $@
 endif
 
+grf.def: $(TARGET_WIN)
+
 version.sh: includes/grf.h
 	cat $< | grep "define VERSION" | grep -E "MAJOR|MINOR|REVISION" | sed -e 's/^#define //;s/ /=/' >$@
 
-libgrf-%.zip: $(TARGET) $(TARGET64) $(TARGET_WIN) includes/libgrf.h $(wildcard examples/*) doc/README doc/grf_magic
+libgrf-%.zip: $(TARGET) $(TARGET64) $(TARGET_WIN) grf.def includes/libgrf.h $(wildcard examples/*) doc/README doc/grf_magic
 	$(RM) $@
 	zip -9r $@ $^ -x .svn '*.o' data
 
-libgrf-%.tar.gz: $(TARGET) $(TARGET64) $(TARGET_WIN) includes/libgrf.h $(wildcard examples/*) doc/README doc/grf_magic
+libgrf-%.tar.gz: $(TARGET) $(TARGET64) $(TARGET_WIN) grf.def includes/libgrf.h $(wildcard examples/*) doc/README doc/grf_magic
 	tar -cvzf $@ --exclude '*.o' --exclude '.svn' --exclude 'data' $^
 
 grfbuilder-%.zip: $(TARGET_WIN) doc/README QtCore4.dll QtGui4.dll mingwm10.dll $(GB_TARGET_WIN) $(GB_LOCALES)

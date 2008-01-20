@@ -29,3 +29,12 @@ echo "x11-libs/qt nas" >>/etc/portage/package.use
 
 Configure: add option -system-nas-sound
 
+Changelog
+=========
+
+Version 0.1.30
+--------------
+
+* Fixed grf_merge() going in infinite loop if some requirements are met (thanks to Atikae)
+* Fixed use of _O_BINARY mode on Win32 (thanks to Jogger)
+

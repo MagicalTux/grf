@@ -12,6 +12,20 @@
 
 /* BEGIN: INCLUDE FROM GRFIO.C */
 
+#ifdef _O_BINARY
+# ifdef O_LARGEFILE
+#  define OPEN_OPTIONS (O_LARGEFILE | _O_BINARY)
+# else
+#  define OPEN_OPTIONS _O_BINARY
+# endif
+#else
+# ifdef O_LARGEFILE
+#  define OPEN_OPTIONS O_LARGEFILE
+# else
+#  define OPEN_OPTIONS 0
+# endif
+#endif
+
 #ifdef __WIN32
 #include <windows.h>
 #else
@@ -280,7 +294,7 @@ GRFEXPORT grf_handle grf_new_by_fd(int fd, bool writemode) {
 	return handler;
 }
 
-inline grf_node prv_grf_find_free_space(grf_handle handler, size_t size, grf_node inode) {
+grf_node prv_grf_find_free_space(grf_handle handler, size_t size, grf_node inode) {
 	// find a "leak" between two files, to put our own file
 	// our files are sorted, that's a good thing:)
 	// We just have to return the node where the space is available, the other func will
@@ -308,11 +322,7 @@ inline grf_node prv_grf_find_free_space(grf_handle handler, size_t size, grf_nod
 GRFEXPORT grf_handle grf_new(const char *filename, bool writemode) {
 	int fd;
 
-#ifdef O_LARGEFILE
-	fd = open(filename, (writemode!=false?O_RDWR | O_CREAT:O_RDONLY) | O_LARGEFILE, 0744);
-#else
-	fd = open(filename, (writemode!=false?O_RDWR | O_CREAT:O_RDONLY), 0744);
-#endif
+	fd = open(filename, (writemode!=false?O_RDWR | O_CREAT:O_RDONLY) | OPEN_OPTIONS, 0744);
 	return grf_new_by_fd(fd, writemode);
 }
 
@@ -354,7 +364,7 @@ GRFEXPORT bool grf_merge(grf_handle dest, grf_handle src, uint8_t repack_type) {
 		for(int i=0;*(rep->filename+i)!=0;i++) if (*(rep->filename+i)=='/') *(rep->filename+i)='\\';
 		if (prev == NULL) {
 			rep->pos = 0;
-			rep->next = dest->first_node; // just in case, supposed to be null
+			if (rep != dest->first_node) rep->next = dest->first_node; // if we insert a new file, do some cleaning
 			rep->prev = NULL;
 			dest->first_node = rep;
 		} else {
