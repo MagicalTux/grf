@@ -72,6 +72,9 @@ void test_new_handler() {
 	fflush(stdout);
 	printf("test.txt[%p]\n", grf_file_add_path(handler, "data/test.txt", "doc/README"));
 	grf_save(handler);
+	// Rename test!
+	grf_file_rename(grf_get_file(handler, "data/libgrf64.so"), "data/RENAMEtest.so");
+	// close
 	grf_free(handler);
 	timer_start();
 	handler = grf_load("test.grf", true);

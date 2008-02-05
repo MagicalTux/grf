@@ -37,6 +37,7 @@ typedef unsigned short WORD;
 typedef unsigned int DWORD;
 #endif
 
+// Values for encrypted grf (v0x102/0x103)
 static unsigned char BitMaskTable[8] = {
 	0x80, 0x40, 0x20, 0x10, 0x08, 0x04, 0x02, 0x01
 };
@@ -82,11 +83,10 @@ static unsigned char NibbleData[4][64]={
 	}
 };
 
-static void NibbleSwap(BYTE *Src, int len) {
-	for( ; 0 < len; len--, Src++) {
-		*Src = (*Src >> 4) | (*Src << 4);
+static void NibbleSwap(BYTE *src, int len) {
+	for( ; 0 < len; len--, src++) {
+		*src = (*src >> 4) | (*src << 4);
 	}
-
 	return;
 }
 
@@ -138,6 +138,7 @@ static void BitConvert4(BYTE *Src) {
 	return;
 }
 
+// TODO: need cleanup
 static void decode_des_etc(BYTE *buf, int len, int type, int cycle) {
 	int lop, cnt = 0;
 
@@ -1246,6 +1247,7 @@ GRFEXPORT grf_node grf_file_add(grf_handle handler, const char *filename, void *
 		// Regular add file~ (argh)
 		ptr_file = calloc(1, sizeof(struct grf_node));
 		ptr_file->filename = strdup(filename);
+		ptr_file->parent = handler;
 		hash_add_element(handler->fast_table, ptr_file->filename, ptr_file);
 		if (handler->root != NULL) prv_grf_reg_tree_node(handler->root, ptr_file);
 	}
