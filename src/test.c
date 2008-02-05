@@ -73,7 +73,10 @@ void test_new_handler() {
 	printf("test.txt[%p]\n", grf_file_add_path(handler, "data/test.txt", "doc/README"));
 	grf_save(handler);
 	// Rename test!
+	printf(" - test_new_handler(): renaming data/libgrf64.so to data/RENAMEtest.so\n");
 	grf_file_rename(grf_get_file(handler, "data/libgrf64.so"), "data/RENAMEtest.so");
+	printf(" - test_new_handler(): [Rename test] file data/libgrf64.so: %p\n", grf_get_file(handler, "data/libgrf64.so"));
+	printf(" - test_new_handler(): [Rename test] file data/RENAMEtest.so: %p\n", grf_get_file(handler, "data/RENAMEtest.so"));
 	// close
 	grf_free(handler);
 	timer_start();
