@@ -1042,8 +1042,8 @@ GRFEXPORT bool grf_file_delete(grf_node handler) {
 	struct grf_node *next = handler->next;
 	if (!parent->write_mode) return false;
 	parent->need_save = true;
-	if (hash_del_element(handler->parent->fast_table, handler->filename)!=0) return false;
 	if (handler->tree_parent != NULL) hash_del_element(handler->tree_parent->parent->subdir, handler->tree_parent->name); // will free memory automatically
+	if (hash_del_element(handler->parent->fast_table, handler->filename)!=0) return false;
 	if (parent->first_node==handler) parent->first_node = next;
 	parent->wasted_space += len_aligned; /* wasted_space accounting */
 	parent->filecount--;
