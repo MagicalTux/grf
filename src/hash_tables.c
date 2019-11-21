@@ -17,8 +17,6 @@
  */
 unsigned long hash_calc(char *name, unsigned long limit) {
 	unsigned long h = 0, g;
-	char *name2;
-	name2=name;
 	while(*name) {
 		h = (h << 4) + *(name++);
 		/* gcc3 will display a warning if we don't put the additional parentheses */

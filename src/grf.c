@@ -285,7 +285,7 @@ GRFEXPORT grf_handle grf_new_by_fd(int fd, bool writemode) {
 
 	handler = (grf_handle)calloc(1, sizeof(struct grf_handler));
 	if (handler == NULL) { close(fd); return NULL; }
-	memset(handler, 0, sizeof(grf_handle));
+	memset(handler, 0, sizeof(struct grf_handler));
 	handler->fast_table = hash_create_table(GRF_HASH_TABLE_SIZE, prv_grf_free_node);
 	handler->fd = fd;
 	handler->need_save = writemode; // file should be new (flag will be unset by prv_grf_load)
@@ -640,24 +640,27 @@ GRFEXPORT void grf_update_id_list(grf_handle handler) {
 
 #define PRV_GRF_QUICKSORT_MAX_LEVELS 1000
 static bool prv_grf_quicksort(struct grf_handler *handler, uint32_t elements) {
-  uint32_t beg[PRV_GRF_QUICKSORT_MAX_LEVELS], end[PRV_GRF_QUICKSORT_MAX_LEVELS];
+	uint32_t beg[PRV_GRF_QUICKSORT_MAX_LEVELS], end[PRV_GRF_QUICKSORT_MAX_LEVELS];
 	int i=0, L, R;
 	struct grf_node *piv;
 	struct grf_node **arr;
 	
 	arr = (struct grf_node **)hash_foreach_val(handler->fast_table);
 
-  beg[0]=0; end[0]=elements;
-  while (i>=0) {
-    L=beg[i]; R=end[i]-1;
-    if (L<R) {
-      piv=arr[L]; if (i==PRV_GRF_QUICKSORT_MAX_LEVELS-1) return NULL;
-      while (L<R) {
-        while (arr[R]->pos>=piv->pos && L<R) R--; if (L<R) arr[L++]=arr[R];
-        while (arr[L]->pos<=piv->pos && L<R) L++; if (L<R) arr[R--]=arr[L]; }
-      arr[L]=piv; beg[i+1]=L+1; end[i+1]=end[i]; end[i++]=L; }
-    else {
-      i--; }}
+	beg[0]=0; end[0]=elements;
+	while (i>=0) {
+		L=beg[i]; R=end[i]-1;
+		if (L<R) {
+			piv=arr[L]; if (i==PRV_GRF_QUICKSORT_MAX_LEVELS-1) return NULL;
+			while (L<R) {
+				while (arr[R]->pos>=piv->pos && L<R) R--;
+				if (L<R) arr[L++]=arr[R];
+				while (arr[L]->pos<=piv->pos && L<R) L++;
+				if (L<R) arr[R--]=arr[L];
+			}
+			arr[L]=piv; beg[i+1]=L+1; end[i+1]=end[i]; end[i++]=L; }
+		else {
+			i--; }}
 	// restore order~
 	piv = NULL;
 	for(unsigned int i=0;arr[i]!=NULL;i++) {

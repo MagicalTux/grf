@@ -101,8 +101,8 @@ struct grf_handler {
 
 // should we use pragma pack ?
 struct grf_header {
-	char header_magic[16] __attribute__ ((__packed__)); // "Master of Magic" + 0x00
-	char header_key[14] __attribute__ ((__packed__)); // 0x01 -> 0x0e, or 0x00 -> 0x00 (no crypt)
+	char header_magic[16]; // "Master of Magic" + 0x00
+	char header_key[14]; // 0x01 -> 0x0e, or 0x00 -> 0x00 (no crypt)
 	uint32_t offset __attribute__ ((__packed__)); // offset of file table
 	uint32_t seed __attribute__ ((__packed__));
 	uint32_t filecount __attribute__ ((__packed__)); // Real filecount = filecount - seed - 7
@@ -114,7 +114,7 @@ struct grf_table_entry_data {
 	uint32_t len __attribute__ ((__packed__)); // packed len
 	uint32_t len_aligned __attribute__ ((__packed__)); // same, but with the alignment (?)
 	uint32_t size __attribute__ ((__packed__)); // real file size (unpacked)
-	uint8_t flags __attribute__ ((__packed__)); // file flags
+	uint8_t flags; // file flags
 	uint32_t pos __attribute__ ((__packed__)); // position in the grf
 };
 
