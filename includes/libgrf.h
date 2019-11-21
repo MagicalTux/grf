@@ -17,6 +17,8 @@
 extern "C" {
 #endif /* __cplusplus */
 
+#include <stddef.h>
+
 /* Detect version of C compiler, and do the required stuff to stay compatible
  */
 #ifndef __cplusplus
