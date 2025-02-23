@@ -4,9 +4,7 @@ Tool made a long time ago to manipulate Gravity Ragnarok Online(tm)'s data files
 
 ## Building
 
-    mkdir build
-    cd build
-    cmake ..
-    make
+    cmake -B build -DCMAKE_BUILD_TYPE=Release
+    cmake --build build
 
 
