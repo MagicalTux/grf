@@ -1,6 +1,6 @@
 /* grf.h : main grf include
- * Blavla
  *
+ * Private definitions
  */
 
 #ifndef __GRF_H_INCLUDED

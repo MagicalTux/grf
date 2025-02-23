@@ -40,7 +40,6 @@ ifeq ($(UNAME),Linux)
 # *****
 # *** Linux config
 # *****
-# TODO: Put back gcc32/g++32
 CC=gcc -m32
 CC64=gcc
 CXX=g++ -m32
