@@ -9,7 +9,7 @@
 #ifndef __WIN32
 struct timeval tv;
 
-inline void timer_start() {
+void timer_start() {
 	gettimeofday((struct timeval *)&tv, NULL);
 }
 
@@ -70,13 +70,17 @@ void test_new_handler() {
 	fflush(stdout);
 	printf("Beta.grf[%p] ", grf_file_add_path(handler, "data/Beta.grf", "grf/Beta.grf"));
 	fflush(stdout);
-	printf("test.txt[%p]\n", grf_file_add_path(handler, "data/test.txt", "doc/README"));
+	printf("test.txt[%p] ", grf_file_add_path(handler, "data/test.txt", "doc/README"));
+	fflush(stdout);
+	char staticTxt[] = "Hello world, this is a text file!";
+	printf("static.txt[%p] ", grf_file_add(handler, "data/static.txt", staticTxt, sizeof(staticTxt)));
+	printf("static2.txt[%p]\n", grf_file_add(handler, "data/static2.txt", staticTxt, sizeof(staticTxt)));
 	grf_save(handler);
 	// Rename test!
-	printf(" - test_new_handler(): renaming data/libgrf64.so to data/RENAMEtest.so\n");
-	grf_file_rename(grf_get_file(handler, "data/libgrf64.so"), "data/RENAMEtest.so");
-	printf(" - test_new_handler(): [Rename test] file data/libgrf64.so: %p\n", grf_get_file(handler, "data/libgrf64.so"));
-	printf(" - test_new_handler(): [Rename test] file data/RENAMEtest.so: %p\n", grf_get_file(handler, "data/RENAMEtest.so"));
+	printf(" - test_new_handler(): renaming data/static.txt to data/RENAMEstatic.txt\n");
+	grf_file_rename(grf_get_file(handler, "data/static.txt"), "data/RENAMEstatic.txt");
+	printf(" - test_new_handler(): [Rename test] file data/static.txt: %p\n", grf_get_file(handler, "data/static.txt"));
+	printf(" - test_new_handler(): [Rename test] file data/RENAMEstatic.txt: %p\n", grf_get_file(handler, "data/RENAMEstatic.txt"));
 	// close
 	grf_free(handler);
 	timer_start();
@@ -86,7 +90,7 @@ void test_new_handler() {
 	if (handler == NULL) return;
 	grf_create_tree(handler);
 	printf(" - test_new_handler(): There are %d files in this GRF - %d byte(s) wasted.\n", grf_filecount(handler), grf_wasted_space(handler));
-	f = grf_get_file(handler, "data/Alpha.grf");
+	f = grf_get_file(handler, "data/RENAMEstatic.txt");
 	printf(" - test_new_handler(): file `%s' found at %p - deleting...\n", grf_file_get_filename(f), f);
 	if (!grf_file_delete(f)) {
 		printf(" - test_new_handler(): delete failed\n");
@@ -102,13 +106,13 @@ void test_new_handler() {
 	timer_end(" - test_new_handler(): File loading took %fms\n");
 	if (handler == NULL) return;
 	printf(" - test_new_handler(): There are %d files in this GRF.\n", grf_filecount(handler));
-	printf(" - test_new_handler(): %d byte(s) wasted (should be slightly lower than before, as table was moved to an optimized place)\n", grf_wasted_space(handler));
-//	printf(" - test_new_handler(): attempting to repack file...\n");
-//	if (grf_repack(handler, GRF_REPACK_FAST)) {
-//		printf(" - test_new_handler(): repack returned TRUE\n");
-//	} else {
-//		printf(" - test_new_handler(): repack FAILED\n");
-//	}
+	printf(" - test_new_handler(): %d byte(s) wasted (might be slightly lower than before, as table was moved to an optimized place)\n", grf_wasted_space(handler));
+	printf(" - test_new_handler(): attempting to repack file...\n");
+	if (grf_repack(handler, GRF_REPACK_FAST)) {
+		printf(" - test_new_handler(): repack returned TRUE\n");
+	} else {
+		printf(" - test_new_handler(): repack FAILED\n");
+	}
 	grf_save(handler);
 	grf_free(handler);
 	handler = grf_load("test.grf", true);
@@ -128,7 +132,7 @@ void test_new_handler() {
 void test_load_file() {
 	void *handler, *fhandler;
 	void *filec;
-	void **list;
+	grf_node *list;
 //	char *fn = "/storage/win_d/Program Files/Gravity/fRO_II/data.grf";
 //	char *fn = "/storage/win_d/Program Files/Gravity/RO/data.grf";
 //	char *fn = "/storage/win_d/Program Files/Gravity/20060224_krodata.gpf";
